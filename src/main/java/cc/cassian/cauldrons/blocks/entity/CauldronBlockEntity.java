@@ -2,22 +2,20 @@ package cc.cassian.cauldrons.blocks.entity;
 
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
-import net.minecraft.client.particle.BubbleParticle;
+import cc.cassian.cauldrons.registry.CauldronSoundEvents;
 import net.minecraft.core.*;
-import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -27,8 +25,8 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
@@ -98,7 +96,7 @@ public class CauldronBlockEntity extends BlockEntity {
         if (itemStack.is(Items.WATER_BUCKET) && potionQuantity == 0) {
             setFillLevel(3);
             this.potion = new PotionContents(Potions.WATER);
-            return new Pair<>(ItemInteractionResult.CONSUME, Items.BUCKET.getDefaultInstance());
+            return new Pair<>(ItemInteractionResult.SUCCESS, Items.BUCKET.getDefaultInstance());
         // fill with potion
         } else if (itemStack.has(DataComponents.POTION_CONTENTS) && potionQuantity < 3) {
             PotionContents insertedPotion = itemStack.get(DataComponents.POTION_CONTENTS);
@@ -107,11 +105,11 @@ public class CauldronBlockEntity extends BlockEntity {
             if (currentPotion.isEmpty()) {
                 this.potion = insertedPotion;
                 setFillLevel(1);
-                return new Pair<>(ItemInteractionResult.CONSUME, Items.GLASS_BOTTLE.getDefaultInstance());
+                return new Pair<>(ItemInteractionResult.SUCCESS, Items.GLASS_BOTTLE.getDefaultInstance());
             }
             else if (insertedPotion.is(currentPotion.get())) {
                 setFillLevel(potionQuantity+1);
-                return new Pair<>(ItemInteractionResult.CONSUME, Items.GLASS_BOTTLE.getDefaultInstance());
+                return new Pair<>(ItemInteractionResult.SUCCESS, Items.GLASS_BOTTLE.getDefaultInstance());
             }
         // drain with bucket
         } else if (itemStack.is(Items.BUCKET) && potionQuantity>=1) {
@@ -120,26 +118,34 @@ public class CauldronBlockEntity extends BlockEntity {
             else returnStack = Items.BUCKET.getDefaultInstance();
             setFillLevel(0);
             this.potion = null;
-            return new Pair<>(ItemInteractionResult.CONSUME, returnStack);
+            return new Pair<>(ItemInteractionResult.SUCCESS, returnStack);
         // drain with bottle
         } else if (itemStack.is(Items.GLASS_BOTTLE) && potionQuantity>=1) {
             setFillLevel(potionQuantity-1);
             var stack = createItemStack(Items.POTION, potion);
             if (getFillLevel() == 0)
                 this.potion = null;
-            return new Pair<>(ItemInteractionResult.CONSUME, stack);
+            return new Pair<>(ItemInteractionResult.SUCCESS, stack);
         // drain with arrow
         } else if (itemStack.is(Items.ARROW) && potionQuantity>=1) {
             setFillLevel(potionQuantity-1);
             var stack = createItemStack(Items.TIPPED_ARROW, potion);
             if (getFillLevel() == 0)
                 this.potion = null;
-            return new Pair<>(ItemInteractionResult.CONSUME, stack);
+            return new Pair<>(ItemInteractionResult.SUCCESS, stack);
         }
         // insert as inventory
         else if (itemHandler.isEmpty()) {
             itemHandler = itemStack;
-            return new Pair<>(ItemInteractionResult.CONSUME, ItemStack.EMPTY);
+            if (getFillLevel()>0 && this.getLevel().isClientSide()) {
+                for (int i = 0; i < 20.0F; i++) {
+                    Random random = new Random();
+                    double d = (random.nextDouble() * 2.0 - 0.5);
+                    double e = (random.nextDouble() * 2.0 - 0.5);
+                    this.getLevel().addParticle(ParticleTypes.SPLASH, this.getBlockPos().getX() + d, this.getBlockPos().getY() + 0.5F, this.getBlockPos().getZ() + e, 0.05, 0.25, 0.05);
+                }
+            }
+            return new Pair<>(ItemInteractionResult.SUCCESS, ItemStack.EMPTY);
         }
         return new Pair<>(ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION, ItemStack.EMPTY);
     }
@@ -147,11 +153,12 @@ public class CauldronBlockEntity extends BlockEntity {
     public void brew() {
         var potionBrewing = this.level.potionBrewing();
         var potionItem = createItemStack(Items.POTION, potion);
-        if (potionBrewing.hasMix(potionItem, itemHandler)) {
+        if (!itemHandler.isEmpty() && potionBrewing.hasMix(potionItem, itemHandler)) {
             ItemStack mix = potionBrewing.mix(itemHandler, potionItem);
             this.potion = mix.getComponents().get(DataComponents.POTION_CONTENTS);
             this.itemHandler = ItemStack.EMPTY;
-            level.levelEvent(LevelEvent.SOUND_BREWING_STAND_BREW, this.getBlockPos(), 0);
+            //level.levelEvent(LevelEvent.SOUND_BREWING_STAND_BREW, this.getBlockPos(), 0);
+            level.playSound(null, getBlockPos(), CauldronSoundEvents.BREWS.get(), SoundSource.BLOCKS);
             level.setBlockAndUpdate(getBlockPos(), this.getBlockState().setValue(BrewingCauldronBlock.MAGIC, !this.getBlockState().getValue(BrewingCauldronBlock.MAGIC)));
             bubbleTimer = 20;
         }
@@ -207,6 +214,7 @@ public class CauldronBlockEntity extends BlockEntity {
                 level.addParticle(ParticleTypes.BUBBLE, pos.getX() + level.random.nextDouble(), pos.getY() + 1, pos.getZ() + level.random.nextDouble(), 0.01, 0.05, 0.01);
                 cauldronBlockEntity.bubbleTimer--;
             }
+            cauldronBlockEntity.brew();
         }
     }
 

@@ -3,6 +3,7 @@ package cc.cassian.cauldrons;
 import cc.cassian.cauldrons.config.ModConfig;
 import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
 import cc.cassian.cauldrons.registry.CauldronBlocks;
+import cc.cassian.cauldrons.registry.CauldronSoundEvents;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.loader.api.FabricLoader;
@@ -28,5 +29,6 @@ public class CauldronMod implements ModInitializer {
 		LOGGER.info("Toil and trouble!");
 		CauldronBlocks.touch();
 		CauldronBlockEntityTypes.touch();
+		CauldronSoundEvents.touch();
 	}
 }

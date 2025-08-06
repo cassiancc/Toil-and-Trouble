@@ -45,10 +45,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
             ItemStack itemStack, BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult
     ) {
         if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
-            if (itemStack.is(Items.STICK)) {
-                cauldronBlockEntity.brew();
-                return ItemInteractionResult.SUCCESS;
-            } else if (!itemStack.isEmpty()) {
+           if (!itemStack.isEmpty()) {
                 Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
                 if (!(insert.getA() == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION)) {
                     if (player.getItemInHand(interactionHand).getCount() == 1)
