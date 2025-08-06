@@ -2,6 +2,7 @@ package cc.cassian.cauldrons.blocks.entity;
 
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -9,6 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -19,12 +21,14 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class CauldronBlockEntity extends BlockEntity {
 
@@ -73,7 +77,7 @@ public class CauldronBlockEntity extends BlockEntity {
             tag.put("cauldron.inventory", itemHandler.save(registries));
         tag.putInt("cauldron.progress", progress);
         tag.putInt("cauldron.max_progress", maxProgress);
-        if (potion.potion().isPresent() && potion.potion().orElseThrow().unwrapKey().isPresent()) {
+        if (this.potion != null && potion.potion().isPresent() && potion.potion().orElseThrow().unwrapKey().isPresent()) {
             tag.putString("cauldron.potion", potion.potion().orElseThrow().unwrapKey().orElseThrow().location().toString());
         } else {
             tag.putString("cauldron.potion", "minecraft:air");
@@ -90,14 +94,16 @@ public class CauldronBlockEntity extends BlockEntity {
             return new Pair<>(ItemInteractionResult.CONSUME, Items.BUCKET.getDefaultInstance());
         // fill with potion
         } else if (itemStack.has(DataComponents.POTION_CONTENTS) && potionQuantity < 3) {
-            PotionContents potionContents = itemStack.get(DataComponents.POTION_CONTENTS);
-            assert potionContents != null;
-            if (potionContents == this.potion) {
-                setFillLevel(potionQuantity+1);
-                return new Pair<>(ItemInteractionResult.CONSUME, Items.GLASS_BOTTLE.getDefaultInstance());
-            } else if (this.potion == null) {
-                this.potion = potionContents;
+            PotionContents insertedPotion = itemStack.get(DataComponents.POTION_CONTENTS);
+            assert insertedPotion != null;
+            Optional<Holder<Potion>> currentPotion = this.potion.potion();
+            if (currentPotion.isEmpty()) {
+                this.potion = insertedPotion;
                 setFillLevel(1);
+                return new Pair<>(ItemInteractionResult.CONSUME, Items.GLASS_BOTTLE.getDefaultInstance());
+            }
+            else if (insertedPotion.is(currentPotion.get())) {
+                setFillLevel(potionQuantity+1);
                 return new Pair<>(ItemInteractionResult.CONSUME, Items.GLASS_BOTTLE.getDefaultInstance());
             }
         // drain with bucket
@@ -131,6 +137,18 @@ public class CauldronBlockEntity extends BlockEntity {
         return new Pair<>(ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION, ItemStack.EMPTY);
     }
 
+    public void brew() {
+        var potionBrewing = this.level.potionBrewing();
+        var potionItem = createItemStack(Items.POTION, potion);
+        if (potionBrewing.hasMix(potionItem, itemHandler)) {
+            ItemStack mix = potionBrewing.mix(itemHandler, potionItem);
+            this.potion = mix.getComponents().get(DataComponents.POTION_CONTENTS);
+            this.itemHandler = ItemStack.EMPTY;
+            level.levelEvent(LevelEvent.SOUND_BREWING_STAND_BREW, this.getBlockPos(), 0);
+            level.setBlockAndUpdate(getBlockPos(), this.getBlockState().setValue(BrewingCauldronBlock.MAGIC, !this.getBlockState().getValue(BrewingCauldronBlock.MAGIC)));
+        }
+    }
+
     public ItemStack retrieve() {
         return itemHandler.copyAndClear();
     }
@@ -140,11 +158,16 @@ public class CauldronBlockEntity extends BlockEntity {
     }
 
     public Integer getFillLevel() {
-        return this.getBlockState().getValue(BrewingCauldronBlock.POTION_QUANTITY);
+        Integer value = this.getBlockState().getValue(BrewingCauldronBlock.POTION_QUANTITY);
+        if (value == 0)
+            this.potion = PotionContents.EMPTY;
+        return value;
     }
 
-    public void setFillLevel(int i) {
-        BrewingCauldronBlock.setFillLevel(this.getBlockState(), this.getLevel(), this.getBlockPos(), i);
+    public void setFillLevel(int value) {
+        if (value == 0)
+            this.potion = PotionContents.EMPTY;
+        BrewingCauldronBlock.setFillLevel(this.getBlockState(), this.getLevel(), this.getBlockPos(), value);
     }
 
     public int getPotionColour() {

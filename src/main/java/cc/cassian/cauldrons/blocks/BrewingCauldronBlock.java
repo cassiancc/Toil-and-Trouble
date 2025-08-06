@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
@@ -26,6 +27,8 @@ import oshi.util.tuples.Pair;
 
 public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     public static final IntegerProperty POTION_QUANTITY = IntegerProperty.create("potion_quantity", 0, 3);
+    public static final BooleanProperty MAGIC = BooleanProperty.create("magic");
+
 
     public BrewingCauldronBlock(Properties properties) {
         super(properties);
@@ -36,7 +39,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     ) {
         if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
             if (itemStack.is(Items.STICK)) {
-//                cauldronBlockEntity.brew();
+                cauldronBlockEntity.brew();
                 return ItemInteractionResult.SUCCESS;
             } else if (!itemStack.isEmpty()) {
                 Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
@@ -135,7 +138,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(POTION_QUANTITY);
+        builder.add(POTION_QUANTITY, MAGIC);
     }
 
     @Override
