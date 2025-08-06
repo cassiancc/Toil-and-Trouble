@@ -39,7 +39,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
 //                cauldronBlockEntity.brew();
                 return ItemInteractionResult.SUCCESS;
             } else if (!itemStack.isEmpty()) {
-                Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack);
+                Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
                 if (!(insert.getA() == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION)) {
                     if (player.getItemInHand(interactionHand).getCount() == 1)
                         player.setItemInHand(interactionHand, insert.getB());
@@ -64,7 +64,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (!level.isClientSide && this.isEntityInsideContent(state, pos, entity) && level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity && cauldronBlockEntity.getPotion() != null) {
-            if (cauldronBlockEntity.getPotion() == Potions.WATER) {
+            if (cauldronBlockEntity.isPotionWater()) {
                 if (entity.isOnFire()) {
                     entity.clearFire();
                     if (entity.mayInteract(level, pos)) {

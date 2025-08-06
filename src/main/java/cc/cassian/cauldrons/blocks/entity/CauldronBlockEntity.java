@@ -13,6 +13,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
@@ -27,7 +28,7 @@ import java.util.Objects;
 
 public class CauldronBlockEntity extends BlockEntity {
 
-    protected Holder<Potion> potion = null;
+    protected PotionContents potion = PotionContents.EMPTY;
     private int progress;
     private int maxProgress;
 
@@ -60,9 +61,9 @@ public class CauldronBlockEntity extends BlockEntity {
         maxProgress = tag.getInt("cauldron.max_progress");
         var p = tag.getString("cauldron.potion");
         if (!p.equals("minecraft:air")) {
-            potion = BuiltInRegistries.POTION.getHolderOrThrow(ResourceKey.create(Registries.POTION, ResourceLocation.parse(p)));
+            potion = new PotionContents(BuiltInRegistries.POTION.getHolderOrThrow(ResourceKey.create(Registries.POTION, ResourceLocation.parse(p))));
         } else {
-            potion = null;
+            potion = PotionContents.EMPTY;
         }
     }
 
@@ -73,7 +74,7 @@ public class CauldronBlockEntity extends BlockEntity {
         tag.putInt("cauldron.progress", progress);
         tag.putInt("cauldron.max_progress", maxProgress);
         if (potion != null) {
-            tag.putString("cauldron.potion", potion.unwrapKey().orElseThrow().location().toString());
+            tag.putString("cauldron.potion", potion.potion().orElseThrow().unwrapKey().orElseThrow().location().toString());
         } else {
             tag.putString("cauldron.potion", "minecraft:air");
         }
@@ -85,18 +86,17 @@ public class CauldronBlockEntity extends BlockEntity {
         // fill with water bucket
         if (itemStack.is(Items.WATER_BUCKET) && potionQuantity == 0) {
             setFillLevel(3);
-            this.potion = Potions.WATER;
+            this.potion = new PotionContents(Potions.WATER);
             return new Pair<>(ItemInteractionResult.CONSUME, Items.BUCKET.getDefaultInstance());
         // fill with potion
         } else if (itemStack.has(DataComponents.POTION_CONTENTS) && potionQuantity < 3) {
             PotionContents potionContents = itemStack.get(DataComponents.POTION_CONTENTS);
             assert potionContents != null;
-            var newPotion = potionContents.potion().orElseThrow();
-            if (newPotion == this.potion) {
+            if (potionContents == this.potion) {
                 setFillLevel(potionQuantity+1);
                 return new Pair<>(ItemInteractionResult.CONSUME, Items.GLASS_BOTTLE.getDefaultInstance());
             } else if (this.potion == null) {
-                this.potion = newPotion;
+                this.potion = potionContents;
                 setFillLevel(1);
                 return new Pair<>(ItemInteractionResult.CONSUME, Items.GLASS_BOTTLE.getDefaultInstance());
             }
@@ -111,16 +111,14 @@ public class CauldronBlockEntity extends BlockEntity {
         // drain with bottle
         } else if (itemStack.is(Items.GLASS_BOTTLE) && potionQuantity>=1) {
             setFillLevel(potionQuantity-1);
-            var stack = Items.POTION.getDefaultInstance();
-            stack.applyComponents(DataComponentMap.builder().set(DataComponents.POTION_CONTENTS, new PotionContents(potion)).build());
+            var stack = createItemStack(Items.POTION, potion);
             if (getFillLevel() == 0)
                 this.potion = null;
             return new Pair<>(ItemInteractionResult.CONSUME, stack);
         // drain with arrow
         } else if (itemStack.is(Items.ARROW) && potionQuantity>=1) {
             setFillLevel(potionQuantity-1);
-            var stack = Items.TIPPED_ARROW.getDefaultInstance();
-            stack.applyComponents(DataComponentMap.builder().set(DataComponents.POTION_CONTENTS, new PotionContents(potion)).build());
+            var stack = createItemStack(Items.TIPPED_ARROW, potion);
             if (getFillLevel() == 0)
                 this.potion = null;
             return new Pair<>(ItemInteractionResult.CONSUME, stack);
@@ -150,14 +148,25 @@ public class CauldronBlockEntity extends BlockEntity {
     }
 
     public int getPotionColour() {
-        return PotionContents.getColor(potion);
+        return potion.getColor();
     }
 
+    @Nullable
     public Holder<Potion> getPotion() {
-        return potion;
+        if (potion.potion().isPresent())
+            return potion.potion().get();
+        else return null;
+    }
+
+    public static ItemStack createItemStack(Item item, PotionContents potion) {
+        ItemStack itemStack = new ItemStack(item);
+        itemStack.set(DataComponents.POTION_CONTENTS, potion);
+        return itemStack;
     }
 
     public boolean isPotionWater() {
-        return Objects.equals(potion, Potions.WATER);
+        if (potion.potion().isPresent())
+            return Objects.equals(potion.potion().get(), Potions.WATER);
+        return false;
     }
 }
