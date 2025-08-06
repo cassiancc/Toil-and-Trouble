@@ -61,7 +61,7 @@ public class CauldronBlockEntity extends BlockEntity {
         maxProgress = tag.getInt("cauldron.max_progress");
         var p = tag.getString("cauldron.potion");
         if (!p.equals("minecraft:air")) {
-            potion = new PotionContents(BuiltInRegistries.POTION.getHolderOrThrow(ResourceKey.create(Registries.POTION, ResourceLocation.parse(p))));
+            potion = BuiltInRegistries.POTION.getHolder(ResourceLocation.parse(p)).map(PotionContents::new).orElse(PotionContents.EMPTY);
         } else {
             potion = PotionContents.EMPTY;
         }
