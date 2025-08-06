@@ -73,7 +73,7 @@ public class CauldronBlockEntity extends BlockEntity {
             tag.put("cauldron.inventory", itemHandler.save(registries));
         tag.putInt("cauldron.progress", progress);
         tag.putInt("cauldron.max_progress", maxProgress);
-        if (potion != null) {
+        if (potion.potion().isPresent() && potion.potion().orElseThrow().unwrapKey().isPresent()) {
             tag.putString("cauldron.potion", potion.potion().orElseThrow().unwrapKey().orElseThrow().location().toString());
         } else {
             tag.putString("cauldron.potion", "minecraft:air");
