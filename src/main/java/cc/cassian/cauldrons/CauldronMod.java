@@ -1,13 +1,16 @@
 package cc.cassian.cauldrons;
 
 import cc.cassian.cauldrons.config.ModConfig;
+import cc.cassian.cauldrons.core.CauldronEvents;
 import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
 import cc.cassian.cauldrons.registry.CauldronBlocks;
 import cc.cassian.cauldrons.registry.CauldronSoundEvents;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,5 +33,6 @@ public class CauldronMod implements ModInitializer {
 		CauldronBlocks.touch();
 		CauldronBlockEntityTypes.touch();
 		CauldronSoundEvents.touch();
+		UseBlockCallback.EVENT.register((CauldronEvents::useBlock));
 	}
 }

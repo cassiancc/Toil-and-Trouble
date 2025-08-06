@@ -43,6 +43,11 @@ public class CauldronBlockEntity extends BlockEntity {
 
     private ItemStack itemHandler = ItemStack.EMPTY;
 
+    public CauldronBlockEntity(BlockPos pos, BlockState state, Holder<Potion> water) {
+        super(CauldronBlockEntityTypes.CAULDRON_BLOCK_ENTITY.get(), pos, state);
+        this.potion = new PotionContents(water);
+    }
+
     @Override
     @Nullable
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
