@@ -3,9 +3,12 @@ package cc.cassian.cauldrons.blocks.entity;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.minecraft.client.particle.BubbleParticle;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -21,20 +24,24 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 
 public class CauldronBlockEntity extends BlockEntity {
 
     protected PotionContents potion = PotionContents.EMPTY;
     private int progress;
     private int maxProgress;
+    private int bubbleTimer = 0;
 
     private ItemStack itemHandler = ItemStack.EMPTY;
 
@@ -146,6 +153,7 @@ public class CauldronBlockEntity extends BlockEntity {
             this.itemHandler = ItemStack.EMPTY;
             level.levelEvent(LevelEvent.SOUND_BREWING_STAND_BREW, this.getBlockPos(), 0);
             level.setBlockAndUpdate(getBlockPos(), this.getBlockState().setValue(BrewingCauldronBlock.MAGIC, !this.getBlockState().getValue(BrewingCauldronBlock.MAGIC)));
+            bubbleTimer = 20;
         }
     }
 
@@ -191,5 +199,18 @@ public class CauldronBlockEntity extends BlockEntity {
         if (potion.potion().isPresent())
             return Objects.equals(potion.potion().get(), Potions.WATER);
         return false;
+    }
+
+    public static void tick(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+        if (blockEntity instanceof CauldronBlockEntity cauldronBlockEntity) {
+            if (cauldronBlockEntity.isBubbling()) {
+                level.addParticle(ParticleTypes.BUBBLE, pos.getX() + level.random.nextDouble(), pos.getY() + 1, pos.getZ() + level.random.nextDouble(), 0.01, 0.05, 0.01);
+                cauldronBlockEntity.bubbleTimer--;
+            }
+        }
+    }
+
+    private boolean isBubbling() {
+        return bubbleTimer > 0;
     }
 }
