@@ -101,7 +101,7 @@ public class CauldronBlockEntity extends BlockEntity {
             this.potion = new PotionContents(Potions.WATER);
             return new Pair<>(ItemInteractionResult.SUCCESS, Items.BUCKET.getDefaultInstance());
         // fill with potion
-        } else if (itemStack.has(DataComponents.POTION_CONTENTS) && potionQuantity < 3) {
+        } else if (itemStack.has(DataComponents.POTION_CONTENTS) && potionQuantity < 3 && !itemStack.is(Items.TIPPED_ARROW)) {
             PotionContents insertedPotion = itemStack.get(DataComponents.POTION_CONTENTS);
             assert insertedPotion != null;
             Optional<Holder<Potion>> currentPotion = this.potion.potion();
