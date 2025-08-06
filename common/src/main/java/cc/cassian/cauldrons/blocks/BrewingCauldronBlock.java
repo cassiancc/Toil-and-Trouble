@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -128,6 +129,11 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                 raiseFillLevel(state, level, pos);
             }
         }
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
+        return new ItemStack(Blocks.CAULDRON);
     }
 
     @Override

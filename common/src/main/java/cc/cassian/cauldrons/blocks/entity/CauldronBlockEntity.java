@@ -2,6 +2,7 @@ package cc.cassian.cauldrons.blocks.entity;
 
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
+import cc.cassian.cauldrons.registry.CauldronBlocks;
 import cc.cassian.cauldrons.registry.CauldronSoundEvents;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
@@ -20,6 +21,8 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -208,13 +211,22 @@ public class CauldronBlockEntity extends BlockEntity {
         return false;
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+    public static void tick(Level level, BlockPos pos, BlockState blockState, BlockEntity blockEntity) {
         if (blockEntity instanceof CauldronBlockEntity cauldronBlockEntity) {
+            // particle logic
             if (cauldronBlockEntity.isBubbling()) {
                 level.addParticle(ParticleTypes.BUBBLE, pos.getX() + level.random.nextDouble(), pos.getY() + 1, pos.getZ() + level.random.nextDouble(), 0.01, 0.05, 0.01);
                 cauldronBlockEntity.bubbleTimer--;
             }
+            // brewing
             cauldronBlockEntity.brew();
+            //reset to vanilla
+            if (cauldronBlockEntity.itemHandler.isEmpty()) {
+                if (cauldronBlockEntity.getFillLevel().equals(0)) {
+                    var newState = Blocks.CAULDRON.defaultBlockState();
+                    level.setBlockAndUpdate(pos, newState);
+                }
+            }
         }
     }
 
