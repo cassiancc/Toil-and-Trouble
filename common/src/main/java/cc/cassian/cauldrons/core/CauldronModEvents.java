@@ -75,8 +75,12 @@ public class CauldronModEvents {
                     Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
                     if (!(insert.getA() == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION)) {
                         itemStack.setCount(itemStack.getCount()-1);
-                        if (player != null) {
-                            player.addItem(insert.getB());
+                        if (player != null && interactionHand != null) {
+                            if (player.getItemInHand(interactionHand).isEmpty()) {
+                                player.setItemInHand(interactionHand, insert.getB());
+                            } else {
+                                player.addItem(insert.getB());
+                            }
                         } else {
                             popResourceFromFace(level, pos, direction, insert.getB());
                         }

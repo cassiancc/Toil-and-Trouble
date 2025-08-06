@@ -5,12 +5,12 @@ plugins {
 }
 
 architectury {
-    version = rootProject.mod_version + "+" + minecraft_version
+    version = mod_version
 }
 
 allprojects {
     group = rootProject.maven_group
-    version = rootProject.mod_version
+    version = mod_version + "+" + minecraft_version
 }
 
 subprojects {
