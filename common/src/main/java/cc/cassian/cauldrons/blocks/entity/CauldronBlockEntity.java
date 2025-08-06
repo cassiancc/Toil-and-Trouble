@@ -1,6 +1,7 @@
 package cc.cassian.cauldrons.blocks.entity;
 
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
+import cc.cassian.cauldrons.core.CauldronModTags;
 import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
 import cc.cassian.cauldrons.registry.CauldronBlocks;
 import cc.cassian.cauldrons.registry.CauldronSoundEvents;
@@ -32,9 +33,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
+import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.POTION_QUANTITY;
+
 public class CauldronBlockEntity extends BlockEntity {
 
     protected PotionContents potion = PotionContents.EMPTY;
+    protected boolean splashing = false;
+    protected boolean lingering = false;
     private int progress;
     private int maxProgress;
     private int bubbleTimer = 0;
@@ -77,6 +82,8 @@ public class CauldronBlockEntity extends BlockEntity {
         } else {
             potion = PotionContents.EMPTY;
         }
+        splashing = tag.getBoolean("cauldron.splashing");
+        lingering = tag.getBoolean("cauldron.lingering");
     }
 
     @Override
@@ -90,6 +97,8 @@ public class CauldronBlockEntity extends BlockEntity {
         } else {
             tag.putString("cauldron.potion", "minecraft:air");
         }
+        tag.putBoolean("cauldron.splashing", splashing);
+        tag.putBoolean("cauldron.lingering", lingering);
         super.saveAdditional(tag, registries);
     }
 
@@ -101,7 +110,7 @@ public class CauldronBlockEntity extends BlockEntity {
             this.potion = new PotionContents(Potions.WATER);
             return new Pair<>(ItemInteractionResult.SUCCESS, Items.BUCKET.getDefaultInstance());
         // fill with potion
-        } else if (itemStack.has(DataComponents.POTION_CONTENTS) && potionQuantity < 3 && !itemStack.is(Items.TIPPED_ARROW)) {
+        } else if (itemStack.has(DataComponents.POTION_CONTENTS) && potionQuantity < 3 && !itemStack.is(CauldronModTags.CANNOT_FILL_CAULDRON)) {
             PotionContents insertedPotion = itemStack.get(DataComponents.POTION_CONTENTS);
             assert insertedPotion != null;
             Optional<Holder<Potion>> currentPotion = this.potion.potion();
@@ -123,7 +132,10 @@ public class CauldronBlockEntity extends BlockEntity {
             return new Pair<>(ItemInteractionResult.SUCCESS, returnStack);
         // drain with bottle
         } else if (itemStack.is(Items.GLASS_BOTTLE) && potionQuantity>=1) {
-            var stack = createItemStack(Items.POTION, potion);
+            var potionItem = Items.POTION;
+            if (splashing) potionItem = Items.SPLASH_POTION;
+            else if (lingering) potionItem = Items.LINGERING_POTION;
+            ItemStack stack = createItemStack(potionItem, potion);
             setFillLevel(potionQuantity-1);
             return new Pair<>(ItemInteractionResult.SUCCESS, stack);
         // drain with arrow
@@ -152,15 +164,31 @@ public class CauldronBlockEntity extends BlockEntity {
         var potionBrewing = this.level.potionBrewing();
         if (potion.potion().isEmpty()) return;
         var potionItem = createItemStack(Items.POTION, potion);
-        if (!itemHandler.isEmpty() && potionBrewing.hasMix(potionItem, itemHandler)) {
-            ItemStack mix = potionBrewing.mix(itemHandler, potionItem);
-            this.potion = mix.getComponents().get(DataComponents.POTION_CONTENTS);
-            this.itemHandler = ItemStack.EMPTY;
-            //level.levelEvent(LevelEvent.SOUND_BREWING_STAND_BREW, this.getBlockPos(), 0);
-            level.playSound(null, getBlockPos(), CauldronSoundEvents.BREWS.get(), SoundSource.BLOCKS);
-            level.setBlockAndUpdate(getBlockPos(), this.getBlockState().setValue(BrewingCauldronBlock.MAGIC, !this.getBlockState().getValue(BrewingCauldronBlock.MAGIC)));
-            bubbleTimer = 20;
+        if (!itemHandler.isEmpty()) {
+            if (itemHandler.is(CauldronModTags.CREATES_SPLASH_POTIONS)) {
+                this.splashing = true;
+                this.lingering = false;
+                updateAfterBrewing();
+            }
+            else if (itemHandler.is(CauldronModTags.CREATES_LINGERING_POTIONS)) {
+                this.splashing = false;
+                this.lingering = true;
+                updateAfterBrewing();
+            }
+            else if (potionBrewing.hasMix(potionItem, itemHandler)) {
+                ItemStack mix = potionBrewing.mix(itemHandler, potionItem);
+                this.potion = mix.getComponents().get(DataComponents.POTION_CONTENTS);
+                updateAfterBrewing();
+            }
         }
+    }
+
+    private void updateAfterBrewing() {
+        this.itemHandler = ItemStack.EMPTY;
+        //level.levelEvent(LevelEvent.SOUND_BREWING_STAND_BREW, this.getBlockPos(), 0);
+        level.playSound(null, getBlockPos(), CauldronSoundEvents.BREWS.get(), SoundSource.BLOCKS);
+        level.setBlockAndUpdate(getBlockPos(), this.getBlockState().setValue(BrewingCauldronBlock.MAGIC, !this.getBlockState().getValue(BrewingCauldronBlock.MAGIC)));
+        bubbleTimer = 20;
     }
 
     public ItemStack retrieve() {
@@ -172,15 +200,11 @@ public class CauldronBlockEntity extends BlockEntity {
     }
 
     public Integer getFillLevel() {
-        Integer value = this.getBlockState().getValue(BrewingCauldronBlock.POTION_QUANTITY);
-        if (value == 0)
-            this.potion = PotionContents.EMPTY;
+        Integer value = this.getBlockState().getValue(POTION_QUANTITY);
         return value;
     }
 
     public void setFillLevel(int value) {
-        if (value == 0)
-            this.potion = PotionContents.EMPTY;
         BrewingCauldronBlock.setFillLevel(this.getBlockState(), this.getLevel(), this.getBlockPos(), value);
     }
 
@@ -220,6 +244,11 @@ public class CauldronBlockEntity extends BlockEntity {
                     var newState = Blocks.CAULDRON.defaultBlockState();
                     level.setBlockAndUpdate(pos, newState);
                 }
+            }
+            if (blockState.getValue(POTION_QUANTITY).equals(0)) {
+                cauldronBlockEntity.potion = PotionContents.EMPTY;
+                cauldronBlockEntity.splashing = false;
+                cauldronBlockEntity.lingering = false;
             }
         }
     }
