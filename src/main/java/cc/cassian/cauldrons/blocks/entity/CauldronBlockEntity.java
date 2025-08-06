@@ -191,7 +191,7 @@ public class CauldronBlockEntity extends BlockEntity {
 
     @Nullable
     public Holder<Potion> getPotion() {
-        if (potion.potion().isPresent())
+        if (potion != null && potion.potion().isPresent())
             return potion.potion().get();
         else return null;
     }
