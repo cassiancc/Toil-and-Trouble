@@ -120,21 +120,16 @@ public class CauldronBlockEntity extends BlockEntity {
             if (isPotionWater()) returnStack = Items.WATER_BUCKET.getDefaultInstance();
             else returnStack = Items.BUCKET.getDefaultInstance();
             setFillLevel(0);
-            this.potion = null;
             return new Pair<>(ItemInteractionResult.SUCCESS, returnStack);
         // drain with bottle
         } else if (itemStack.is(Items.GLASS_BOTTLE) && potionQuantity>=1) {
-            setFillLevel(potionQuantity-1);
             var stack = createItemStack(Items.POTION, potion);
-            if (getFillLevel() == 0)
-                this.potion = null;
+            setFillLevel(potionQuantity-1);
             return new Pair<>(ItemInteractionResult.SUCCESS, stack);
         // drain with arrow
         } else if (itemStack.is(Items.ARROW) && potionQuantity>=1) {
-            setFillLevel(potionQuantity-1);
             var stack = createItemStack(Items.TIPPED_ARROW, potion);
-            if (getFillLevel() == 0)
-                this.potion = null;
+            setFillLevel(potionQuantity-1);
             return new Pair<>(ItemInteractionResult.SUCCESS, stack);
         }
         // insert as inventory
@@ -155,6 +150,7 @@ public class CauldronBlockEntity extends BlockEntity {
 
     public void brew() {
         var potionBrewing = this.level.potionBrewing();
+        if (potion.potion().isEmpty()) return;
         var potionItem = createItemStack(Items.POTION, potion);
         if (!itemHandler.isEmpty() && potionBrewing.hasMix(potionItem, itemHandler)) {
             ItemStack mix = potionBrewing.mix(itemHandler, potionItem);
@@ -200,9 +196,7 @@ public class CauldronBlockEntity extends BlockEntity {
     }
 
     public static ItemStack createItemStack(Item item, PotionContents potion) {
-        ItemStack itemStack = new ItemStack(item);
-        itemStack.set(DataComponents.POTION_CONTENTS, potion);
-        return itemStack;
+        return PotionContents.createItemStack(item, potion.potion().get());
     }
 
     public boolean isPotionWater() {
