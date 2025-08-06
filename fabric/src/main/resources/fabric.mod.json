@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "toil_and_trouble",
+  "version": "${version}",
+  "name": "Toil and Trouble",
+  "description": "Empower Cauldrons with additional functionality, including Cauldron Brewing.",
+  "authors": [
+    "cassiancc"
+  ],
+  "contact": {
+    "homepage": "https://github.com/cassiancc/Toil-And-Trouble",
+    "sources": "https://github.com/cassiancc/Toil-And-Trouble",
+    "issues": "https://github.com/cassiancc/Toil-And-Trouble/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/toil_and_trouble/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "cc.cassian.cauldrons.fabric.CauldronModFabric"
+    ],
+    "client": [
+      "cc.cassian.cauldrons.fabric.client.CauldronModFabricClient"
+    ]
+  },
+  "mixins": [
+    "toil_and_trouble.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

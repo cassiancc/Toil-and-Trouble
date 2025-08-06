@@ -1,0 +1,31 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "toil_and_trouble"
+version = "${version}"
+displayName = "Toil and Trouble"
+authors = "cassiancc"
+description = '''
+Empower Cauldrons with additional functionality, including Cauldron Brewing.
+'''
+#logoFile = ""
+
+[[dependencies.toil_and_trouble]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1.181,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.toil_and_trouble]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[mixins]]
+config = "toil_and_trouble.mixins.json"
