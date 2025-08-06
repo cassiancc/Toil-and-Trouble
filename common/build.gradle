@@ -12,4 +12,6 @@ dependencies {
     // Do NOT use other classes from Fabric Loader.
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
     compileOnlyApi("folk.sisby:kaleido-config:${kaleido_version}")
+    modCompileOnly("maven.modrinth:jade:${project.jade_version}+fabric")
+
 }

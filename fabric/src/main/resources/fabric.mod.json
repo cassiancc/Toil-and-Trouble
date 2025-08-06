@@ -21,6 +21,9 @@
     ],
     "client": [
       "cc.cassian.cauldrons.fabric.client.CauldronModFabricClient"
+    ],
+    "jade": [
+        "cc.cassian.cauldrons.compat.jade.CauldronModJadePlugin"
     ]
   },
   "mixins": [

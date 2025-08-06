@@ -229,6 +229,18 @@ public class CauldronBlockEntity extends BlockEntity {
         return false;
     }
 
+    public boolean isPotionSplash() {
+        if (potion.potion().isPresent())
+            return splashing;
+        return false;
+    }
+
+    public boolean isPotionLingering() {
+        if (potion.potion().isPresent())
+            return lingering;
+        return false;
+    }
+
     public static void tick(Level level, BlockPos pos, BlockState blockState, BlockEntity blockEntity) {
         if (blockEntity instanceof CauldronBlockEntity cauldronBlockEntity) {
             // particle logic
