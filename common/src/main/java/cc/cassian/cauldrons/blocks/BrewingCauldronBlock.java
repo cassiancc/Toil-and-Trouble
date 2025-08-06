@@ -9,6 +9,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -58,22 +59,27 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
 
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        if (!level.isClientSide && this.isEntityInsideContent(state, pos, entity) && level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity && cauldronBlockEntity.getPotion() != null) {
-            if (cauldronBlockEntity.isPotionWater()) {
-                if (entity.isOnFire()) {
-                    entity.clearFire();
+        if (!level.isClientSide && this.isEntityInsideContent(state, pos, entity) && level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
+            if (entity instanceof ItemEntity itemEntity) {
+                CauldronModEvents.insert(itemEntity.getItem(), state, level, pos, null, null, null);
+            }
+            else if (cauldronBlockEntity.getPotion() != null) {
+                if (cauldronBlockEntity.isPotionWater()) {
+                    if (entity.isOnFire()) {
+                        entity.clearFire();
+                        if (entity.mayInteract(level, pos)) {
+                            lowerFillLevel(state, level, pos);
+                        }
+                    }
+                } else if (entity instanceof LivingEntity livingEntity) {
+                    if (livingEntity.isAffectedByPotions()) {
+                        for (MobEffectInstance effect : cauldronBlockEntity.getPotion().value().getEffects()) {
+                            livingEntity.addEffect(effect);
+                        }
+                    }
                     if (entity.mayInteract(level, pos)) {
-                        lowerFillLevel(state, level, pos);
+                        setFillLevel(state, level, pos, 0);
                     }
-                }
-            } else if (entity instanceof LivingEntity livingEntity) {
-                if (livingEntity.isAffectedByPotions()) {
-                    for (MobEffectInstance effect : cauldronBlockEntity.getPotion().value().getEffects()) {
-                        livingEntity.addEffect(effect);
-                    }
-                }
-                if (entity.mayInteract(level, pos)) {
-                    setFillLevel(state, level, pos, 0);
                 }
             }
         }

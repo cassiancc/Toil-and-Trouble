@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
 import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.setFillLevel;
@@ -42,30 +43,46 @@ public class CauldronModEvents {
     }
 
     public static ItemInteractionResult insert(
-            ItemStack itemStack, BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand interactionHand, Direction direction
+            ItemStack itemStack, BlockState blockState, Level level, BlockPos pos, @Nullable Player player, @Nullable InteractionHand interactionHand, @Nullable Direction direction
     ) {
+        if (direction == null) {
+            direction = Direction.UP;
+        }
         if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
             if (!itemStack.isEmpty()) {
                 if (itemStack.is(Items.ARROW) && itemStack.getCount()>8 && cauldronBlockEntity.getFillLevel()>=1) {
-                    itemStack.setCount(itemStack.getCount()-8);
+                    var tippedCount = 8;
+                    var fillLevel = 1;
+                    if (itemStack.getCount()>16 && cauldronBlockEntity.getFillLevel()>=2) {
+                        tippedCount = 16;
+                        fillLevel = 2;
+                    }
+                    if (itemStack.getCount()>32 && cauldronBlockEntity.getFillLevel()==3) {
+                        tippedCount = 32;
+                        fillLevel = 3;
+                    }
+                    itemStack.setCount(itemStack.getCount()-tippedCount);
                     var stack = PotionContents.createItemStack(Items.TIPPED_ARROW, cauldronBlockEntity.getPotion());
-                    stack.setCount(8);
-                    setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-1);
-                    player.addItem(stack);
+                    stack.setCount(tippedCount);
+                    setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
+                    if (player != null)
+                        player.addItem(stack);
+                    else {
+                        popResourceFromFace(level, pos, direction, stack);
+                    }
                     return ItemInteractionResult.CONSUME;
                 } else {
                     Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
                     if (!(insert.getA() == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION)) {
-                        if (player.getItemInHand(interactionHand).getCount() == 1)
-                            player.setItemInHand(interactionHand, insert.getB());
-                        else {
-                            player.setItemInHand(interactionHand, itemStack.copyWithCount(itemStack.getCount()-1));
+                        itemStack.setCount(itemStack.getCount()-1);
+                        if (player != null) {
+                            player.addItem(insert.getB());
+                        } else {
                             popResourceFromFace(level, pos, direction, insert.getB());
                         }
                     }
                     return insert.getA();
                 }
-
             }
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
