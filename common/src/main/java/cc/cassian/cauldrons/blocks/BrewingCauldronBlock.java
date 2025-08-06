@@ -1,6 +1,7 @@
 package cc.cassian.cauldrons.blocks;
 
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
+import cc.cassian.cauldrons.core.CauldronModEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -45,21 +46,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     protected ItemInteractionResult useItemOn(
             ItemStack itemStack, BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult
     ) {
-        if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
-           if (!itemStack.isEmpty()) {
-                Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
-                if (!(insert.getA() == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION)) {
-                    if (player.getItemInHand(interactionHand).getCount() == 1)
-                        player.setItemInHand(interactionHand, insert.getB());
-                    else {
-                        player.setItemInHand(interactionHand, itemStack.copyWithCount(itemStack.getCount()-1));
-                        popResourceFromFace(level, pos, blockHitResult.getDirection(), insert.getB());
-                    }
-                }
-                return insert.getA();
-            }
-        }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return CauldronModEvents.insert(itemStack, blockState, level, pos, player, interactionHand, blockHitResult.getDirection());
     }
 
     protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult) {
