@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import oshi.util.tuples.Pair;
@@ -31,7 +32,7 @@ public class CauldronEvents {
                 return InteractionResult.SUCCESS;
         }
         else if (blockState.is(Blocks.WATER_CAULDRON)) {
-            var state =  CauldronBlocks.BREWING_CAULDRON.get().defaultBlockState().setValue(BrewingCauldronBlock.POTION_QUANTITY, 3);
+            var state =  CauldronBlocks.BREWING_CAULDRON.get().defaultBlockState().setValue(BrewingCauldronBlock.POTION_QUANTITY, blockState.getValue(LayeredCauldronBlock.LEVEL));
             level.setBlockAndUpdate(pos, state);
             level.setBlockEntity(new CauldronBlockEntity(pos, state, Potions.WATER));
             var insert = insert(player.getItemInHand(interactionHand), blockState, level, pos, player, interactionHand, blockHitResult);
