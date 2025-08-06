@@ -136,11 +136,11 @@ public class CauldronBlockEntity extends BlockEntity {
         else if (itemHandler.isEmpty()) {
             itemHandler = itemStack;
             if (getFillLevel()>0 && this.getLevel().isClientSide()) {
-                for (int i = 0; i < 20.0F; i++) {
+                for (int i = 0; i < 20; i++) {
                     Random random = new Random();
-                    double d = (random.nextDouble() * 2.0 - 0.5);
-                    double e = (random.nextDouble() * 2.0 - 0.5);
-                    this.getLevel().addParticle(ParticleTypes.SPLASH, this.getBlockPos().getX() + d, this.getBlockPos().getY() + 0.5F, this.getBlockPos().getZ() + e, 0.05, 0.25, 0.05);
+                    double d = (random.nextDouble());
+                    double e = (random.nextDouble());
+                    this.getLevel().addParticle(ParticleTypes.SPLASH, this.getBlockPos().getX() + d, this.getBlockPos().getY() + 1F, this.getBlockPos().getZ() + e, 0.05, 0.25, 0.05);
                 }
             }
             return new Pair<>(ItemInteractionResult.SUCCESS, ItemStack.EMPTY);
