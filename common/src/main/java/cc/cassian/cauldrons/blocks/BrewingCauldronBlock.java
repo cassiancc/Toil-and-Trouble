@@ -4,6 +4,8 @@ import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.core.CauldronModEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
@@ -63,6 +65,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                 CauldronModEvents.insert(itemEntity.getItem(), state, level, pos, null, null, null);
             }
             else if (cauldronBlockEntity.getPotion() != null) {
+                level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS);
                 if (cauldronBlockEntity.isPotionWater()) {
                     if (entity.isOnFire()) {
                         entity.clearFire();
