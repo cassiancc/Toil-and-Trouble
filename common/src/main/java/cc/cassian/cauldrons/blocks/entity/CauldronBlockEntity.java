@@ -2,6 +2,7 @@ package cc.cassian.cauldrons.blocks.entity;
 
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
+import cc.cassian.cauldrons.config.ModConfig;
 import cc.cassian.cauldrons.core.CauldronModTags;
 import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
 import cc.cassian.cauldrons.registry.CauldronBlocks;
@@ -42,7 +43,7 @@ public class CauldronBlockEntity extends BlockEntity {
     protected boolean splashing = false;
     protected boolean lingering = false;
     private int progress;
-    private int maxProgress;
+    private int maxProgress = CauldronMod.CONFIG.brewingTime;
     private int bubbleTimer = 0;
 
     private ItemStack itemHandler = ItemStack.EMPTY;
@@ -155,6 +156,7 @@ public class CauldronBlockEntity extends BlockEntity {
                     double e = (random.nextDouble());
                     this.getLevel().addParticle(ParticleTypes.SPLASH, this.getBlockPos().getX() + d, this.getBlockPos().getY() + 1F, this.getBlockPos().getZ() + e, 0.05, 0.25, 0.05);
                 }
+                progress = 0;
             }
             return new Pair<>(ItemInteractionResult.SUCCESS, ItemStack.EMPTY);
         }
@@ -250,8 +252,13 @@ public class CauldronBlockEntity extends BlockEntity {
                 cauldronBlockEntity.bubbleTimer--;
             }
             // brewing
-            if (level.getBlockState(pos.below()).is(CauldronModTags.HEATS_CAULDRON) || !CauldronMod.CONFIG.requiresHeat) {
-                cauldronBlockEntity.brew();
+            if ((level.getBlockState(pos.below()).is(CauldronModTags.HEATS_CAULDRON) || !CauldronMod.CONFIG.requiresHeat) && !cauldronBlockEntity.itemHandler.isEmpty()) {
+                if (cauldronBlockEntity.progress > cauldronBlockEntity.maxProgress) {
+                    cauldronBlockEntity.brew();
+                    cauldronBlockEntity.progress = 0;
+                } else {
+                    cauldronBlockEntity.progress++;
+                }
             }
             //reset to vanilla
             if (cauldronBlockEntity.itemHandler.isEmpty()) {
