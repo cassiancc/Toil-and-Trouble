@@ -1,5 +1,6 @@
 package cc.cassian.cauldrons.blocks;
 
+import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.core.CauldronModEvents;
 import net.minecraft.core.BlockPos;
@@ -69,7 +70,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                             lowerFillLevel(state, level, pos);
                         }
                     }
-                } else if (entity instanceof LivingEntity livingEntity) {
+                } else if (entity instanceof LivingEntity livingEntity && CauldronMod.CONFIG.cauldronsApplyEffects.value()) {
                     if (livingEntity.isAffectedByPotions()) {
                         for (MobEffectInstance effect : cauldronBlockEntity.getPotion().value().getEffects()) {
                             livingEntity.addEffect(effect);

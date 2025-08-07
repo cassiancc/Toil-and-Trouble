@@ -44,7 +44,7 @@ public class CauldronBlockEntity extends BlockEntity {
     protected boolean lingering = false;
     protected boolean lingeringParticles = false;
     private int progress;
-    private int maxProgress = CauldronMod.CONFIG.brewingTime;
+    private int maxProgress = CauldronMod.CONFIG.brewingTime.value() * 20;
     private int bubbleTimer = 0;
     private boolean pop = false;
 
@@ -282,11 +282,11 @@ public class CauldronBlockEntity extends BlockEntity {
             }
             // brewing
             boolean cauldronHeated = level.getBlockState(pos.below()).is(CauldronModTags.HEATS_CAULDRON);
-            boolean cauldronCanBrew = cauldronHeated || !CauldronMod.CONFIG.requiresHeat;
+            boolean cauldronCanBrew = cauldronHeated || !CauldronMod.CONFIG.requiresHeat.value();
             if (cauldronCanBrew && !cauldronBlockEntity.itemHandler.isEmpty()) {
                 var maxProgress = cauldronBlockEntity.maxProgress;
                 if (cauldronHeated) {
-                    maxProgress = (int) (maxProgress*CauldronMod.CONFIG.heatAmplification);
+                    maxProgress = (int) (maxProgress*CauldronMod.CONFIG.heatAmplification.value());
                 }
                 if (cauldronBlockEntity.progress > maxProgress) {
                     cauldronBlockEntity.brew();

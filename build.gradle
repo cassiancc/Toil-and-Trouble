@@ -58,6 +58,10 @@ subprojects {
                 includeGroup "folk.sisby"
             }
         }
+        maven {
+            name = "TerraformersMC"
+            url = "https://maven.terraformersmc.com/"
+        }
     }
 
     loom {
@@ -66,7 +70,10 @@ subprojects {
 
     dependencies {
         minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
-        mappings loom.officialMojangMappings()
+        mappings loom.layered() {
+            officialMojangMappings()
+            parchment("org.parchmentmc.data:parchment-$minecraft_version:$parchment_version@zip")
+        }
     }
 
     java {
