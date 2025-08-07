@@ -5,11 +5,13 @@ import cc.cassian.cauldrons.client.renderer.CauldronRenderer;
 import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
 import cc.cassian.cauldrons.registry.CauldronBlocks;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 
 public final class CauldronModFabricClient implements ClientModInitializer {
     @Override
@@ -23,7 +25,7 @@ public final class CauldronModFabricClient implements ClientModInitializer {
             }
             return 9551193;
         }, CauldronBlocks.BREWING_CAULDRON.get());
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), CauldronBlocks.BREWING_CAULDRON.get());
+        BlockRenderLayerMap.putBlocks(ChunkSectionLayer.TRANSLUCENT, CauldronBlocks.BREWING_CAULDRON.get());
 
     }
 }

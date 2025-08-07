@@ -5,6 +5,9 @@ import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.core.CauldronModTags;
 import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
 import cc.cassian.cauldrons.registry.CauldronSoundEvents;
+import com.google.gson.JsonElement;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -14,7 +17,8 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,9 +30,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
@@ -72,28 +79,29 @@ public class CauldronBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
-        Tag inventory = tag.get("cauldron.inventory");
-        if (inventory != null)
-            itemHandler = ItemStack.parse(registries, inventory).orElse(ItemStack.EMPTY);
+    public void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
+        Optional<ItemStack> inventory = tag.read("cauldron.inventory", ItemStack.SINGLE_ITEM_CODEC);
+        if (inventory.isPresent())
+            itemHandler = inventory.get();
         else itemHandler = ItemStack.EMPTY;
-        progress = tag.getInt("cauldron.progress");
-        maxProgress = tag.getInt("cauldron.max_progress");
-        var p = tag.getString("cauldron.potion");
+        progress = tag.getIntOr("cauldron.progress", 0);
+        maxProgress = tag.getIntOr("cauldron.max_progress", 0);
+        var p = tag.getStringOr("cauldron.potion", "minecraft:air");
         if (!p.equals("minecraft:air")) {
-            potion = BuiltInRegistries.POTION.getHolder(ResourceLocation.parse(p)).map(PotionContents::new).orElse(PotionContents.EMPTY);
+            potion = BuiltInRegistries.POTION.get(ResourceLocation.parse(p)).map(PotionContents::new).orElse(PotionContents.EMPTY);
         } else {
             potion = PotionContents.EMPTY;
         }
-        splashing = tag.getBoolean("cauldron.splashing");
-        lingering = tag.getBoolean("cauldron.lingering");
+        splashing = tag.getBooleanOr("cauldron.splashing", false);
+        lingering = tag.getBooleanOr("cauldron.lingering", false);
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        if (!itemHandler.isEmpty())
-            tag.put("cauldron.inventory", itemHandler.save(registries));
+    public void saveAdditional(ValueOutput tag) {
+        if (!itemHandler.isEmpty()) {
+            tag.store("cauldron.inventory", ItemStack.SINGLE_ITEM_CODEC, itemHandler);
+        }
         tag.putInt("cauldron.progress", progress);
         tag.putInt("cauldron.max_progress", maxProgress);
         if (this.potion != null && potion.potion().isPresent() && potion.potion().orElseThrow().unwrapKey().isPresent()) {
@@ -103,16 +111,16 @@ public class CauldronBlockEntity extends BlockEntity {
         }
         tag.putBoolean("cauldron.splashing", splashing);
         tag.putBoolean("cauldron.lingering", lingering);
-        super.saveAdditional(tag, registries);
+        super.saveAdditional(tag);
     }
 
-    public Pair<ItemInteractionResult, ItemStack> insert(ItemStack itemStack) {
+    public Pair<InteractionResult, ItemStack> insert(ItemStack itemStack) {
         var potionQuantity = getFillLevel();
         // fill with water bucket
         if (itemStack.is(Items.WATER_BUCKET) && potionQuantity == 0) {
             setFillLevel(3);
             this.potion = new PotionContents(Potions.WATER);
-            return new Pair<>(ItemInteractionResult.SUCCESS, Items.BUCKET.getDefaultInstance());
+            return new Pair<>(InteractionResult.SUCCESS, Items.BUCKET.getDefaultInstance());
         // fill with potion
         } else if (itemStack.has(DataComponents.POTION_CONTENTS) && potionQuantity < 3 && !itemStack.is(CauldronModTags.CANNOT_FILL_CAULDRON)) {
             PotionContents insertedPotion = itemStack.get(DataComponents.POTION_CONTENTS);
@@ -121,11 +129,11 @@ public class CauldronBlockEntity extends BlockEntity {
             if (currentPotion.isEmpty()) {
                 this.potion = insertedPotion;
                 setFillLevel(1);
-                return new Pair<>(ItemInteractionResult.SUCCESS, Items.GLASS_BOTTLE.getDefaultInstance());
+                return new Pair<>(InteractionResult.SUCCESS, Items.GLASS_BOTTLE.getDefaultInstance());
             }
             else if (insertedPotion.is(currentPotion.get())) {
                 setFillLevel(potionQuantity+1);
-                return new Pair<>(ItemInteractionResult.SUCCESS, Items.GLASS_BOTTLE.getDefaultInstance());
+                return new Pair<>(InteractionResult.SUCCESS, Items.GLASS_BOTTLE.getDefaultInstance());
             }
         // drain with bucket
         } else if (itemStack.is(Items.BUCKET) && potionQuantity>=1) {
@@ -133,7 +141,7 @@ public class CauldronBlockEntity extends BlockEntity {
             if (isPotionWater()) returnStack = Items.WATER_BUCKET.getDefaultInstance();
             else returnStack = Items.BUCKET.getDefaultInstance();
             setFillLevel(0);
-            return new Pair<>(ItemInteractionResult.SUCCESS, returnStack);
+            return new Pair<>(InteractionResult.SUCCESS, returnStack);
         // drain with bottle
         } else if (itemStack.is(Items.GLASS_BOTTLE) && potionQuantity>=1) {
             var potionItem = Items.POTION;
@@ -141,12 +149,12 @@ public class CauldronBlockEntity extends BlockEntity {
             else if (lingering) potionItem = Items.LINGERING_POTION;
             ItemStack stack = createItemStack(potionItem, potion);
             setFillLevel(potionQuantity-1);
-            return new Pair<>(ItemInteractionResult.SUCCESS, stack);
+            return new Pair<>(InteractionResult.SUCCESS, stack);
         // drain with arrow
         } else if (itemStack.is(Items.ARROW) && potionQuantity>=1) {
             var stack = createItemStack(Items.TIPPED_ARROW, potion);
             setFillLevel(potionQuantity-1);
-            return new Pair<>(ItemInteractionResult.SUCCESS, stack);
+            return new Pair<>(InteractionResult.SUCCESS, stack);
         }
         // insert as inventory
         else if (itemHandler.isEmpty()) {
@@ -160,9 +168,9 @@ public class CauldronBlockEntity extends BlockEntity {
                 }
                 progress = 0;
             }
-            return new Pair<>(ItemInteractionResult.SUCCESS, ItemStack.EMPTY);
+            return new Pair<>(InteractionResult.SUCCESS, ItemStack.EMPTY);
         }
-        return new Pair<>(ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION, ItemStack.EMPTY);
+        return new Pair<>(InteractionResult.PASS, ItemStack.EMPTY);
     }
 
     public void brew() {

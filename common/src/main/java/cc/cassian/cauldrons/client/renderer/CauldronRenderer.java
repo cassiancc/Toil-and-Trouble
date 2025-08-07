@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
 public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity> {
     private static final float SIZE = 0.375F;
@@ -19,7 +20,7 @@ public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity
     }
 
     @Override
-    public void render(CauldronBlockEntity blockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j) {
+    public void render(CauldronBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay, Vec3 cameraPos) {
         ItemStack itemStack = blockEntity.getItem();
         int k = (int)blockEntity.getBlockPos().asLong();
 
@@ -29,7 +30,7 @@ public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
             poseStack.translate(0.0, 0, 0.0F);
             poseStack.scale(0.375F, 0.375F, 0.375F);
-            this.itemRenderer.renderStatic(itemStack, ItemDisplayContext.FIXED, i, j, poseStack, multiBufferSource, blockEntity.getLevel(), k);
+            this.itemRenderer.renderStatic(itemStack, ItemDisplayContext.FIXED, packedLight, packedOverlay, poseStack, bufferSource, blockEntity.getLevel(), k);
             poseStack.popPose();
         }
     }

@@ -4,13 +4,14 @@ import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.core.CauldronModEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -45,7 +46,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
         return CauldronBlockEntity::tick;
     }
 
-    protected ItemInteractionResult useItemOn(
+    protected InteractionResult useItemOn(
             ItemStack itemStack, BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult
     ) {
         return CauldronModEvents.insert(itemStack, blockState, level, pos, player, interactionHand, blockHitResult.getDirection());
@@ -59,8 +60,8 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     }
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        if (!level.isClientSide() && this.isEntityInsideContent(state, pos, entity) && level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier) {
+        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
             if (entity instanceof ItemEntity itemEntity && itemEntity.tickCount>10) {
                 CauldronModEvents.insert(itemEntity.getItem(), state, level, pos, null, null, null);
             }
@@ -69,7 +70,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                 if (cauldronBlockEntity.isPotionWater()) {
                     if (entity.isOnFire()) {
                         entity.clearFire();
-                        if (entity.mayInteract(level, pos)) {
+                        if (entity.mayInteract((ServerLevel) level, pos)) {
                             lowerFillLevel(state, level, pos);
                         }
                     }
@@ -79,7 +80,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                             livingEntity.addEffect(effect);
                         }
                     }
-                    if (entity.mayInteract(level, pos)) {
+                    if (entity.mayInteract((ServerLevel) level, pos)) {
                         setFillLevel(state, level, pos, 0);
                     }
                 }
@@ -127,7 +128,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
+    public ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean bl) {
         return new ItemStack(Blocks.CAULDRON);
     }
 

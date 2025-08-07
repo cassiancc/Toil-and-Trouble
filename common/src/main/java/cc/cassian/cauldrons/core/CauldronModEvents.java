@@ -6,7 +6,7 @@ import cc.cassian.cauldrons.registry.CauldronBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -25,7 +25,7 @@ import static net.minecraft.world.level.block.Block.popResourceFromFace;
 
 public class CauldronModEvents {
 
-    public static ItemInteractionResult useBlock(Player player, Level level, InteractionHand interactionHand, BlockPos pos, Direction direction) {
+    public static InteractionResult useBlock(Player player, Level level, InteractionHand interactionHand, BlockPos pos, Direction direction) {
         BlockState blockState = level.getBlockState(pos);
         ItemStack stack = player.getItemInHand(interactionHand);
         if (blockState.is(Blocks.CAULDRON) && !stack.is(Items.WATER_BUCKET)) {
@@ -39,10 +39,10 @@ public class CauldronModEvents {
             return insert(player.getItemInHand(interactionHand), blockState, level, pos, player, interactionHand, direction);
 
         }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return InteractionResult.PASS;
     }
 
-    public static ItemInteractionResult insert(
+    public static InteractionResult insert(
             ItemStack itemStack, BlockState blockState, Level level, BlockPos pos, @Nullable Player player, @Nullable InteractionHand interactionHand, @Nullable Direction direction
     ) {
         if (direction == null) {
@@ -70,10 +70,10 @@ public class CauldronModEvents {
                     else {
                         popResourceFromFace(level, pos, direction, stack);
                     }
-                    return ItemInteractionResult.CONSUME;
+                    return InteractionResult.CONSUME;
                 } else {
-                    Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
-                    if (!(insert.getA() == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION)) {
+                    Pair<InteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
+                    if (!(insert.getA() == InteractionResult.PASS)) {
                         itemStack.setCount(itemStack.getCount()-1);
                         if (player != null && interactionHand != null) {
                             if (player.getItemInHand(interactionHand).isEmpty()) {
@@ -89,6 +89,6 @@ public class CauldronModEvents {
                 }
             }
         }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return InteractionResult.PASS;
     }
 }

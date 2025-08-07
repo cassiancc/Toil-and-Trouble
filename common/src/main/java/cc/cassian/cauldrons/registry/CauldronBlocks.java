@@ -19,7 +19,7 @@ public class CauldronBlocks {
     private static Supplier<Block> register(ResourceKey<Block> resourceKey, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties) {
         // register block
         // return
-        return CommonRegistry.registerBlock(resourceKey.location().getPath(), ()-> function.apply(properties));
+        return CommonRegistry.registerBlock(resourceKey.location().getPath(), ()-> function.apply(properties.setId(resourceKey)));
     }
 
     private static ResourceKey<Block> registryKey(String string) {
