@@ -1,5 +1,6 @@
 package cc.cassian.cauldrons.blocks.entity;
 
+import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.core.CauldronModTags;
 import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
@@ -249,7 +250,9 @@ public class CauldronBlockEntity extends BlockEntity {
                 cauldronBlockEntity.bubbleTimer--;
             }
             // brewing
-            cauldronBlockEntity.brew();
+            if (level.getBlockState(pos.below()).is(CauldronModTags.HEATS_CAULDRON) || !CauldronMod.CONFIG.requiresHeat) {
+                cauldronBlockEntity.brew();
+            }
             //reset to vanilla
             if (cauldronBlockEntity.itemHandler.isEmpty()) {
                 if (cauldronBlockEntity.getFillLevel().equals(0)) {
