@@ -246,7 +246,14 @@ public class CauldronBlockEntity extends BlockEntity {
         if (blockEntity instanceof CauldronBlockEntity cauldronBlockEntity) {
             // particle logic
             if (cauldronBlockEntity.isBubbling()) {
-                level.addParticle(ParticleTypes.BUBBLE, pos.getX() + level.random.nextDouble(), pos.getY() + 1, pos.getZ() + level.random.nextDouble(), 0.01, 0.05, 0.01);
+                double d = pos.getX() + level.random.nextDouble();
+                double e = pos.getY() + 1;
+                double f = pos.getZ() + level.random.nextDouble();
+                if (level.random.nextBoolean()) {
+                    level.addParticle(ParticleTypes.BUBBLE_POP, d, e, f, 0.01, 0.05, 0.01);
+                } else {
+                    level.addParticle(ParticleTypes.BUBBLE, d, e, f, 0.01, 0.1, 0.01);
+                }
                 cauldronBlockEntity.bubbleTimer--;
             }
             // brewing
@@ -265,6 +272,8 @@ public class CauldronBlockEntity extends BlockEntity {
                 if (cauldronBlockEntity.getFillLevel().equals(0)) {
                     var newState = Blocks.CAULDRON.defaultBlockState();
                     level.setBlockAndUpdate(pos, newState);
+                } else if (blockState.getValue(BREWING)) {
+                    level.setBlockAndUpdate(pos, blockState.setValue(BrewingCauldronBlock.BREWING, false));
                 }
             }
             if (blockState.getValue(POTION_QUANTITY).equals(0)) {

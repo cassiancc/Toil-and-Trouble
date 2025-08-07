@@ -58,7 +58,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (!level.isClientSide && this.isEntityInsideContent(state, pos, entity) && level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
-            if (entity instanceof ItemEntity itemEntity) {
+            if (entity instanceof ItemEntity itemEntity && itemEntity.tickCount>10) {
                 CauldronModEvents.insert(itemEntity.getItem(), state, level, pos, null, null, null);
             }
             else if (cauldronBlockEntity.getPotion() != null) {

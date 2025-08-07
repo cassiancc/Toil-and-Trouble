@@ -1,16 +1,28 @@
 {
   "variants": {
-    "potion_quantity=0": {
+    "potion_quantity=0,brewing=false": {
       "model": "minecraft:block/cauldron"
     },
-    "potion_quantity=1": {
+    "potion_quantity=1,brewing=false": {
       "model": "toil_and_trouble:block/cauldron_level1"
     },
-    "potion_quantity=2": {
+    "potion_quantity=2,brewing=false": {
       "model": "toil_and_trouble:block/cauldron_level2"
     },
-    "potion_quantity=3": {
+    "potion_quantity=3,brewing=false": {
       "model": "toil_and_trouble:block/cauldron_full"
+    },
+    "potion_quantity=0,brewing=true": {
+      "model": "minecraft:block/cauldron"
+    },
+    "potion_quantity=1,brewing=true": {
+      "model": "toil_and_trouble:block/active_cauldron_level1"
+    },
+    "potion_quantity=2,brewing=true": {
+      "model": "toil_and_trouble:block/active_cauldron_level2"
+    },
+    "potion_quantity=3,brewing=true": {
+      "model": "toil_and_trouble:block/active_cauldron_full"
     }
   }
 }
