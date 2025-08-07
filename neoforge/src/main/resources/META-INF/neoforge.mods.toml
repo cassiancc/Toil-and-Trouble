@@ -1,6 +1,6 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
-#issueTrackerURL = ""
+issueTrackerURL = "https://github.com/cassiancc/Toil-And-Trouble/issues"
 license = "MIT"
 
 [[mods]]
@@ -11,7 +11,7 @@ authors = "cassiancc"
 description = '''
 Empower Cauldrons with additional functionality, including Cauldron Brewing.
 '''
-#logoFile = ""
+logoFile = "icon.png"
 
 [[dependencies.toil_and_trouble]]
 modId = "neoforge"
