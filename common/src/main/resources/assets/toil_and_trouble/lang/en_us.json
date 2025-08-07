@@ -1,9 +1,8 @@
 {
-    "block.toil_and_trouble.cauldron": "Cauldron",
+    "block.toil_and_trouble.cauldron": "Potion Cauldron",
     "lore.toil_and_trouble.cauldron": "This workstation can store and brew potions.",
     "config.jade.plugin_toil_and_trouble.cauldron": "Cauldron Brewing",
     "subtitles.toil_and_trouble.block.cauldron.brews": "Cauldron brews",
-    "gui.toil_and_trouble.splash": "Bottle for a Splash Potion",
-    "gui.toil_and_trouble.lingering": "Bottle for a Lingering Potion"
+    "gui.toil_and_trouble.doses": "Contains %s Bottles:"
 
 }

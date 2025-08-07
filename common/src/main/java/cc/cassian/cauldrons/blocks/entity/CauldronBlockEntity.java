@@ -15,6 +15,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -43,6 +44,7 @@ public class CauldronBlockEntity extends BlockEntity {
     private int progress;
     private int maxProgress = CauldronMod.CONFIG.brewingTime;
     private int bubbleTimer = 0;
+    private boolean pop = false;
 
     private ItemStack itemHandler = ItemStack.EMPTY;
 
@@ -249,11 +251,21 @@ public class CauldronBlockEntity extends BlockEntity {
                 double d = pos.getX() + level.random.nextDouble();
                 double e = pos.getY() + 1;
                 double f = pos.getZ() + level.random.nextDouble();
-                if (level.random.nextBoolean()) {
-                    level.addParticle(ParticleTypes.BUBBLE_POP, d, e, f, 0.01, 0.05, 0.01);
-                } else {
-                    level.addParticle(ParticleTypes.BUBBLE, d, e, f, 0.01, 0.1, 0.01);
+                if (cauldronBlockEntity.getPotion() != null) {
+                    var effects = cauldronBlockEntity.getPotion().value().getEffects();
+                    if (!effects.isEmpty()) {
+                        for (MobEffectInstance effect : effects) {
+                            level.addParticle(effect.getParticleOptions(), d, e, f, 0.01, 0.05, 0.01);
+                        }
+                    } else {
+                        if (cauldronBlockEntity.pop) {
+                            level.addParticle(ParticleTypes.BUBBLE_POP, d, e, f, 0.01, 0.05, 0.01);
+                        } else {
+                            level.addParticle(ParticleTypes.BUBBLE, d, e, f, 0.01, 0.05, 0.01);
+                        }
+                    }
                 }
+                cauldronBlockEntity.pop = !cauldronBlockEntity.pop;
                 cauldronBlockEntity.bubbleTimer--;
             }
             // brewing
