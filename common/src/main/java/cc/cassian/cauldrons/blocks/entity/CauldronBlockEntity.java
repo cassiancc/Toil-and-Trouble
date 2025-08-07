@@ -40,7 +40,9 @@ public class CauldronBlockEntity extends BlockEntity {
 
     protected PotionContents potion = PotionContents.EMPTY;
     protected boolean splashing = false;
+    protected boolean splashParticles = false;
     protected boolean lingering = false;
+    protected boolean lingeringParticles = false;
     private int progress;
     private int maxProgress = CauldronMod.CONFIG.brewingTime;
     private int bubbleTimer = 0;
@@ -172,11 +174,13 @@ public class CauldronBlockEntity extends BlockEntity {
                 this.splashing = true;
                 this.lingering = false;
                 updateAfterBrewing();
+                this.splashParticles = true;
             }
             else if (itemHandler.is(CauldronModTags.CREATES_LINGERING_POTIONS)) {
                 this.splashing = false;
                 this.lingering = true;
                 updateAfterBrewing();
+                this.lingeringParticles = true;
             }
             else if (potionBrewing.hasMix(potionItem, itemHandler)) {
                 ItemStack mix = potionBrewing.mix(itemHandler, potionItem);
@@ -192,6 +196,8 @@ public class CauldronBlockEntity extends BlockEntity {
         level.playSound(null, getBlockPos(), CauldronSoundEvents.BREWS.get(), SoundSource.BLOCKS);
         level.setBlockAndUpdate(getBlockPos(), this.getBlockState().setValue(BrewingCauldronBlock.BREWING, false));
         bubbleTimer = 20;
+        splashParticles = false;
+        lingeringParticles = false;
     }
 
     public ItemStack retrieve() {
@@ -253,7 +259,13 @@ public class CauldronBlockEntity extends BlockEntity {
                 double f = pos.getZ() + level.random.nextDouble();
                 if (cauldronBlockEntity.getPotion() != null) {
                     var effects = cauldronBlockEntity.getPotion().value().getEffects();
-                    if (!effects.isEmpty()) {
+                    if (cauldronBlockEntity.splashParticles) {
+                        level.addParticle(ParticleTypes.SMOKE, d, e, f, 0.01, 0.05, 0.01);
+                    }
+                    else if (cauldronBlockEntity.lingeringParticles) {
+                        level.addParticle(ParticleTypes.DRAGON_BREATH, d, e, f, 0.01, 0.05, 0.01);
+                    }
+                    else if (!effects.isEmpty()) {
                         for (MobEffectInstance effect : effects) {
                             level.addParticle(effect.getParticleOptions(), d, e, f, 0.01, 0.05, 0.01);
                         }
