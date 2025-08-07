@@ -2,10 +2,8 @@ package cc.cassian.cauldrons.blocks.entity;
 
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
-import cc.cassian.cauldrons.config.ModConfig;
 import cc.cassian.cauldrons.core.CauldronModTags;
 import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
-import cc.cassian.cauldrons.registry.CauldronBlocks;
 import cc.cassian.cauldrons.registry.CauldronSoundEvents;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
@@ -25,7 +23,6 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -35,6 +32,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
+import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.BREWING;
 import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.POTION_QUANTITY;
 
 public class CauldronBlockEntity extends BlockEntity {
@@ -190,7 +188,7 @@ public class CauldronBlockEntity extends BlockEntity {
         this.itemHandler = ItemStack.EMPTY;
         //level.levelEvent(LevelEvent.SOUND_BREWING_STAND_BREW, this.getBlockPos(), 0);
         level.playSound(null, getBlockPos(), CauldronSoundEvents.BREWS.get(), SoundSource.BLOCKS);
-        level.setBlockAndUpdate(getBlockPos(), this.getBlockState().setValue(BrewingCauldronBlock.MAGIC, !this.getBlockState().getValue(BrewingCauldronBlock.MAGIC)));
+        level.setBlockAndUpdate(getBlockPos(), this.getBlockState().setValue(BrewingCauldronBlock.BREWING, false));
         bubbleTimer = 20;
     }
 
@@ -258,6 +256,8 @@ public class CauldronBlockEntity extends BlockEntity {
                     cauldronBlockEntity.progress = 0;
                 } else {
                     cauldronBlockEntity.progress++;
+                    if (!blockState.getValue(BREWING))
+                        level.setBlockAndUpdate(pos, blockState.setValue(BREWING, true));
                 }
             }
             //reset to vanilla
