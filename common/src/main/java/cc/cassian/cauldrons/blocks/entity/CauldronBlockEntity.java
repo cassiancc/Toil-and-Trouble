@@ -269,8 +269,14 @@ public class CauldronBlockEntity extends BlockEntity {
                 cauldronBlockEntity.bubbleTimer--;
             }
             // brewing
-            if ((level.getBlockState(pos.below()).is(CauldronModTags.HEATS_CAULDRON) || !CauldronMod.CONFIG.requiresHeat) && !cauldronBlockEntity.itemHandler.isEmpty()) {
-                if (cauldronBlockEntity.progress > cauldronBlockEntity.maxProgress) {
+            boolean cauldronHeated = level.getBlockState(pos.below()).is(CauldronModTags.HEATS_CAULDRON);
+            boolean cauldronCanBrew = cauldronHeated || !CauldronMod.CONFIG.requiresHeat;
+            if (cauldronCanBrew && !cauldronBlockEntity.itemHandler.isEmpty()) {
+                var maxProgress = cauldronBlockEntity.maxProgress;
+                if (cauldronHeated) {
+                    maxProgress = (int) (maxProgress*CauldronMod.CONFIG.heatAmplification);
+                }
+                if (cauldronBlockEntity.progress > maxProgress) {
                     cauldronBlockEntity.brew();
                     cauldronBlockEntity.progress = 0;
                 } else {

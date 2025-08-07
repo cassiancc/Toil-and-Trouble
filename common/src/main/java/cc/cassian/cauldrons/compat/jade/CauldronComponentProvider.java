@@ -21,6 +21,7 @@ public enum CauldronComponentProvider implements IBlockComponentProvider {
         if (blockAccessor.getBlockEntity() instanceof CauldronBlockEntity cauldronBlockEntity) {
             if (!cauldronBlockEntity.getItem().isEmpty()) {
                 iTooltip.add(cauldronBlockEntity.getItem().getHoverName());
+                iTooltip.add(Component.empty());
             }
             if (cauldronBlockEntity.getPotion() != null) {
                 iTooltip.add(Component.translatable("gui.toil_and_trouble.doses", blockAccessor.getBlockState().getValue(BrewingCauldronBlock.POTION_QUANTITY)).withStyle(ChatFormatting.DARK_PURPLE));
