@@ -3,6 +3,8 @@
     "lore.toil_and_trouble.cauldron": "This workstation can store and brew potions.",
     "config.jade.plugin_toil_and_trouble.cauldron": "Cauldron Brewing",
     "subtitles.toil_and_trouble.block.cauldron.brews": "Cauldron brews",
-    "gui.toil_and_trouble.doses": "Contains %s Bottles:"
+    "gui.toil_and_trouble.doses": "Contains %s Bottles:",
+    "config.waila.plugin_toil_and_trouble": "Toil and Trouble",
+    "config.waila.plugin_toil_and_trouble.cauldron": "Show contents of Potion Cauldrons"
 
 }

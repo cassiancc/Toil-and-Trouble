@@ -29,7 +29,12 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+    // jade
     modImplementation "maven.modrinth:jade:${project.jade_version}+fabric"
+    // wthit
+    modRuntimeOnly "mcp.mobius.waila:wthit:fabric-${wthit_version}"
+    modRuntimeOnly "lol.bai:badpackets:fabric-${badpackets_version}"
+    //configs
     modImplementation(include("folk.sisby:kaleido-config:${kaleido_version}"))
     modImplementation "maven.modrinth:mcqoy:adCKjC4q"
     modImplementation("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_version}")
