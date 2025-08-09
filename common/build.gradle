@@ -18,5 +18,5 @@ dependencies {
     modCompileOnly "mcp.mobius.waila:wthit-api:fabric-${wthit_version}"
 
     // EMI
-    modCompileOnly("dev.emi:emi-xplat-intermediary:$emi_version+$minecraft_version:api")
+    modCompileOnly("dev.emi:emi-xplat-intermediary:$emi_version:api")
 }

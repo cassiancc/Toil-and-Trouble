@@ -20,7 +20,7 @@ public class BrewingEmiRecipe extends BasicEmiRecipe {
     private final ItemStack resultForDisplay;
 
     public BrewingEmiRecipe(RecipeHolder<BrewingRecipe> recipe, RegistryAccess registryAccess) {
-        super(CauldronModEmiPlugin.CAULDRON_CATEGORY, recipe.id(), 100, 18);
+        super(CauldronModEmiPlugin.CAULDRON_CATEGORY, recipe.id().location(), 100, 18);
         // reagent
         inputs.add(EmiIngredient.of(recipe.value().getReagent()));
         // potion item
@@ -29,7 +29,7 @@ public class BrewingEmiRecipe extends BasicEmiRecipe {
         this.potionForDisplay = PotionContents.createItemStack(CauldronModItems.CAULDRON_CONTENTS.get(), recipe.value().getPotion());
         potionForDisplay.set(DataComponents.ITEM_NAME, potion.getHoverName());
         // output
-        var result = recipe.value().getResultItem(registryAccess);
+        var result = recipe.value().getResultItem();
         outputs.add(EmiStack.of(result));
         this.resultForDisplay = PotionContents.createItemStack(CauldronModItems.CAULDRON_CONTENTS.get(), recipe.value().getResultPotion(registryAccess).potion().get());
         resultForDisplay.set(DataComponents.ITEM_NAME, result.getHoverName());

@@ -25,8 +25,8 @@ public final class CauldronModFabricClient implements ClientModInitializer {
                 return cauldronBlockEntity.getPotionColour();
             }
             return 9551193;
-        }, CauldronBlocks.BREWING_CAULDRON.get());
-        BlockRenderLayerMap.putBlocks(ChunkSectionLayer.TRANSLUCENT, CauldronBlocks.BREWING_CAULDRON.get());
+        }, CauldronModBlocks.BREWING_CAULDRON.get());
+        BlockRenderLayerMap.putBlocks(ChunkSectionLayer.TRANSLUCENT, CauldronModBlocks.BREWING_CAULDRON.get());
 
     }
 }

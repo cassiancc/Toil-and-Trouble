@@ -28,9 +28,9 @@ public class CauldronModEmiPlugin implements EmiPlugin {
 
         registry.addCategory(CAULDRON_CATEGORY);
         registry.addWorkstation(CAULDRON_CATEGORY, CAULDRON_WORKSTATION);
-        for (RecipeHolder<BrewingRecipe> recipe : manager.getAllRecipesFor(CauldronModRecipes.BREWING.get())) {
-            registry.addRecipe(new BrewingEmiRecipe(recipe, access));
-        }
+//        for (RecipeHolder<BrewingRecipe> recipe : manager.getAllRecipesFor(CauldronModRecipes.BREWING.get())) {
+//            registry.addRecipe(new BrewingEmiRecipe(recipe, access));
+//        }
 
     }
 }
