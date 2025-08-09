@@ -1,8 +1,6 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": {
-    "item": "minecraft:fermented_spider_eye"
-  },
+  "reagent": "minecraft:fermented_spider_eye",
   "potion": "minecraft:healing",
   "result": "minecraft:harming"
 }

@@ -1,8 +1,6 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": {
-    "item": "minecraft:phantom_membrane"
-  },
+  "reagent": "minecraft:phantom_membrane",
   "potion": "minecraft:awkward",
   "result": "minecraft:slow_falling"
 }

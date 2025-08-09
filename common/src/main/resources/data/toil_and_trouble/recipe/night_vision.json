@@ -1,8 +1,6 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": {
-    "item": "minecraft:golden_carrot"
-  },
+  "reagent": "minecraft:golden_carrot",
   "potion": "minecraft:awkward",
   "result": "minecraft:night_vision"
 }

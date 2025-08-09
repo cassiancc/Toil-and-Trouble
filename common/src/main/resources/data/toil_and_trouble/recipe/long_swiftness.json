@@ -1,8 +1,6 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": {
-    "item": "minecraft:redstone"
-  },
+  "reagent": "minecraft:redstone",
   "potion": "minecraft:swiftness",
   "result": "minecraft:long_swiftness"
 }

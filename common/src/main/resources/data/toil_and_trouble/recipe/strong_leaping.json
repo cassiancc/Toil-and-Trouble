@@ -1,8 +1,6 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": {
-    "item": "minecraft:glowstone_dust"
-  },
+  "reagent": "minecraft:glowstone_dust",
   "potion": "minecraft:leaping",
   "result": "minecraft:strong_leaping"
 }

@@ -1,8 +1,6 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": {
-    "item": "minecraft:ghast_tear"
-  },
+  "reagent": "minecraft:ghast_tear",
   "potion": "minecraft:awkward",
   "result": "minecraft:regeneration"
 }

@@ -1,8 +1,6 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": {
-    "item": "minecraft:slime_block"
-  },
+  "reagent": "minecraft:slime_block",
   "potion": "minecraft:awkward",
   "result": "minecraft:oozing"
 }
