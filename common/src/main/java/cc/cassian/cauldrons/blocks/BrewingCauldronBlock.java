@@ -147,18 +147,12 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock())) {
-            if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
-                if (level instanceof ServerLevel) {
-                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cauldronBlockEntity.getItem());
-                }
-
-                super.onRemove(state, level, pos, newState, movedByPiston);
-                level.updateNeighbourForOutputSignal(pos, this);
-            } else {
-                super.onRemove(state, level, pos, newState, movedByPiston);
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
+            if (level instanceof ServerLevel) {
+                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cauldronBlockEntity.getItem());
             }
+            level.updateNeighbourForOutputSignal(pos, this);
         }
     }
 

@@ -1,8 +1,6 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": {
-    "tag": "toil_and_trouble:creates_awkward_potions"
-  },
+  "reagent": "#toil_and_trouble:creates_awkward_potions",
   "potion": "minecraft:water",
   "result": "minecraft:awkward"
 }

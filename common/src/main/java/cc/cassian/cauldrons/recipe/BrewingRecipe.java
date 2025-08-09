@@ -37,17 +37,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
     @Override
     public ItemStack assemble(BrewingRecipeInput input, HolderLookup.Provider registries) {
-        return getResultItem(registries);
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return NonNullList.of(reagent);
+        return getResultItem();
     }
 
     public Ingredient getReagent() {
@@ -58,8 +48,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         return potion.potion().get();
     }
 
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries) {
+    public ItemStack getResultItem() {
         return PotionContents.createItemStack(Items.POTION, result.potion().get());
     }
 
@@ -75,6 +64,16 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
     @Override
     public RecipeType<BrewingRecipe> getType() {
         return CauldronModRecipes.BREWING.get();
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return null;
     }
 
     public static class Serializer implements RecipeSerializer<BrewingRecipe> {

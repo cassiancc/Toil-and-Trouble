@@ -19,6 +19,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionResult;
@@ -179,12 +180,15 @@ public class CauldronBlockEntity extends BlockEntity {
 
     public void brew() {
         if (potion.potion().isEmpty() || reagent.isEmpty()) return;
-        Optional<RecipeHolder<BrewingRecipe>> recipe = level.getRecipeManager().getRecipeFor(CauldronModRecipes.BREWING.get(), new BrewingRecipeInput(reagent, potion), level);
-        if (recipe.isPresent()) {
-            this.potion = recipe.get().value().getResultPotion(level.registryAccess());
-            updateAfterBrewing();
+        if (this.level instanceof ServerLevel serverLevel) {
+            Optional<RecipeHolder<BrewingRecipe>> recipe = serverLevel.recipeAccess().getRecipeFor(CauldronModRecipes.BREWING.get(), new BrewingRecipeInput(reagent, potion), level);
+            if (recipe.isPresent()) {
+                this.potion = recipe.get().value().getResultPotion(level.registryAccess());
+                updateAfterBrewing();
+                return;
+            }
         }
-        else if (reagent.is(CauldronModTags.CREATES_SPLASH_POTIONS)) {
+        if (reagent.is(CauldronModTags.CREATES_SPLASH_POTIONS)) {
             this.splashing = true;
             this.lingering = false;
             updateAfterBrewing();
@@ -205,6 +209,7 @@ public class CauldronBlockEntity extends BlockEntity {
                 updateAfterBrewing();
             }
         }
+
     }
 
     private void updateAfterBrewing() {
