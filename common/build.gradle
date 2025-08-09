@@ -19,4 +19,6 @@ dependencies {
 
     // EMI
     modCompileOnly("dev.emi:emi-xplat-intermediary:$emi_version:api")
+    modCompileOnly("de.crafty:eiv-fabric:$eiv_version")
+
 }

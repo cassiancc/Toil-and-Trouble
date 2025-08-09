@@ -69,6 +69,7 @@ subprojects {
                 includeGroup "mcp.mobius.waila"
             }
         }
+        mavenLocal()
     }
 
     loom {

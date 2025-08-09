@@ -185,7 +185,7 @@ public class CauldronBlockEntity extends BlockEntity {
         if (level instanceof ServerLevel serverLevel) {
             Optional<RecipeHolder<BrewingRecipe>> recipe = serverLevel.recipeAccess().getRecipeFor(CauldronModRecipes.BREWING.get(), new BrewingRecipeInput(reagent, potion), level);
             if (recipe.isPresent()) {
-                this.potion = recipe.get().value().getResultPotion(level.registryAccess());
+                this.potion = recipe.get().value().getResultPotion();
                 updateAfterBrewing();
             }
             else if (reagent.is(CauldronModTags.CREATES_SPLASH_POTIONS)) {

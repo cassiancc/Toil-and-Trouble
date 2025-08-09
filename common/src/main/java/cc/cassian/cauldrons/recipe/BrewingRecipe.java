@@ -52,7 +52,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         return PotionContents.createItemStack(Items.POTION, result.potion().get());
     }
 
-    public PotionContents getResultPotion(HolderLookup.Provider registries) {
+    public PotionContents getResultPotion() {
         return result;
     }
 

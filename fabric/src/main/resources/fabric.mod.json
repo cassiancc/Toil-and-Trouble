@@ -25,8 +25,8 @@
     "jade": [
         "cc.cassian.cauldrons.compat.jade.CauldronModJadePlugin"
     ],
-    "emi": [
-      "cc.cassian.cauldrons.compat.emi.CauldronModEmiPlugin"
+    "eiv": [
+      "cc.cassian.cauldrons.compat.eiv.CauldronModEIVPlugin"
     ]
   },
   "mixins": [
