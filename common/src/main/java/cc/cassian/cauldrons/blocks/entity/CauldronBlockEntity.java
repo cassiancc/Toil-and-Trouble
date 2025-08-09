@@ -100,7 +100,7 @@ public class CauldronBlockEntity extends BlockEntity {
         }
         splashing = tag.getBooleanOr("cauldron.splashing", false);
         lingering = tag.getBooleanOr("cauldron.lingering", false);
-        bubbleTimer = tag.getInt("cauldron.bubble_timer", 0);
+        bubbleTimer = tag.getIntOr("cauldron.bubble_timer", 0);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class CauldronBlockEntity extends BlockEntity {
         tag.putBoolean("cauldron.splashing", splashing);
         tag.putBoolean("cauldron.lingering", lingering);
         tag.putInt("cauldron.bubble_timer", bubbleTimer);
-        super.saveAdditional(tag, registries);
+        super.saveAdditional(tag);
     }
 
     public Pair<InteractionResult, ItemStack> insert(ItemStack itemStack) {
@@ -182,8 +182,8 @@ public class CauldronBlockEntity extends BlockEntity {
 
     public void brew() {
         if (potion.potion().isEmpty() || reagent.isEmpty()) return;
-        if (!level.isClientSide()) {
-            Optional<RecipeHolder<BrewingRecipe>> recipe = level.getRecipeManager().getRecipeFor(CauldronModRecipes.BREWING.get(), new BrewingRecipeInput(reagent, potion), level);
+        if (level instanceof ServerLevel serverLevel) {
+            Optional<RecipeHolder<BrewingRecipe>> recipe = serverLevel.recipeAccess().getRecipeFor(CauldronModRecipes.BREWING.get(), new BrewingRecipeInput(reagent, potion), level);
             if (recipe.isPresent()) {
                 this.potion = recipe.get().value().getResultPotion(level.registryAccess());
                 updateAfterBrewing();
