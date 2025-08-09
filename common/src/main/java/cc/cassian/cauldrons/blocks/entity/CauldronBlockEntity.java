@@ -100,6 +100,7 @@ public class CauldronBlockEntity extends BlockEntity {
         }
         splashing = tag.getBooleanOr("cauldron.splashing", false);
         lingering = tag.getBooleanOr("cauldron.lingering", false);
+        bubbleTimer = tag.getInt("cauldron.bubble_timer", 0);
     }
 
     @Override
@@ -116,7 +117,8 @@ public class CauldronBlockEntity extends BlockEntity {
         }
         tag.putBoolean("cauldron.splashing", splashing);
         tag.putBoolean("cauldron.lingering", lingering);
-        super.saveAdditional(tag);
+        tag.putInt("cauldron.bubble_timer", bubbleTimer);
+        super.saveAdditional(tag, registries);
     }
 
     public Pair<InteractionResult, ItemStack> insert(ItemStack itemStack) {
@@ -180,33 +182,32 @@ public class CauldronBlockEntity extends BlockEntity {
 
     public void brew() {
         if (potion.potion().isEmpty() || reagent.isEmpty()) return;
-        if (this.level instanceof ServerLevel serverLevel) {
-            Optional<RecipeHolder<BrewingRecipe>> recipe = serverLevel.recipeAccess().getRecipeFor(CauldronModRecipes.BREWING.get(), new BrewingRecipeInput(reagent, potion), level);
+        if (!level.isClientSide()) {
+            Optional<RecipeHolder<BrewingRecipe>> recipe = level.getRecipeManager().getRecipeFor(CauldronModRecipes.BREWING.get(), new BrewingRecipeInput(reagent, potion), level);
             if (recipe.isPresent()) {
                 this.potion = recipe.get().value().getResultPotion(level.registryAccess());
                 updateAfterBrewing();
-                return;
             }
-        }
-        if (reagent.is(CauldronModTags.CREATES_SPLASH_POTIONS)) {
-            this.splashing = true;
-            this.lingering = false;
-            updateAfterBrewing();
-            this.splashParticles = true;
-        }
-        else if (reagent.is(CauldronModTags.CREATES_LINGERING_POTIONS)) {
-            this.splashing = false;
-            this.lingering = true;
-            updateAfterBrewing();
-            this.lingeringParticles = true;
-        }
-        else if (CauldronMod.CONFIG.useBrewingStandRecipes.value()) {
-            var potionBrewing = this.level.potionBrewing();
-            var potionItem = createItemStack(Items.POTION, potion);
-            if (potionBrewing.hasMix(potionItem, reagent)) {
-                ItemStack mix = potionBrewing.mix(reagent, potionItem);
-                this.potion = mix.getComponents().get(DataComponents.POTION_CONTENTS);
+            else if (reagent.is(CauldronModTags.CREATES_SPLASH_POTIONS)) {
+                this.splashing = true;
+                this.lingering = false;
                 updateAfterBrewing();
+                this.splashParticles = true;
+            }
+            else if (reagent.is(CauldronModTags.CREATES_LINGERING_POTIONS)) {
+                this.splashing = false;
+                this.lingering = true;
+                updateAfterBrewing();
+                this.lingeringParticles = true;
+            }
+            else if (CauldronMod.CONFIG.useBrewingStandRecipes.value()) {
+                var potionBrewing = this.level.potionBrewing();
+                var potionItem = createItemStack(Items.POTION, potion);
+                if (potionBrewing.hasMix(potionItem, reagent)) {
+                    ItemStack mix = potionBrewing.mix(reagent, potionItem);
+                    this.potion = mix.getComponents().get(DataComponents.POTION_CONTENTS);
+                    updateAfterBrewing();
+                }
             }
         }
 
