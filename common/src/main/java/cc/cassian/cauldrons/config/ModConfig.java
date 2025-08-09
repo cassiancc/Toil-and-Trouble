@@ -1,7 +1,6 @@
 package cc.cassian.cauldrons.config;
 
 import folk.sisby.kaleido.api.ReflectiveConfig;
-import folk.sisby.kaleido.api.WrappedConfig;
 import folk.sisby.kaleido.lib.quiltconfig.api.annotations.Comment;
 import folk.sisby.kaleido.lib.quiltconfig.api.values.TrackedValue;
 
@@ -15,5 +14,6 @@ public class ModConfig extends ReflectiveConfig {
     public final TrackedValue<Integer> brewingTime = this.value(3);
     @Comment("Whether standing in a Cauldron should cause the entity to absorb the potion inside.")
     public final TrackedValue<Boolean> cauldronsApplyEffects = this.value(true);
-
+    @Comment("Allow Cauldrons to craft all recipes a Brewing Stand can.")
+    public final TrackedValue<Boolean> useBrewingStandRecipes = this.value(true);
 }

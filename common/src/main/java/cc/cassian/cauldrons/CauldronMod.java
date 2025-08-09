@@ -1,6 +1,7 @@
 package cc.cassian.cauldrons;
 
 import cc.cassian.cauldrons.config.ModConfig;
+import cc.cassian.cauldrons.core.CauldronModRecipes;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,5 +21,6 @@ public class CauldronMod {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 		LOGGER.info("Toil and trouble!");
+		CauldronModRecipes.touch();
 	}
 }

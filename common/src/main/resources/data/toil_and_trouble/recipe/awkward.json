@@ -1,0 +1,8 @@
+{
+  "type": "toil_and_trouble:brewing",
+  "reagent": {
+    "id": "minecraft:nether_wart"
+  },
+  "potion": "minecraft:water",
+  "result": "minecraft:awkward"
+}
