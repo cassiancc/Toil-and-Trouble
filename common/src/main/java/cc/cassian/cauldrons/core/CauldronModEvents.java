@@ -2,7 +2,7 @@ package cc.cassian.cauldrons.core;
 
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
-import cc.cassian.cauldrons.registry.CauldronBlocks;
+import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -20,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
 import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.setFillLevel;
-import static cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity.createItemStack;
 import static net.minecraft.world.level.block.Block.popResourceFromFace;
 
 public class CauldronModEvents {
@@ -29,11 +28,11 @@ public class CauldronModEvents {
         BlockState blockState = level.getBlockState(pos);
         ItemStack stack = player.getItemInHand(interactionHand);
         if (blockState.is(Blocks.CAULDRON) && !stack.is(Items.WATER_BUCKET)) {
-            level.setBlockAndUpdate(pos, CauldronBlocks.BREWING_CAULDRON.get().defaultBlockState());
+            level.setBlockAndUpdate(pos, CauldronModBlocks.BREWING_CAULDRON.get().defaultBlockState());
             return insert(player.getItemInHand(interactionHand), blockState, level, pos, player, interactionHand, direction);
         }
         else if (blockState.is(Blocks.WATER_CAULDRON) && !stack.is(Items.BUCKET)) {
-            var state =  CauldronBlocks.BREWING_CAULDRON.get().defaultBlockState().setValue(BrewingCauldronBlock.POTION_QUANTITY, blockState.getValue(LayeredCauldronBlock.LEVEL));
+            var state =  CauldronModBlocks.BREWING_CAULDRON.get().defaultBlockState().setValue(BrewingCauldronBlock.POTION_QUANTITY, blockState.getValue(LayeredCauldronBlock.LEVEL));
             level.setBlockAndUpdate(pos, state);
             level.setBlockEntity(new CauldronBlockEntity(pos, state, Potions.WATER));
             return insert(player.getItemInHand(interactionHand), blockState, level, pos, player, interactionHand, direction);

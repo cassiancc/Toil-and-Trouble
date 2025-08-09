@@ -1,9 +1,10 @@
 package cc.cassian.cauldrons.neoforge;
 
 import cc.cassian.cauldrons.CauldronMod;
-import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
-import cc.cassian.cauldrons.registry.CauldronBlocks;
-import cc.cassian.cauldrons.registry.CauldronSoundEvents;
+import cc.cassian.cauldrons.registry.CauldronModBlockEntityTypes;
+import cc.cassian.cauldrons.registry.CauldronModBlocks;
+import cc.cassian.cauldrons.registry.CauldronModItems;
+import cc.cassian.cauldrons.registry.CauldronModSoundEvents;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -21,11 +22,13 @@ public final class CauldronModNeoForge {
     @SubscribeEvent
     public static void register(RegisterEvent event) {
         if (event.getRegistryKey().equals(Registries.BLOCK)) {
-            CauldronBlocks.touch();
+            CauldronModBlocks.touch();
+        } else if (event.getRegistryKey().equals(Registries.ITEM)) {
+            CauldronModItems.touch();
         } else if (event.getRegistryKey().equals(Registries.BLOCK_ENTITY_TYPE)) {
-            CauldronBlockEntityTypes.touch();
+            CauldronModBlockEntityTypes.touch();
         }  else if (event.getRegistryKey().equals(Registries.SOUND_EVENT)) {
-            CauldronSoundEvents.touch();
+            CauldronModSoundEvents.touch();
         }
     }
 }

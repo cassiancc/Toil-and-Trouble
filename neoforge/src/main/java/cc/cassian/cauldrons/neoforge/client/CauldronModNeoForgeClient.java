@@ -3,10 +3,9 @@ package cc.cassian.cauldrons.neoforge.client;
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.client.renderer.CauldronRenderer;
-import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
-import cc.cassian.cauldrons.registry.CauldronBlocks;
+import cc.cassian.cauldrons.registry.CauldronModBlockEntityTypes;
+import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -24,12 +23,12 @@ public final class CauldronModNeoForgeClient {
                 return cauldronBlockEntity.getPotionColour();
             }
             return 9551193;
-        }), CauldronBlocks.BREWING_CAULDRON.get());
+        }), CauldronModBlocks.BREWING_CAULDRON.get());
 
     }
 
     @SubscribeEvent
     public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(CauldronBlockEntityTypes.CAULDRON_BLOCK_ENTITY.get(), CauldronRenderer::new);
+        event.registerBlockEntityRenderer(CauldronModBlockEntityTypes.CAULDRON_BLOCK_ENTITY.get(), CauldronRenderer::new);
     }
 }

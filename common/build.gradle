@@ -14,4 +14,7 @@ dependencies {
     compileOnlyApi("folk.sisby:kaleido-config:${kaleido_version}")
     modCompileOnly("maven.modrinth:jade:${project.jade_version}+fabric")
     modCompileOnly "mcp.mobius.waila:wthit-api:fabric-${wthit_version}"
+
+    // EMI
+    modCompileOnly("dev.emi:emi-xplat-intermediary:$emi_version+$minecraft_version:api")
 }

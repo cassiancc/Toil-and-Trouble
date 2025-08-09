@@ -6,8 +6,8 @@ import cc.cassian.cauldrons.core.CauldronModRecipes;
 import cc.cassian.cauldrons.core.CauldronModTags;
 import cc.cassian.cauldrons.recipe.BrewingRecipe;
 import cc.cassian.cauldrons.recipe.BrewingRecipeInput;
-import cc.cassian.cauldrons.registry.CauldronBlockEntityTypes;
-import cc.cassian.cauldrons.registry.CauldronSoundEvents;
+import cc.cassian.cauldrons.registry.CauldronModBlockEntityTypes;
+import cc.cassian.cauldrons.registry.CauldronModSoundEvents;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -55,7 +55,7 @@ public class CauldronBlockEntity extends BlockEntity {
     private ItemStack reagent = ItemStack.EMPTY;
 
     public CauldronBlockEntity(BlockPos pos, BlockState state, Holder<Potion> water) {
-        super(CauldronBlockEntityTypes.CAULDRON_BLOCK_ENTITY.get(), pos, state);
+        super(CauldronModBlockEntityTypes.CAULDRON_BLOCK_ENTITY.get(), pos, state);
         this.potion = new PotionContents(water);
     }
 
@@ -71,7 +71,7 @@ public class CauldronBlockEntity extends BlockEntity {
     }
 
     public CauldronBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(CauldronBlockEntityTypes.CAULDRON_BLOCK_ENTITY.get(), blockPos, blockState);
+        super(CauldronModBlockEntityTypes.CAULDRON_BLOCK_ENTITY.get(), blockPos, blockState);
 
     }
 
@@ -206,7 +206,7 @@ public class CauldronBlockEntity extends BlockEntity {
     private void updateAfterBrewing() {
         this.reagent = ItemStack.EMPTY;
         //level.levelEvent(LevelEvent.SOUND_BREWING_STAND_BREW, this.getBlockPos(), 0);
-        level.playSound(null, getBlockPos(), CauldronSoundEvents.BREWS.get(), SoundSource.BLOCKS);
+        level.playSound(null, getBlockPos(), CauldronModSoundEvents.BREWS.get(), SoundSource.BLOCKS);
         level.setBlockAndUpdate(getBlockPos(), this.getBlockState().setValue(BrewingCauldronBlock.BREWING, false));
         bubbleTimer = 20;
         splashParticles = false;

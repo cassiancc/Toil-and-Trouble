@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class CauldronBlocks {
+public class CauldronModBlocks {
 
     public static final Supplier<Block> BREWING_CAULDRON = register(
             "cauldron", BrewingCauldronBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
