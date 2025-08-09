@@ -1,0 +1,6 @@
+{
+  "toil_and_trouble:cauldron": {
+    "initializer": "cc.cassian.cauldrons.compat.wthit.CauldronModWTHITPlugin",
+    "side": "*"
+  }
+}

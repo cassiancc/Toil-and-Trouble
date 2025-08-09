@@ -50,15 +50,15 @@ public class CauldronModEvents {
         }
         if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
             if (!itemStack.isEmpty()) {
-                if (itemStack.is(Items.ARROW) && itemStack.getCount()>8 && cauldronBlockEntity.getFillLevel()>=1) {
-                    var tippedCount = 8;
+                if (itemStack.is(Items.ARROW) && itemStack.getCount()>=16 && cauldronBlockEntity.getFillLevel()>=1) {
+                    var tippedCount = 16;
                     var fillLevel = 1;
-                    if (itemStack.getCount()>16 && cauldronBlockEntity.getFillLevel()>=2) {
-                        tippedCount = 16;
+                    if (itemStack.getCount()>=32 && cauldronBlockEntity.getFillLevel()>=2) {
+                        tippedCount = 32;
                         fillLevel = 2;
                     }
-                    if (itemStack.getCount()>32 && cauldronBlockEntity.getFillLevel()==3) {
-                        tippedCount = 32;
+                    if (itemStack.getCount()==64 && cauldronBlockEntity.getFillLevel()==3) {
+                        tippedCount = 64;
                         fillLevel = 3;
                     }
                     itemStack.setCount(itemStack.getCount()-tippedCount);
