@@ -1,16 +1,11 @@
 package cc.cassian.cauldrons.recipe;
 
-import cc.cassian.cauldrons.CauldronMod;
-import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
-import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
@@ -22,11 +17,11 @@ import net.minecraft.world.level.Level;
 
 public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
-    private final ItemStack reagent;
+    private final Ingredient reagent;
     private final PotionContents potion;
     private final PotionContents result;
 
-    public BrewingRecipe(ItemStack reagent, PotionContents potion, PotionContents result) {
+    public BrewingRecipe(Ingredient reagent, PotionContents potion, PotionContents result) {
         this.reagent = reagent;
         this.potion = potion;
         this.result = result;
@@ -34,7 +29,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
     @Override
     public boolean matches(BrewingRecipeInput input, Level level) {
-        if (ItemStack.matches(input.getItem(0), reagent) && input.getPotionContents().is(getPotion())) {
+        if (reagent.test(input.getItem(0)) && input.getPotionContents().is(getPotion())) {
             return true;
         }
         return false;
@@ -52,10 +47,10 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
     @Override
     public NonNullList<Ingredient> getIngredients() {
-        return NonNullList.of(Ingredient.of(reagent));
+        return NonNullList.of(reagent);
     }
 
-    public ItemStack getReagent() {
+    public Ingredient getReagent() {
         return reagent;
     }
 
@@ -84,7 +79,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
     public static class Serializer implements RecipeSerializer<BrewingRecipe> {
         public static final MapCodec<BrewingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-                ItemStack.CODEC.fieldOf("reagent").forGetter(r->r.reagent),
+                Ingredient.CODEC.fieldOf("reagent").forGetter(r->r.reagent),
                 PotionContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
                 PotionContents.CODEC.fieldOf("result").forGetter(r->r.result)
         ).apply(inst, BrewingRecipe::new));
@@ -92,14 +87,14 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         public static final StreamCodec<RegistryFriendlyByteBuf, BrewingRecipe> STREAM_CODEC = StreamCodec.of(BrewingRecipe.Serializer::toNetwork, BrewingRecipe.Serializer::fromNetwork);
 
         private static BrewingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
-            var reagent = ItemStack.STREAM_CODEC.decode(buf);
+            var reagent = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
             var potion = PotionContents.STREAM_CODEC.decode(buf);
             var result = PotionContents.STREAM_CODEC.decode(buf);
             return new BrewingRecipe(reagent, potion, result);
         }
 
         private static void toNetwork(RegistryFriendlyByteBuf buf, BrewingRecipe recipe) {
-            ItemStack.STREAM_CODEC.encode(buf, recipe.reagent);
+            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.reagent);
             PotionContents.STREAM_CODEC.encode(buf, recipe.potion);
             PotionContents.STREAM_CODEC.encode(buf, recipe.result);
         }

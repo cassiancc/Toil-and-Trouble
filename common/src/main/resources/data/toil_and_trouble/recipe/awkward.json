@@ -1,7 +1,7 @@
 {
   "type": "toil_and_trouble:brewing",
   "reagent": {
-    "id": "minecraft:nether_wart"
+    "tag": "toil_and_trouble:creates_awkward_potions"
   },
   "potion": "minecraft:water",
   "result": "minecraft:awkward"

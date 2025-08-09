@@ -1,7 +1,7 @@
 {
   "type": "toil_and_trouble:brewing",
   "reagent": {
-    "id": "minecraft:blaze_powder"
+    "item": "minecraft:blaze_powder"
   },
   "potion": "minecraft:awkward",
   "result": "minecraft:strength"
