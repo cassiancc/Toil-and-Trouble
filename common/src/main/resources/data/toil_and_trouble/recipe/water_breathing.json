@@ -1,0 +1,8 @@
+{
+  "type": "toil_and_trouble:brewing",
+  "reagent": {
+    "item": "minecraft:pufferfish"
+  },
+  "potion": "minecraft:awkward",
+  "result": "minecraft:water_breathing"
+}

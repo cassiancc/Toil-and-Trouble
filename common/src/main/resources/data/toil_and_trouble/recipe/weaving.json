@@ -1,0 +1,8 @@
+{
+  "type": "toil_and_trouble:brewing",
+  "reagent": {
+    "item": "minecraft:cobweb"
+  },
+  "potion": "minecraft:awkward",
+  "result": "minecraft:weaving"
+}

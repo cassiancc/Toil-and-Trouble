@@ -1,0 +1,8 @@
+{
+  "type": "toil_and_trouble:brewing",
+  "reagent": {
+    "item": "minecraft:glistering_melon_slice"
+  },
+  "potion": "minecraft:awkward",
+  "result": "minecraft:healing"
+}

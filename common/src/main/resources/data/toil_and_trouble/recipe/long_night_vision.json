@@ -1,0 +1,8 @@
+{
+  "type": "toil_and_trouble:brewing",
+  "reagent": {
+    "item": "minecraft:redstone"
+  },
+  "potion": "minecraft:night_vision",
+  "result": "minecraft:long_night_vision"
+}

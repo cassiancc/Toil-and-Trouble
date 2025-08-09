@@ -1,0 +1,8 @@
+{
+  "type": "toil_and_trouble:brewing",
+  "reagent": {
+    "item": "minecraft:fermented_spider_eye"
+  },
+  "potion": "minecraft:night_vision",
+  "result": "minecraft:invisibility"
+}
