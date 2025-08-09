@@ -2,6 +2,7 @@ package cc.cassian.cauldrons.registry;
 
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
+import cc.cassian.cauldrons.items.CauldronContentsItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
@@ -16,7 +17,7 @@ import java.util.function.Supplier;
 public class CauldronModItems {
 
     public static final Supplier<Item> CAULDRON_CONTENTS = register(
-            "cauldron_contents", PotionItem::new, new Item.Properties()
+            "cauldron_contents", CauldronContentsItem::new, new Item.Properties()
     );
 
     private static Supplier<Item> register(ResourceKey<Item> resourceKey, Function<Item.Properties, Item> function, Item.Properties properties) {

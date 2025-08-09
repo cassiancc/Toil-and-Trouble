@@ -27,12 +27,10 @@ public class BrewingEmiRecipe extends BasicEmiRecipe {
         var potion = PotionContents.createItemStack(Items.POTION, recipe.value().getPotion());
         inputs.add(EmiStack.of(potion));
         this.potionForDisplay = PotionContents.createItemStack(CauldronModItems.CAULDRON_CONTENTS.get(), recipe.value().getPotion());
-        potionForDisplay.set(DataComponents.ITEM_NAME, potion.getHoverName());
         // output
         var result = recipe.value().getResultItem(registryAccess);
         outputs.add(EmiStack.of(result));
         this.resultForDisplay = PotionContents.createItemStack(CauldronModItems.CAULDRON_CONTENTS.get(), recipe.value().getResultPotion(registryAccess).potion().get());
-        resultForDisplay.set(DataComponents.ITEM_NAME, result.getHoverName());
     }
 
     @Override
