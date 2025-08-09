@@ -1,7 +1,7 @@
 {
   "type": "toil_and_trouble:brewing",
   "reagent": {
-    "item": "minecraft:turtle_shell"
+    "item": "minecraft:redstone"
   },
   "potion": "minecraft:turtle_master",
   "result": "minecraft:long_turtle_master"
