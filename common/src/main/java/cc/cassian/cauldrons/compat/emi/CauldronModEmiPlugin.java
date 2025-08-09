@@ -18,7 +18,7 @@ public class CauldronModEmiPlugin implements EmiPlugin {
 
     public static final EmiStack CAULDRON_WORKSTATION = EmiStack.of(Items.CAULDRON);
 
-    public static final EmiRecipeCategory PORTAL_CRAFTING
+    public static final EmiRecipeCategory CAULDRON_CATEGORY
             = new EmiRecipeCategory(CauldronMod.of("brewing"), CAULDRON_WORKSTATION);
 
     @Override
@@ -26,8 +26,8 @@ public class CauldronModEmiPlugin implements EmiPlugin {
         RecipeManager manager = registry.getRecipeManager();
         var access = Minecraft.getInstance().level.registryAccess();
 
-        registry.addCategory(PORTAL_CRAFTING);
-        registry.addWorkstation(PORTAL_CRAFTING, CAULDRON_WORKSTATION);
+        registry.addCategory(CAULDRON_CATEGORY);
+        registry.addWorkstation(CAULDRON_CATEGORY, CAULDRON_WORKSTATION);
         for (RecipeHolder<BrewingRecipe> recipe : manager.getAllRecipesFor(CauldronModRecipes.BREWING.get())) {
             registry.addRecipe(new BrewingEmiRecipe(recipe, access));
         }

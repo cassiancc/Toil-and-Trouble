@@ -7,15 +7,11 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
 public class BrewingEmiRecipe extends BasicEmiRecipe {
@@ -24,7 +20,7 @@ public class BrewingEmiRecipe extends BasicEmiRecipe {
     private final ItemStack resultForDisplay;
 
     public BrewingEmiRecipe(RecipeHolder<BrewingRecipe> recipe, RegistryAccess registryAccess) {
-        super(CauldronModEmiPlugin.PORTAL_CRAFTING, recipe.id(), 100, 18);
+        super(CauldronModEmiPlugin.CAULDRON_CATEGORY, recipe.id(), 100, 18);
         // reagent
         inputs.add(EmiIngredient.of(recipe.value().getReagent()));
         // potion item
@@ -41,7 +37,7 @@ public class BrewingEmiRecipe extends BasicEmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgetHolder) {
-        widgetHolder.addSlot(inputs.get(0), 0, 0);
+        widgetHolder.addSlot(inputs.getFirst(), 0, 0);
         widgetHolder.addTexture(EmiTexture.PLUS, 20, 2);
         widgetHolder.addSlot(EmiStack.of(potionForDisplay), 36, 0);
         widgetHolder.addTexture(EmiTexture.FULL_ARROW, 56, 1);
