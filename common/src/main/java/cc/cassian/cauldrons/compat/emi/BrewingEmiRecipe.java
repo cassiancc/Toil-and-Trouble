@@ -43,8 +43,8 @@ public class BrewingEmiRecipe extends BasicEmiRecipe {
     public void addWidgets(WidgetHolder widgetHolder) {
         widgetHolder.addSlot(inputs.get(0), 0, 0);
         widgetHolder.addTexture(EmiTexture.PLUS, 20, 2);
-        widgetHolder.addSlot(EmiStack.of(potionForDisplay), 35, 0);
-        widgetHolder.addTexture(EmiTexture.FULL_ARROW, 55, 1);
+        widgetHolder.addSlot(EmiStack.of(potionForDisplay), 36, 0);
+        widgetHolder.addTexture(EmiTexture.FULL_ARROW, 56, 1);
         widgetHolder.addSlot(EmiStack.of(resultForDisplay), 81, 0).recipeContext(this);
 
     }

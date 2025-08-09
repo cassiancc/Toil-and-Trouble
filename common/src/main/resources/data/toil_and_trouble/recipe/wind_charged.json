@@ -1,0 +1,8 @@
+{
+  "type": "toil_and_trouble:brewing",
+  "reagent": {
+    "item": "minecraft:breeze_rod"
+  },
+  "potion": "minecraft:awkward",
+  "result": "minecraft:wind_charged"
+}
