@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Players in adventure mode can no longer drain cauldrons by standing in them.
 
+### Fixed
+- Cauldron heating works as intended.
+
 ## [1.1.1] - 2025-08-10
 
 ### Fixed

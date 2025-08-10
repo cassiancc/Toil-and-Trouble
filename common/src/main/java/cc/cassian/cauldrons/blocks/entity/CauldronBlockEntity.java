@@ -37,8 +37,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
-import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.BREWING;
-import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.POTION_QUANTITY;
+import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.*;
 
 public class CauldronBlockEntity extends BlockEntity {
 
@@ -294,7 +293,7 @@ public class CauldronBlockEntity extends BlockEntity {
                 cauldronBlockEntity.bubbleTimer--;
             }
             // brewing
-            boolean cauldronHeated = level.getBlockState(pos.below()).is(CauldronModTags.HEATS_CAULDRON);
+            boolean cauldronHeated = level.getBlockState(pos.below()).is(CauldronModTags.HEATS_CAULDRONS);
             boolean cauldronCanBrew = cauldronHeated || !CauldronMod.CONFIG.requiresHeat.value();
             if (cauldronCanBrew && !cauldronBlockEntity.reagent.isEmpty()) {
                 var maxProgress = cauldronBlockEntity.maxProgress;
@@ -316,13 +315,18 @@ public class CauldronBlockEntity extends BlockEntity {
                     var newState = Blocks.CAULDRON.defaultBlockState();
                     level.setBlockAndUpdate(pos, newState);
                 } else if (blockState.getValue(BREWING)) {
-                    level.setBlockAndUpdate(pos, blockState.setValue(BrewingCauldronBlock.BREWING, false));
+                    blockState = blockState.setValue(BrewingCauldronBlock.BREWING, false);
+                    level.setBlockAndUpdate(pos, blockState);
                 }
             }
             if (blockState.getValue(POTION_QUANTITY).equals(0)) {
                 cauldronBlockEntity.potion = PotionContents.EMPTY;
                 cauldronBlockEntity.splashing = false;
                 cauldronBlockEntity.lingering = false;
+            }
+            if (cauldronHeated != blockState.getValue(HEATED)) {
+                blockState = blockState.setValue(HEATED, cauldronHeated);
+                level.setBlockAndUpdate(pos, blockState);
             }
         }
     }

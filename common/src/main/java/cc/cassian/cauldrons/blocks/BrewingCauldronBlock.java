@@ -34,11 +34,12 @@ import org.jetbrains.annotations.Nullable;
 public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     public static final IntegerProperty POTION_QUANTITY = IntegerProperty.create("potion_quantity", 0, 3);
     public static final BooleanProperty BREWING = BooleanProperty.create("brewing");
+    public static final BooleanProperty HEATED = BooleanProperty.create("heated");
 
 
     public BrewingCauldronBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(POTION_QUANTITY, 0).setValue(BREWING, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(POTION_QUANTITY, 0).setValue(BREWING, false).setValue(HEATED, false));
     }
 
     @Override
@@ -144,7 +145,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(POTION_QUANTITY, BREWING);
+        builder.add(POTION_QUANTITY, BREWING, HEATED);
     }
 
     @Override
