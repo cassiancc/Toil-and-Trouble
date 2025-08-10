@@ -3,6 +3,7 @@ package cc.cassian.cauldrons.blocks;
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.core.CauldronModEvents;
+import cc.cassian.cauldrons.core.CauldronModHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -69,7 +70,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                 if (cauldronBlockEntity.isPotionWater()) {
                     if (entity.isOnFire()) {
                         entity.clearFire();
-                        if (entity.mayInteract(level, pos)) {
+                        if (CauldronModHelpers.canInteract(level, pos, entity)) {
                             lowerFillLevel(state, level, pos);
                         }
                     }
@@ -79,7 +80,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                             livingEntity.addEffect(effect);
                         }
                     }
-                    if (entity.mayInteract(level, pos)) {
+                    if (CauldronModHelpers.canInteract(level, pos, entity)) {
                         setFillLevel(state, level, pos, 0);
                     }
                 }
