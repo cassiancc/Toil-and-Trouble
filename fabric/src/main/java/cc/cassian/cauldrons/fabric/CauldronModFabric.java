@@ -1,6 +1,7 @@
 package cc.cassian.cauldrons.fabric;
 
 import cc.cassian.cauldrons.CauldronMod;
+import cc.cassian.cauldrons.core.CauldronModRecipes;
 import cc.cassian.cauldrons.registry.CauldronModBlockEntityTypes;
 import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import cc.cassian.cauldrons.registry.CauldronModItems;
@@ -20,5 +21,6 @@ public final class CauldronModFabric implements ModInitializer {
         CauldronModItems.touch();
         CauldronModBlockEntityTypes.touch();
         CauldronModSoundEvents.touch();
+        CauldronModRecipes.touch();
     }
 }

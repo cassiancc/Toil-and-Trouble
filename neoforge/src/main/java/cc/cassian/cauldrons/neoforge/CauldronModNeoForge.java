@@ -1,6 +1,7 @@
 package cc.cassian.cauldrons.neoforge;
 
 import cc.cassian.cauldrons.CauldronMod;
+import cc.cassian.cauldrons.core.CauldronModRecipes;
 import cc.cassian.cauldrons.registry.CauldronModBlockEntityTypes;
 import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import cc.cassian.cauldrons.registry.CauldronModItems;
@@ -29,6 +30,8 @@ public final class CauldronModNeoForge {
             CauldronModBlockEntityTypes.touch();
         }  else if (event.getRegistryKey().equals(Registries.SOUND_EVENT)) {
             CauldronModSoundEvents.touch();
+        } else if (event.getRegistryKey().equals(Registries.RECIPE_TYPE)) {
+            CauldronModRecipes.touch();
         }
     }
 }
