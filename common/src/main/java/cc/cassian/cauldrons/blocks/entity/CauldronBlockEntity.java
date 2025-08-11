@@ -316,14 +316,16 @@ public class CauldronBlockEntity extends BlockEntity {
                     cauldronBlockEntity.splashing = false;
                     cauldronBlockEntity.lingering = false;
                 }
-                if (cauldronHeated != newState.getValue(HEATED)) {
-                    newState = newState.setValue(HEATED, cauldronHeated);
-                }
+                newState = newState.trySetValue(HEATED, cauldronHeated).trySetValue(HAS_POTION, cauldronBlockEntity.hasPotion());
             }
             if (newState != blockState) {
                 level.setBlockAndUpdate(pos, newState);
             }
         }
+    }
+
+    private boolean hasPotion() {
+        return !(potion == PotionContents.EMPTY || isPotionWater());
     }
 
     private boolean isBubbling() {
