@@ -48,12 +48,14 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
         return CauldronBlockEntity::tick;
     }
 
+    @Override
     protected ItemInteractionResult useItemOn(
             ItemStack itemStack, BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult
     ) {
         return CauldronModEvents.insert(itemStack, blockState, level, pos, player, interactionHand, blockHitResult.getDirection());
     }
 
+    @Override
     protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult) {
         if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
             popResourceFromFace(level, pos, blockHitResult.getDirection(), cauldronBlockEntity.retrieve());
@@ -68,7 +70,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                 CauldronModEvents.insert(itemEntity.getItem(), state, level, pos, null, null, null);
             }
             else if (cauldronBlockEntity.getPotion() != PotionContents.EMPTY) {
-                level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS);
+//                level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS);
                 if (cauldronBlockEntity.isPotionWater()) {
                     if (entity.isOnFire()) {
                         entity.clearFire();

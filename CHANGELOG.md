@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Players in Adventure mode can no longer drain cauldrons by standing in them.
+- Temporarily disabled splash sound effect.
 
 ### Fixed
 - Cauldron heating works as intended.
