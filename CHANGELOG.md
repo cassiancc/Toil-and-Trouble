@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- Players in adventure mode can no longer drain cauldrons by standing in them.
+- Players in Adventure mode can no longer drain cauldrons by standing in them.
 
 ### Fixed
 - Cauldron heating works as intended.
+- Custom potion brewing works as intended.
+- Inserted items are no longer consumed in Creative.
 
 ## [1.1.1] - 2025-08-10
 
