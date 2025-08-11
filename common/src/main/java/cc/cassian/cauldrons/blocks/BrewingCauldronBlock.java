@@ -3,6 +3,7 @@ package cc.cassian.cauldrons.blocks;
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.core.CauldronModEvents;
+import cc.cassian.cauldrons.core.CauldronModHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
@@ -33,11 +35,13 @@ import org.jetbrains.annotations.Nullable;
 public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     public static final IntegerProperty POTION_QUANTITY = IntegerProperty.create("potion_quantity", 0, 3);
     public static final BooleanProperty BREWING = BooleanProperty.create("brewing");
+    public static final BooleanProperty HEATED = BooleanProperty.create("heated");
+    public static final BooleanProperty HAS_POTION = BooleanProperty.create("has_potion");
 
 
     public BrewingCauldronBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(POTION_QUANTITY, 0).setValue(BREWING, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(POTION_QUANTITY, 0).setValue(BREWING, false).setValue(HEATED, false).setValue(HAS_POTION, false));
     }
 
     @Override
@@ -45,12 +49,14 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
         return CauldronBlockEntity::tick;
     }
 
+    @Override
     protected InteractionResult useItemOn(
             ItemStack itemStack, BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult
     ) {
         return CauldronModEvents.insert(itemStack, blockState, level, pos, player, interactionHand, blockHitResult.getDirection());
     }
 
+    @Override
     protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult) {
         if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
             popResourceFromFace(level, pos, blockHitResult.getDirection(), cauldronBlockEntity.retrieve());
@@ -64,22 +70,22 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
             if (entity instanceof ItemEntity itemEntity && itemEntity.tickCount>10) {
                 CauldronModEvents.insert(itemEntity.getItem(), state, level, pos, null, null, null);
             }
-            else if (cauldronBlockEntity.getPotion() != null) {
-                level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS);
+            else if (cauldronBlockEntity.getPotion() != PotionContents.EMPTY) {
+//                level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS);
                 if (cauldronBlockEntity.isPotionWater()) {
                     if (entity.isOnFire()) {
                         entity.clearFire();
-                        if (entity.mayInteract((ServerLevel) level, pos)) {
+                        if (CauldronModHelpers.canInteract(level, pos, entity)) {
                             lowerFillLevel(state, level, pos);
                         }
                     }
                 } else if (entity instanceof LivingEntity livingEntity && CauldronMod.CONFIG.cauldronsApplyEffects.value()) {
                     if (livingEntity.isAffectedByPotions()) {
-                        for (MobEffectInstance effect : cauldronBlockEntity.getPotion().value().getEffects()) {
+                        for (MobEffectInstance effect : cauldronBlockEntity.getPotion().getAllEffects()) {
                             livingEntity.addEffect(effect);
                         }
                     }
-                    if (entity.mayInteract((ServerLevel) level, pos)) {
+                    if (CauldronModHelpers.canInteract(level, pos, entity)) {
                         setFillLevel(state, level, pos, 0);
                     }
                 }
@@ -143,7 +149,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(POTION_QUANTITY, BREWING);
+        builder.add(POTION_QUANTITY, BREWING, HEATED, HAS_POTION);
     }
 
     @Override

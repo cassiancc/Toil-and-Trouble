@@ -21,6 +21,5 @@ public class CauldronMod {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 		LOGGER.info("Toil and trouble!");
-		CauldronModRecipes.touch();
 	}
 }

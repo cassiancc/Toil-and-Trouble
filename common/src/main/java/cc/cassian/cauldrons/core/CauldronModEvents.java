@@ -10,7 +10,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -61,7 +60,7 @@ public class CauldronModEvents {
                         fillLevel = 3;
                     }
                     itemStack.setCount(itemStack.getCount()-tippedCount);
-                    var stack = PotionContents.createItemStack(Items.TIPPED_ARROW, cauldronBlockEntity.getPotion());
+                    var stack = CauldronBlockEntity.createItemStack(Items.TIPPED_ARROW, cauldronBlockEntity.getPotion());
                     stack.setCount(tippedCount);
                     setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
                     if (player != null)
@@ -71,9 +70,10 @@ public class CauldronModEvents {
                     }
                     return InteractionResult.CONSUME;
                 } else {
-                    Pair<InteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
-                    if (!(insert.getA() == InteractionResult.PASS)) {
-                        itemStack.setCount(itemStack.getCount()-1);
+                    Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
+                    if (!(insert.getA() == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION)) {
+                        if (player != null && !player.isCreative())
+                            itemStack.setCount(itemStack.getCount()-1);
                         if (player != null && interactionHand != null) {
                             if (player.getItemInHand(interactionHand).isEmpty()) {
                                 player.setItemInHand(interactionHand, insert.getB());

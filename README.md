@@ -18,11 +18,12 @@ Toil and Trouble is a client and server mod for Fabric and NeoForge 1.21.1. Its 
 - Cauldrons can now be used for brewing! Fill a cauldron up with water and insert a Nether Wart to brew it into an Awkward Potion, and then add a reagent like Blaze Powder to brew a Potion (Fire Resistance, in the case of Blaze Powder).
 - Unlike Brewing Stands, Cauldrons do not require fuel. This is intentional, but a config option can be changed to make them require heating, or to allow heating to speed up the brewing process.
 - Potions can be retrieved with Bottles, and Arrows can be dipped into Potion Cauldrons in order to turn them into Tipped Arrows. You can even throw items directly into the Cauldron to automate the brewing process.
+- Cauldron Brewing recipes are also data-driven. Cauldrons prefer their own data-driven recipes, but will use recipes meant for the brewing stand if present. You can also disable this behaviour to solely have Cauldrons use their own recipes.
 
 ## Mod Compatibility
 - Modded brewing recipes will work out of the box, as this mod allows cauldrons to craft anything a Brewing Stand can.
-- [Jade](https://modrinth.com/mod/jade) shows the contents of Potion Cauldrons.
-- [WTHIT](https://modrinth.com/mod/wthit) shows the contents of Potion Cauldrons.
+- [Jade](https://modrinth.com/mod/jade) and [WTHIT](https://modrinth.com/mod/wthit) shows the contents of Potion Cauldrons.
+- [EMI](https://modrinth.com/mod/emi) and [EIV](https://modrinth.com/mod/eiv) ([tested against my port](https://github.com/cassiancc/ExtendedItemView/releases/tag/2.5.3%2B1.21.8)) show data-driven Cauldron Brewing recipes.
 - If you are using this mod alongside [Amendments](https://modrinth.com/mod/amendments), it's recommended to disable its Improved Cauldron functionality, as its changes to the cauldron intersect with this mod's.
 
 ## FAQ

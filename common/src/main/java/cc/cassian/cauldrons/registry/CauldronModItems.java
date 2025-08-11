@@ -1,6 +1,7 @@
 package cc.cassian.cauldrons.registry;
 
 import cc.cassian.cauldrons.CauldronMod;
+import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.items.CauldronContentsItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
