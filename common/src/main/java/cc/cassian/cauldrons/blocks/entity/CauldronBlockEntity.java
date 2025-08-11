@@ -7,6 +7,7 @@ import cc.cassian.cauldrons.core.CauldronModTags;
 import cc.cassian.cauldrons.recipe.BrewingRecipe;
 import cc.cassian.cauldrons.recipe.BrewingRecipeInput;
 import cc.cassian.cauldrons.registry.CauldronModBlockEntityTypes;
+import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import cc.cassian.cauldrons.registry.CauldronModSoundEvents;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
@@ -309,13 +310,15 @@ public class CauldronBlockEntity extends BlockEntity {
                     newState = newState.setValue(BrewingCauldronBlock.BREWING, false);
                 }
             }
-            if (blockState.getValue(POTION_QUANTITY).equals(0)) {
-                cauldronBlockEntity.potion = PotionContents.EMPTY;
-                cauldronBlockEntity.splashing = false;
-                cauldronBlockEntity.lingering = false;
-            }
-            if (cauldronHeated != blockState.getValue(HEATED)) {
-                newState = newState.setValue(HEATED, cauldronHeated);
+            if (newState.is(CauldronModBlocks.BREWING_CAULDRON.get())) {
+                if (newState.getValue(POTION_QUANTITY).equals(0)) {
+                    cauldronBlockEntity.potion = PotionContents.EMPTY;
+                    cauldronBlockEntity.splashing = false;
+                    cauldronBlockEntity.lingering = false;
+                }
+                if (cauldronHeated != newState.getValue(HEATED)) {
+                    newState = newState.setValue(HEATED, cauldronHeated);
+                }
             }
             if (newState != blockState) {
                 level.setBlockAndUpdate(pos, newState);
