@@ -13,6 +13,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -83,12 +84,7 @@ public class CauldronBlockEntity extends BlockEntity {
         else reagent = ItemStack.EMPTY;
         progress = tag.getInt("cauldron.progress");
         maxProgress = tag.getInt("cauldron.max_progress");
-        var p = tag.getString("cauldron.potion");
-        if (!p.equals("minecraft:air")) {
-            potion = BuiltInRegistries.POTION.getHolder(ResourceLocation.parse(p)).map(PotionContents::new).orElse(PotionContents.EMPTY);
-        } else {
-            potion = PotionContents.EMPTY;
-        }
+        potion = PotionContents.CODEC.decode(NbtOps.INSTANCE, tag.get("cauldron.potion")).result().get().getFirst();
         splashing = tag.getBoolean("cauldron.splashing");
         lingering = tag.getBoolean("cauldron.lingering");
         bubbleTimer = tag.getInt("cauldron.bubble_timer");
@@ -100,11 +96,7 @@ public class CauldronBlockEntity extends BlockEntity {
             tag.put("cauldron.inventory", reagent.save(registries));
         tag.putInt("cauldron.progress", progress);
         tag.putInt("cauldron.max_progress", maxProgress);
-        if (this.potion != null && potion.potion().isPresent() && potion.potion().orElseThrow().unwrapKey().isPresent()) {
-            tag.putString("cauldron.potion", potion.potion().orElseThrow().unwrapKey().orElseThrow().location().toString());
-        } else {
-            tag.putString("cauldron.potion", "minecraft:air");
-        }
+        tag.put("cauldron.potion", PotionContents.CODEC.encodeStart(NbtOps.INSTANCE, potion).result().get());
         tag.putBoolean("cauldron.splashing", splashing);
         tag.putBoolean("cauldron.lingering", lingering);
         tag.putInt("cauldron.bubble_timer", bubbleTimer);
@@ -241,7 +233,12 @@ public class CauldronBlockEntity extends BlockEntity {
     }
 
     public static ItemStack createItemStack(Item item, PotionContents potion) {
-        return PotionContents.createItemStack(item, potion.potion().get());
+        if (potion.potion().isPresent()) {
+            return PotionContents.createItemStack(item, potion.potion().get());
+        }
+        var stack = item.getDefaultInstance();
+        stack.set(DataComponents.POTION_CONTENTS, potion);
+        return stack;
     }
 
     public boolean isPotionWater() {
