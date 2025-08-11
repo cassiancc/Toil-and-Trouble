@@ -70,8 +70,8 @@ public class CauldronModEvents {
                     }
                     return InteractionResult.CONSUME;
                 } else {
-                    Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
-                    if (!(insert.getA() == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION)) {
+                    Pair<InteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
+                    if (!(insert.getA() == InteractionResult.PASS)) {
                         if (player != null && !player.isCreative())
                             itemStack.setCount(itemStack.getCount()-1);
                         if (player != null && interactionHand != null) {

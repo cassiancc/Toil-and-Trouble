@@ -41,10 +41,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.*;
 
@@ -92,7 +89,7 @@ public class CauldronBlockEntity extends BlockEntity {
         else reagent = ItemStack.EMPTY;
         progress = tag.getIntOr("cauldron.progress", 0);
         maxProgress = tag.getIntOr("cauldron.max_progress", 0);
-        potion = PotionContents.CODEC.decode(NbtOps.INSTANCE, tag.get("cauldron.potion")).result().get().getFirst();
+        potion = tag.read("cauldron.potion", PotionContents.CODEC).orElse(PotionContents.EMPTY);
         splashing = tag.getBooleanOr("cauldron.splashing", false);
         lingering = tag.getBooleanOr("cauldron.lingering", false);
         bubbleTimer = tag.getIntOr("cauldron.bubble_timer", 0);
@@ -105,7 +102,7 @@ public class CauldronBlockEntity extends BlockEntity {
         }
         tag.putInt("cauldron.progress", progress);
         tag.putInt("cauldron.max_progress", maxProgress);
-        tag.put("cauldron.potion", PotionContents.CODEC.encodeStart(NbtOps.INSTANCE, potion).result().get());
+        tag.store("cauldron.potion", PotionContents.CODEC, potion);
         tag.putBoolean("cauldron.splashing", splashing);
         tag.putBoolean("cauldron.lingering", lingering);
         tag.putInt("cauldron.bubble_timer", bubbleTimer);
