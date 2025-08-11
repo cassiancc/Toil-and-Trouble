@@ -34,7 +34,7 @@ public class CauldronModWTHITPlugin implements IWailaPlugin, IBlockComponentProv
                     item = Items.SPLASH_POTION;
                 else if (cauldronBlockEntity.isPotionLingering())
                     item = Items.LINGERING_POTION;
-                iTooltip.addLine(PotionContents.createItemStack(item, cauldronBlockEntity.getPotion()).getHoverName());
+                iTooltip.addLine(CauldronBlockEntity.createItemStack(item, cauldronBlockEntity.getPotionContents()).getHoverName());
                 if (Screen.hasShiftDown())
                     PotionContents.addPotionTooltip(cauldronBlockEntity.getPotion().value().getEffects(), iTooltip::addLine, 0, 0);
             }

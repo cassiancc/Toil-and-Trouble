@@ -11,12 +11,10 @@ import cc.cassian.cauldrons.registry.CauldronModSoundEvents;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -230,6 +228,10 @@ public class CauldronBlockEntity extends BlockEntity {
         if (potion != null && potion.potion().isPresent())
             return potion.potion().get();
         else return null;
+    }
+
+    public PotionContents getPotionContents() {
+        return potion;
     }
 
     public static ItemStack createItemStack(Item item, PotionContents potion) {

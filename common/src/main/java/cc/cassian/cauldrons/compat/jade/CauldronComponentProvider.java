@@ -30,7 +30,7 @@ public enum CauldronComponentProvider implements IBlockComponentProvider {
                     item = Items.SPLASH_POTION;
                 else if (cauldronBlockEntity.isPotionLingering())
                     item = Items.LINGERING_POTION;
-                iTooltip.add(PotionContents.createItemStack(item, cauldronBlockEntity.getPotion()).getHoverName());
+                iTooltip.add(CauldronBlockEntity.createItemStack(item, cauldronBlockEntity.getPotionContents()).getHoverName());
                 if (Screen.hasShiftDown())
                     PotionContents.addPotionTooltip(cauldronBlockEntity.getPotion().value().getEffects(), iTooltip::add, 0, 0);
             }
