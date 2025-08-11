@@ -27,16 +27,16 @@ public class CauldronModWTHITPlugin implements IWailaPlugin, IBlockComponentProv
                 iTooltip.addLine(cauldronBlockEntity.getItem().getHoverName());
                 iTooltip.addLine(Component.empty());
             }
-            if (cauldronBlockEntity.getPotion() != null) {
+            if (cauldronBlockEntity.getPotion() != PotionContents.EMPTY) {
                 iTooltip.addLine(Component.translatable("gui.toil_and_trouble.doses", blockAccessor.getBlockState().getValue(BrewingCauldronBlock.POTION_QUANTITY)).withStyle(ChatFormatting.DARK_PURPLE));
                 var item = Items.POTION;
                 if (cauldronBlockEntity.isPotionSplash())
                     item = Items.SPLASH_POTION;
                 else if (cauldronBlockEntity.isPotionLingering())
                     item = Items.LINGERING_POTION;
-                iTooltip.addLine(CauldronBlockEntity.createItemStack(item, cauldronBlockEntity.getPotionContents()).getHoverName());
+                iTooltip.addLine(CauldronBlockEntity.createItemStack(item, cauldronBlockEntity.getPotion()).getHoverName());
                 if (Screen.hasShiftDown())
-                    PotionContents.addPotionTooltip(cauldronBlockEntity.getPotion().value().getEffects(), iTooltip::addLine, 0, 0);
+                    PotionContents.addPotionTooltip(cauldronBlockEntity.getPotion().getAllEffects(), iTooltip::addLine, 0, 0);
             }
         }
     }

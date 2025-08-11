@@ -18,6 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
@@ -66,7 +67,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
             if (entity instanceof ItemEntity itemEntity && itemEntity.tickCount>10) {
                 CauldronModEvents.insert(itemEntity.getItem(), state, level, pos, null, null, null);
             }
-            else if (cauldronBlockEntity.getPotion() != null) {
+            else if (cauldronBlockEntity.getPotion() != PotionContents.EMPTY) {
                 level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS);
                 if (cauldronBlockEntity.isPotionWater()) {
                     if (entity.isOnFire()) {
@@ -77,7 +78,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                     }
                 } else if (entity instanceof LivingEntity livingEntity && CauldronMod.CONFIG.cauldronsApplyEffects.value()) {
                     if (livingEntity.isAffectedByPotions()) {
-                        for (MobEffectInstance effect : cauldronBlockEntity.getPotion().value().getEffects()) {
+                        for (MobEffectInstance effect : cauldronBlockEntity.getPotion().getAllEffects()) {
                             livingEntity.addEffect(effect);
                         }
                     }

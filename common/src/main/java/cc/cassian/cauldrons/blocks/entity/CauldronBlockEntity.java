@@ -32,9 +32,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.*;
 
@@ -223,14 +221,7 @@ public class CauldronBlockEntity extends BlockEntity {
         return potion.getColor();
     }
 
-    @Nullable
-    public Holder<Potion> getPotion() {
-        if (potion != null && potion.potion().isPresent())
-            return potion.potion().get();
-        else return null;
-    }
-
-    public PotionContents getPotionContents() {
+    public PotionContents getPotion() {
         return potion;
     }
 
@@ -263,13 +254,15 @@ public class CauldronBlockEntity extends BlockEntity {
 
     public static void tick(Level level, BlockPos pos, BlockState blockState, BlockEntity blockEntity) {
         if (blockEntity instanceof CauldronBlockEntity cauldronBlockEntity) {
+            var newState = blockState;
             // particle logic
             if (cauldronBlockEntity.isBubbling()) {
                 double d = pos.getX() + level.random.nextDouble();
                 double e = pos.getY() + 1;
                 double f = pos.getZ() + level.random.nextDouble();
-                if (cauldronBlockEntity.getPotion() != null) {
-                    var effects = cauldronBlockEntity.getPotion().value().getEffects();
+                if (cauldronBlockEntity.getPotion() != PotionContents.EMPTY) {
+                    ArrayList<MobEffectInstance> effects = new ArrayList<>();
+                    cauldronBlockEntity.getPotion().getAllEffects().forEach(effects::add);
                     if (cauldronBlockEntity.splashParticles) {
                         level.addParticle(ParticleTypes.SMOKE, d, e, f, 0.01, 0.05, 0.01);
                     }
@@ -305,17 +298,15 @@ public class CauldronBlockEntity extends BlockEntity {
                 } else {
                     cauldronBlockEntity.progress++;
                     if (!blockState.getValue(BREWING))
-                        level.setBlockAndUpdate(pos, blockState.setValue(BREWING, true));
+                        newState = newState.setValue(BREWING, true);
                 }
             }
             //reset to vanilla
             if (cauldronBlockEntity.reagent.isEmpty()) {
                 if (cauldronBlockEntity.getFillLevel().equals(0)) {
-                    var newState = Blocks.CAULDRON.defaultBlockState();
-                    level.setBlockAndUpdate(pos, newState);
+                    newState = Blocks.CAULDRON.defaultBlockState();
                 } else if (blockState.getValue(BREWING)) {
-                    blockState = blockState.setValue(BrewingCauldronBlock.BREWING, false);
-                    level.setBlockAndUpdate(pos, blockState);
+                    newState = newState.setValue(BrewingCauldronBlock.BREWING, false);
                 }
             }
             if (blockState.getValue(POTION_QUANTITY).equals(0)) {
@@ -324,8 +315,10 @@ public class CauldronBlockEntity extends BlockEntity {
                 cauldronBlockEntity.lingering = false;
             }
             if (cauldronHeated != blockState.getValue(HEATED)) {
-                blockState = blockState.setValue(HEATED, cauldronHeated);
-                level.setBlockAndUpdate(pos, blockState);
+                newState = newState.setValue(HEATED, cauldronHeated);
+            }
+            if (newState != blockState) {
+                level.setBlockAndUpdate(pos, newState);
             }
         }
     }
