@@ -8,20 +8,24 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
-public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
+public class DippingRecipe implements Recipe<BrewingRecipeInput> {
 
     private final Ingredient reagent;
     private final PotionContents potion;
-    private final PotionContents result;
+    private final ItemStack result;
 
-    public BrewingRecipe(Ingredient reagent, PotionContents potion, PotionContents result) {
+    public DippingRecipe(Ingredient reagent, PotionContents potion, ItemStack result) {
         this.reagent = reagent;
         this.potion = potion;
         this.result = result;
@@ -34,7 +38,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
     @Override
     public ItemStack assemble(BrewingRecipeInput input, HolderLookup.Provider registries) {
-        return getResultItem(registries);
+        return this.result.copy();
     }
 
     @Override
@@ -57,52 +61,48 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
     @Override
     public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return PotionContents.createItemStack(Items.POTION, result.potion().get());
-    }
-
-    public PotionContents getResultPotion(HolderLookup.Provider registries) {
-        return result;
+        return result.copy();
     }
 
     @Override
-    public RecipeSerializer<BrewingRecipe> getSerializer() {
-        return CauldronModRecipes.BREWING_SERIALIZER.get();
+    public RecipeSerializer<DippingRecipe> getSerializer() {
+        return CauldronModRecipes.DIPPING_SERIALIZER.get();
     }
 
     @Override
-    public RecipeType<BrewingRecipe> getType() {
-        return CauldronModRecipes.BREWING.get();
+    public RecipeType<DippingRecipe> getType() {
+        return CauldronModRecipes.DIPPING.get();
     }
 
-    public static class Serializer implements RecipeSerializer<BrewingRecipe> {
-        public static final MapCodec<BrewingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+    public static class Serializer implements RecipeSerializer<DippingRecipe> {
+        public static final MapCodec<DippingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 Ingredient.CODEC.fieldOf("reagent").forGetter(r->r.reagent),
                 PotionContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
-                PotionContents.CODEC.fieldOf("result").forGetter(r->r.result)
-        ).apply(inst, BrewingRecipe::new));
+                ItemStack.CODEC.fieldOf("result").forGetter(r->r.result)
+        ).apply(inst, DippingRecipe::new));
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, BrewingRecipe> STREAM_CODEC = StreamCodec.of(BrewingRecipe.Serializer::toNetwork, BrewingRecipe.Serializer::fromNetwork);
+        public static final StreamCodec<RegistryFriendlyByteBuf, DippingRecipe> STREAM_CODEC = StreamCodec.of(DippingRecipe.Serializer::toNetwork, DippingRecipe.Serializer::fromNetwork);
 
-        private static BrewingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
+        private static DippingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
             var reagent = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
             var potion = PotionContents.STREAM_CODEC.decode(buf);
-            var result = PotionContents.STREAM_CODEC.decode(buf);
-            return new BrewingRecipe(reagent, potion, result);
+            var result = ItemStack.STREAM_CODEC.decode(buf);
+            return new DippingRecipe(reagent, potion, result);
         }
 
-        private static void toNetwork(RegistryFriendlyByteBuf buf, BrewingRecipe recipe) {
+        private static void toNetwork(RegistryFriendlyByteBuf buf, DippingRecipe recipe) {
             Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.reagent);
             PotionContents.STREAM_CODEC.encode(buf, recipe.potion);
-            PotionContents.STREAM_CODEC.encode(buf, recipe.result);
+            ItemStack.STREAM_CODEC.encode(buf, recipe.result);
         }
 
         @Override
-        public MapCodec<BrewingRecipe> codec() {
+        public MapCodec<DippingRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        public StreamCodec<RegistryFriendlyByteBuf, BrewingRecipe> streamCodec() {
+        public StreamCodec<RegistryFriendlyByteBuf, DippingRecipe> streamCodec() {
             return STREAM_CODEC;
         }
     }
