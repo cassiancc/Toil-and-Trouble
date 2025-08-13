@@ -7,6 +7,7 @@
     "config.waila.plugin_toil_and_trouble": "Toil and Trouble",
     "config.waila.plugin_toil_and_trouble.cauldron": "Show contents of Potion Cauldrons",
     "emi.category.toil_and_trouble.brewing": "Cauldron Brewing",
+    "emi.category.toil_and_trouble.dipping": "Cauldron Dipping",
     "tag.item.toil_and_trouble.cannot_fill_cauldron": "Cannot Fill Cauldron",
     "tag.item.toil_and_trouble.creates_awkward_potions": "Awkward Potion Reagents",
     "tag.item.toil_and_trouble.creates_splash_potions": "Splash Potion Reagents",
