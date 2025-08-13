@@ -1,6 +1,8 @@
 package cc.cassian.cauldrons.recipe;
 
+import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
@@ -24,11 +26,13 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
     private final Ingredient reagent;
     private final PotionContents potion;
     private final ItemStack result;
+    private final int brewingTime;
 
-    public DippingRecipe(Ingredient reagent, PotionContents potion, ItemStack result) {
+    public DippingRecipe(Ingredient reagent, PotionContents potion, ItemStack result, int brewingTime) {
         this.reagent = reagent;
         this.potion = potion;
         this.result = result;
+        this.brewingTime = brewingTime;
     }
 
     @Override
@@ -38,7 +42,7 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
 
     @Override
     public ItemStack assemble(BrewingRecipeInput input, HolderLookup.Provider registries) {
-        return this.result.copy();
+       return this.result.copy();
     }
 
     @Override
@@ -57,6 +61,10 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
 
     public Holder<Potion> getPotion() {
         return potion.potion().get();
+    }
+
+    public int getBrewingTime() {
+        return brewingTime;
     }
 
     @Override
@@ -78,7 +86,8 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
         public static final MapCodec<DippingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 Ingredient.CODEC.fieldOf("reagent").forGetter(r->r.reagent),
                 PotionContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
-                ItemStack.CODEC.fieldOf("result").forGetter(r->r.result)
+                ItemStack.CODEC.fieldOf("result").forGetter(r->r.result),
+                Codec.INT.optionalFieldOf("brewing_time", CauldronMod.CONFIG.brewingTime.value()).forGetter(r -> r.brewingTime)
         ).apply(inst, DippingRecipe::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, DippingRecipe> STREAM_CODEC = StreamCodec.of(DippingRecipe.Serializer::toNetwork, DippingRecipe.Serializer::fromNetwork);
@@ -87,13 +96,15 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
             var reagent = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
             var potion = PotionContents.STREAM_CODEC.decode(buf);
             var result = ItemStack.STREAM_CODEC.decode(buf);
-            return new DippingRecipe(reagent, potion, result);
+            var brewingTime = buf.readInt();
+            return new DippingRecipe(reagent, potion, result, brewingTime);
         }
 
         private static void toNetwork(RegistryFriendlyByteBuf buf, DippingRecipe recipe) {
             Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.reagent);
             PotionContents.STREAM_CODEC.encode(buf, recipe.potion);
             ItemStack.STREAM_CODEC.encode(buf, recipe.result);
+            buf.writeInt(recipe.brewingTime);
         }
 
         @Override

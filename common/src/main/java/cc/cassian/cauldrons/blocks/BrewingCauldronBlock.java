@@ -46,7 +46,11 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return CauldronBlockEntity::tick;
+        return (level1, pos, blockState, blockEntity) -> {
+            if (blockEntity instanceof CauldronBlockEntity cauldronBlockEntity) {
+                cauldronBlockEntity.tick(level1, pos, blockState);
+            }
+        };
     }
 
     @Override
