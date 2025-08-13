@@ -1,0 +1,11 @@
+{
+  "id": "toil-and-trouble",
+  "platforms": {
+    "curseforge": "toil-and-trouble",
+    "modrinth": "toil-and-trouble"
+  } ,
+  "versions": {
+    "1.21.1": "main",
+    "1.21.8": "1.21.8"
+  }
+}
