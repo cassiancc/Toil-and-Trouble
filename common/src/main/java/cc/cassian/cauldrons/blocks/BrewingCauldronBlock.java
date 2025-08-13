@@ -82,11 +82,8 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                 } else if (entity instanceof LivingEntity livingEntity && CauldronMod.CONFIG.cauldronsApplyEffects.value()) {
                     if (livingEntity.isAffectedByPotions()) {
                         for (MobEffectInstance effect : cauldronBlockEntity.getPotion().getAllEffects()) {
-                            livingEntity.addEffect(effect);
+                            livingEntity.addEffect(new MobEffectInstance(effect.getEffect(), 1, effect.getAmplifier(), true, true));
                         }
-                    }
-                    if (CauldronModHelpers.canInteract(level, pos, entity)) {
-                        setFillLevel(state, level, pos, 0);
                     }
                 }
             }

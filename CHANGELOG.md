@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Data-driven dipping recipes, the format of which is documented on this mod's Modded Minecraft Wiki.
+
+### Changed
+- Standing in cauldrons now gives you the effect for as long as you are standing in them, without ever draining the Cauldron.
+
+## [1.1.2] - 2025-08-10
+
 ### Changed
 - Players in Adventure mode can no longer drain cauldrons by standing in them.
 - Temporarily disabled splash sound effect.
