@@ -18,7 +18,7 @@ public class DippingEmiRecipe extends BasicEmiRecipe {
     private final ItemStack potionForDisplay;
 
     public DippingEmiRecipe(RecipeHolder<DippingRecipe> recipe, RegistryAccess registryAccess) {
-        super(CauldronModEmiPlugin.DIPPING_CATEGORY, recipe.id(), 100, 18);
+        super(CauldronModEmiPlugin.DIPPING_CATEGORY, recipe.id().location(), 100, 18);
         // reagent
         inputs.add(EmiIngredient.of(recipe.value().getReagent()));
         // potion item
@@ -26,7 +26,7 @@ public class DippingEmiRecipe extends BasicEmiRecipe {
         inputs.add(EmiStack.of(potion));
         this.potionForDisplay = PotionContents.createItemStack(CauldronModItems.CAULDRON_CONTENTS.get(), recipe.value().getPotion());
         // output
-        var result = recipe.value().getResultItem(registryAccess);
+        var result = recipe.value().getResultItem();
         outputs.add(EmiStack.of(result));
     }
 

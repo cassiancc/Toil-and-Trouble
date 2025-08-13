@@ -13,10 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 public class DippingRecipe implements Recipe<BrewingRecipeInput> {
@@ -41,16 +38,6 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
         return this.result.copy();
     }
 
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return NonNullList.of(reagent);
-    }
-
     public Ingredient getReagent() {
         return reagent;
     }
@@ -59,8 +46,7 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
         return potion.potion().get();
     }
 
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries) {
+    public ItemStack getResultItem() {
         return result.copy();
     }
 
@@ -72,6 +58,16 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
     @Override
     public RecipeType<DippingRecipe> getType() {
         return CauldronModRecipes.DIPPING.get();
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return null;
     }
 
     public static class Serializer implements RecipeSerializer<DippingRecipe> {

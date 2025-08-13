@@ -1,4 +1,4 @@
-package cc.cassian.cauldrons.compat.eiv;
+package cc.cassian.cauldrons.compat.eiv.brewing;
 
 import cc.cassian.cauldrons.CauldronMod;
 import de.crafty.eiv.common.api.recipe.EivRecipeType;

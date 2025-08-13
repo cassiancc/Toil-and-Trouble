@@ -172,14 +172,14 @@ public class CauldronBlockEntity extends BlockEntity {
     public void brew() {
         if (potion.potion().isEmpty() || reagent.isEmpty()) return;
         if (level instanceof ServerLevel serverLevel) {
-            Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = serverLevel.getRecipeManager().getRecipeFor(CauldronModRecipes.BREWING.get(), new BrewingRecipeInput(reagent, potion), serverLevel);
+            Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = serverLevel.recipeAccess().getRecipeFor(CauldronModRecipes.BREWING.get(), new BrewingRecipeInput(reagent, potion), serverLevel);
             if (brewingRecipe.isPresent()) {
-                this.potion = brewingRecipe.get().value().getResultPotion(serverLevel.registryAccess());
+                this.potion = brewingRecipe.get().value().getResultPotion();
                 updateAfterBrewing();
             }
-            Optional<RecipeHolder<DippingRecipe>> dippingRecipe = serverLevel.getRecipeManager().getRecipeFor(CauldronModRecipes.DIPPING.get(), new BrewingRecipeInput(reagent, potion), serverLevel);
+            Optional<RecipeHolder<DippingRecipe>> dippingRecipe = serverLevel.recipeAccess().getRecipeFor(CauldronModRecipes.DIPPING.get(), new BrewingRecipeInput(reagent, potion), serverLevel);
             if (dippingRecipe.isPresent()) {
-                updateAfterBrewing(dippingRecipe.get().value().getResultItem(serverLevel.registryAccess()));
+                updateAfterBrewing(dippingRecipe.get().value().getResultItem());
                 setFillLevel(0);
             }
             else if (reagent.is(CauldronModTags.CREATES_SPLASH_POTIONS)) {

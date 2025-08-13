@@ -1,10 +1,8 @@
-package cc.cassian.cauldrons.compat.eiv;
+package cc.cassian.cauldrons.compat.eiv.brewing;
 
 import cc.cassian.cauldrons.CauldronMod;
 import de.crafty.eiv.common.api.recipe.IEivRecipeViewType;
 import de.crafty.eiv.common.recipe.inventory.RecipeViewMenu;
-import dev.emi.emi.api.render.EmiTexture;
-import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
