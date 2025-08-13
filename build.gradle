@@ -2,6 +2,7 @@ plugins {
     id 'dev.architectury.loom' version '1.10-SNAPSHOT' apply false
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.gradleup.shadow' version '8.3.6' apply false
+    id 'org.moddedmc.wiki.toolkit' version '0.2.8'
 }
 
 architectury {
@@ -11,6 +12,14 @@ architectury {
 allprojects {
     group = rootProject.maven_group
     version = mod_version + "+" + minecraft_version
+}
+
+wiki {
+    // The name of the object (examplemod) should match the registered wiki project ID (if it exists).
+    docs.create("toil-and-trouble") {
+        // The path to the folder containing the documentation metadata file (sinytra-wiki.json)
+        root = file("docs")
+    }
 }
 
 subprojects {

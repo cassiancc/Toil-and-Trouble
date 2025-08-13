@@ -69,6 +69,27 @@ public class CauldronModEvents {
                         popResourceFromFace(level, pos, direction, stack);
                     }
                     return InteractionResult.CONSUME;
+                } else if (itemStack.is(Items.GLASS_BOTTLE) && cauldronBlockEntity.getFillLevel()>=1) {
+                    var fillLevel = 1;
+                    if (itemStack.getCount()==2 && cauldronBlockEntity.getFillLevel()==2) {
+                        fillLevel = 2;
+                    }
+                    if (itemStack.getCount()>=3 && cauldronBlockEntity.getFillLevel()==3) {
+                        fillLevel = 3;
+                    }
+                    itemStack.setCount(itemStack.getCount()-fillLevel);
+                    var potionItem = Items.POTION;
+                    if (cauldronBlockEntity.isPotionSplash()) potionItem = Items.SPLASH_POTION;
+                    else if (cauldronBlockEntity.isPotionLingering()) potionItem = Items.LINGERING_POTION;
+                    var stack = CauldronBlockEntity.createItemStack(potionItem, cauldronBlockEntity.getPotion());
+                    stack.setCount(fillLevel);
+                    setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
+                    if (player != null)
+                        player.addItem(stack);
+                    else {
+                        popResourceFromFace(level, pos, direction, stack);
+                    }
+                    return InteractionResult.CONSUME;
                 } else {
                     Pair<InteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
                     if (!(insert.getA() == InteractionResult.PASS)) {

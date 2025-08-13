@@ -6,6 +6,7 @@ import cc.cassian.cauldrons.core.CauldronModRecipes;
 import cc.cassian.cauldrons.core.CauldronModTags;
 import cc.cassian.cauldrons.recipe.BrewingRecipe;
 import cc.cassian.cauldrons.recipe.BrewingRecipeInput;
+import cc.cassian.cauldrons.recipe.DippingRecipe;
 import cc.cassian.cauldrons.registry.CauldronModBlockEntityTypes;
 import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import cc.cassian.cauldrons.registry.CauldronModSoundEvents;
@@ -171,10 +172,15 @@ public class CauldronBlockEntity extends BlockEntity {
     public void brew() {
         if (potion.potion().isEmpty() || reagent.isEmpty()) return;
         if (level instanceof ServerLevel serverLevel) {
-            Optional<RecipeHolder<BrewingRecipe>> recipe = serverLevel.recipeAccess().getRecipeFor(CauldronModRecipes.BREWING.get(), new BrewingRecipeInput(reagent, potion), level);
-            if (recipe.isPresent()) {
-                this.potion = recipe.get().value().getResultPotion();
+            Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = serverLevel.getRecipeManager().getRecipeFor(CauldronModRecipes.BREWING.get(), new BrewingRecipeInput(reagent, potion), serverLevel);
+            if (brewingRecipe.isPresent()) {
+                this.potion = brewingRecipe.get().value().getResultPotion(serverLevel.registryAccess());
                 updateAfterBrewing();
+            }
+            Optional<RecipeHolder<DippingRecipe>> dippingRecipe = serverLevel.getRecipeManager().getRecipeFor(CauldronModRecipes.DIPPING.get(), new BrewingRecipeInput(reagent, potion), serverLevel);
+            if (dippingRecipe.isPresent()) {
+                updateAfterBrewing(dippingRecipe.get().value().getResultItem(serverLevel.registryAccess()));
+                setFillLevel(0);
             }
             else if (reagent.is(CauldronModTags.CREATES_SPLASH_POTIONS)) {
                 this.splashing = true;
@@ -201,14 +207,18 @@ public class CauldronBlockEntity extends BlockEntity {
 
     }
 
-    private void updateAfterBrewing() {
-        this.reagent = ItemStack.EMPTY;
+    private void updateAfterBrewing(ItemStack stack) {
+        this.reagent = stack;
         //level.levelEvent(LevelEvent.SOUND_BREWING_STAND_BREW, this.getBlockPos(), 0);
         level.playSound(null, getBlockPos(), CauldronModSoundEvents.BREWS.get(), SoundSource.BLOCKS);
         level.setBlockAndUpdate(getBlockPos(), this.getBlockState().setValue(BrewingCauldronBlock.BREWING, false));
         bubbleTimer = 20;
         splashParticles = false;
         lingeringParticles = false;
+    }
+
+    private void updateAfterBrewing() {
+        updateAfterBrewing(ItemStack.EMPTY);
     }
 
     public ItemStack retrieve() {

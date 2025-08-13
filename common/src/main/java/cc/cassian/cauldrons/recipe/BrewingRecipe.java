@@ -29,10 +29,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
     @Override
     public boolean matches(BrewingRecipeInput input, Level level) {
-        if (reagent.test(input.getItem(0)) && input.getPotionContents().is(getPotion())) {
-            return true;
-        }
-        return false;
+        return reagent.test(input.getItem(0)) && input.getPotionContents().is(getPotion());
     }
 
     @Override
