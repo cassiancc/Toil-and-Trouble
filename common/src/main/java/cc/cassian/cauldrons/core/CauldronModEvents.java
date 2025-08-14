@@ -63,11 +63,7 @@ public class CauldronModEvents {
                     var stack = CauldronBlockEntity.createItemStack(Items.TIPPED_ARROW, cauldronBlockEntity.getPotion());
                     stack.setCount(tippedCount);
                     setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
-                    if (player != null)
-                        player.addItem(stack);
-                    else {
-                        popResourceFromFace(level, pos, direction, stack);
-                    }
+                    addItem(player, interactionHand, level, pos, direction, stack);
                     return ItemInteractionResult.CONSUME;
                 } else if (itemStack.is(Items.GLASS_BOTTLE) && cauldronBlockEntity.getFillLevel()>=1) {
                     var fillLevel = 1;
@@ -84,31 +80,31 @@ public class CauldronModEvents {
                     var stack = CauldronBlockEntity.createItemStack(potionItem, cauldronBlockEntity.getPotion());
                     stack.setCount(fillLevel);
                     setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
-                    if (player != null)
-                        player.addItem(stack);
-                    else {
-                        popResourceFromFace(level, pos, direction, stack);
-                    }
+                    addItem(player, interactionHand, level, pos, direction, stack);
                     return ItemInteractionResult.CONSUME;
                 } else {
                     Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
                     if (!(insert.getA() == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION)) {
-                        if (player != null && !player.isCreative())
+                        if (player == null || !player.isCreative())
                             itemStack.setCount(itemStack.getCount()-1);
-                        if (player != null && interactionHand != null) {
-                            if (player.getItemInHand(interactionHand).isEmpty()) {
-                                player.setItemInHand(interactionHand, insert.getB());
-                            } else {
-                                player.addItem(insert.getB());
-                            }
-                        } else {
-                            popResourceFromFace(level, pos, direction, insert.getB());
-                        }
+                        addItem(player, interactionHand, level, pos, direction, insert.getB());
                     }
                     return insert.getA();
                 }
             }
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    public static void addItem(Player player, InteractionHand interactionHand, Level level, BlockPos pos, Direction direction, ItemStack stack) {
+        if (player != null) {
+            if (interactionHand != null && player.getItemInHand(interactionHand).isEmpty()) {
+                player.setItemInHand(interactionHand, stack);
+            } else {
+                player.addItem(stack);
+            }
+        } else {
+            popResourceFromFace(level, pos, direction, stack);
+        }
     }
 }

@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Standing in cauldrons now gives you the effect for as long as you are standing in them, without ever draining the Cauldron.
 
+### Fixed
+- Strange behaviour from throwing items into Cauldrons.
+- Items retrieved from cauldrons are now properly placed in your hand.
+
 ## [1.1.2] - 2025-08-10
 
 ### Changed
