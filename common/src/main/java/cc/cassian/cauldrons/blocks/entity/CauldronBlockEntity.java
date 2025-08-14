@@ -25,6 +25,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -167,7 +168,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
             }
             return new Pair<>(InteractionResult.SUCCESS, ItemStack.EMPTY);
         }
-        return new Pair<>(InteractionResult.PASS, ItemStack.EMPTY);
+        return new Pair<>(InteractionResult.TRY_WITH_EMPTY_HAND, ItemStack.EMPTY);
     }
 
     public void brew() {

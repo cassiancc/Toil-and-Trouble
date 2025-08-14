@@ -64,7 +64,7 @@ public class CauldronModEvents {
                     stack.setCount(tippedCount);
                     setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
                     addItem(player, interactionHand, level, pos, direction, stack);
-                    return ItemInteractionResult.CONSUME;
+                    return InteractionResult.CONSUME;
                 } else if (itemStack.is(Items.GLASS_BOTTLE) && cauldronBlockEntity.getFillLevel()>=1) {
                     var fillLevel = 1;
                     if (itemStack.getCount()==2 && cauldronBlockEntity.getFillLevel()==2) {
@@ -81,10 +81,10 @@ public class CauldronModEvents {
                     stack.setCount(fillLevel);
                     setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
                     addItem(player, interactionHand, level, pos, direction, stack);
-                    return ItemInteractionResult.CONSUME;
+                    return InteractionResult.CONSUME;
                 } else {
-                    Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
-                    if (!(insert.getA() == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION)) {
+                    Pair<InteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
+                    if (!(insert.getA() == InteractionResult.PASS)) {
                         if (player == null || !player.isCreative())
                             itemStack.setCount(itemStack.getCount()-1);
                         addItem(player, interactionHand, level, pos, direction, insert.getB());
@@ -93,7 +93,7 @@ public class CauldronModEvents {
                 }
             }
         }
-        return InteractionResult.PASS;
+        return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
     public static void addItem(Player player, InteractionHand interactionHand, Level level, BlockPos pos, Direction direction, ItemStack stack) {
