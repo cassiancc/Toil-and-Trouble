@@ -26,6 +26,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -46,7 +47,7 @@ import java.util.*;
 
 import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.*;
 
-public class CauldronBlockEntity extends BlockEntity {
+public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer {
 
     protected PotionContents potion = PotionContents.EMPTY;
     protected boolean splashing = false;
@@ -350,5 +351,60 @@ public class CauldronBlockEntity extends BlockEntity {
 
     private boolean isBubbling() {
         return bubbleTimer > 0;
+    }
+
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        return new int[1];
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, @Nullable Direction direction) {
+        return true;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+        return true;
+    }
+
+    @Override
+    public int getContainerSize() {
+        return 1;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return reagent.isEmpty();
+    }
+
+    @Override
+    public ItemStack getItem(int slot) {
+        return reagent;
+    }
+
+    @Override
+    public ItemStack removeItem(int slot, int amount) {
+        return reagent.copyAndClear();
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int slot) {
+        return reagent.copyAndClear();
+    }
+
+    @Override
+    public void setItem(int slot, ItemStack stack) {
+        reagent = stack;
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return true;
+    }
+
+    @Override
+    public void clearContent() {
+        reagent.copyAndClear();
     }
 }
