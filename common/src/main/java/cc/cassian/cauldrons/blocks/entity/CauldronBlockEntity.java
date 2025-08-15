@@ -12,6 +12,7 @@ import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import cc.cassian.cauldrons.registry.CauldronModSoundEvents;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -44,15 +45,14 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 
     protected PotionContents potion = PotionContents.EMPTY;
     protected boolean splashing = false;
-    protected boolean splashParticles = false;
     protected boolean lingering = false;
-    protected boolean lingeringParticles = false;
     private int progress;
     private int maxProgress = CauldronMod.CONFIG.brewingTime.value() * 20;
     private int bubbleTimer = 0;
     private boolean pop = false;
 
     private ItemStack reagent = ItemStack.EMPTY;
+    private ParticleOptions particleType = ParticleTypes.BUBBLE;
 
     public CauldronBlockEntity(BlockPos pos, BlockState state, Holder<Potion> water) {
         super(CauldronModBlockEntityTypes.CAULDRON_BLOCK_ENTITY.get(), pos, state);
@@ -88,6 +88,8 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         splashing = tag.getBoolean("cauldron.splashing");
         lingering = tag.getBoolean("cauldron.lingering");
         bubbleTimer = tag.getInt("cauldron.bubble_timer");
+        if (tag.contains("cauldron.particle_type"))
+            particleType = ParticleTypes.CODEC.decode(NbtOps.INSTANCE, tag.get("cauldron.particle_type")).result().get().getFirst();
     }
 
     @Override
@@ -100,6 +102,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         tag.putBoolean("cauldron.splashing", splashing);
         tag.putBoolean("cauldron.lingering", lingering);
         tag.putInt("cauldron.bubble_timer", bubbleTimer);
+        tag.put("cauldron.particle_type", ParticleTypes.CODEC.encodeStart(NbtOps.INSTANCE, particleType).result().get());
         super.saveAdditional(tag, registries);
     }
 
@@ -168,24 +171,22 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
             Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = level.getRecipeManager().getRecipeFor(CauldronModRecipes.BREWING.get(), new BrewingRecipeInput(reagent, potion), level);
             if (brewingRecipe.isPresent()) {
                 this.potion = brewingRecipe.get().value().getResultPotion(level.registryAccess());
-                updateAfterBrewing();
+                updateAfterBrewing(ItemStack.EMPTY, brewingRecipe.get().value().getParticleType());
             }
             Optional<RecipeHolder<DippingRecipe>> dippingRecipe = level.getRecipeManager().getRecipeFor(CauldronModRecipes.DIPPING.get(), new BrewingRecipeInput(reagent, potion), level);
             if (dippingRecipe.isPresent()) {
-                updateAfterBrewing(dippingRecipe.get().value().getResultItem(level.registryAccess()));
+                updateAfterBrewing(dippingRecipe.get().value().getResultItem(level.registryAccess()), ParticleTypes.BUBBLE);
                 setFillLevel(0);
             }
             else if (reagent.is(CauldronModTags.CREATES_SPLASH_POTIONS)) {
                 this.splashing = true;
                 this.lingering = false;
-                updateAfterBrewing();
-                this.splashParticles = true;
+                updateAfterBrewing(ItemStack.EMPTY, ParticleTypes.SMOKE);
             }
             else if (reagent.is(CauldronModTags.CREATES_LINGERING_POTIONS)) {
                 this.splashing = false;
                 this.lingering = true;
-                updateAfterBrewing();
-                this.lingeringParticles = true;
+                updateAfterBrewing(ItemStack.EMPTY, ParticleTypes.DRAGON_BREATH);
             }
             else if (CauldronMod.CONFIG.useBrewingStandRecipes.value()) {
                 var potionBrewing = this.level.potionBrewing();
@@ -193,24 +194,19 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
                 if (potionBrewing.hasMix(potionItem, reagent)) {
                     ItemStack mix = potionBrewing.mix(reagent, potionItem);
                     this.potion = mix.getComponents().get(DataComponents.POTION_CONTENTS);
-                    updateAfterBrewing();
+                    updateAfterBrewing(ItemStack.EMPTY, ParticleTypes.BUBBLE);
                 }
             }
         }
     }
 
-    private void updateAfterBrewing(ItemStack stack) {
+    private void updateAfterBrewing(ItemStack stack, ParticleOptions particleType) {
         this.reagent = stack;
         //level.levelEvent(LevelEvent.SOUND_BREWING_STAND_BREW, this.getBlockPos(), 0);
         level.playSound(null, getBlockPos(), CauldronModSoundEvents.BREWS.get(), SoundSource.BLOCKS);
         level.setBlockAndUpdate(getBlockPos(), this.getBlockState().setValue(BrewingCauldronBlock.BREWING, false));
         bubbleTimer = 20;
-        splashParticles = false;
-        lingeringParticles = false;
-    }
-
-    private void updateAfterBrewing() {
-        updateAfterBrewing(ItemStack.EMPTY);
+        this.particleType = particleType;
     }
 
     public ItemStack retrieve() {
@@ -276,11 +272,8 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
                 if (cauldronBlockEntity.getPotion() != PotionContents.EMPTY) {
                     ArrayList<MobEffectInstance> effects = new ArrayList<>();
                     cauldronBlockEntity.getPotion().getAllEffects().forEach(effects::add);
-                    if (cauldronBlockEntity.splashParticles) {
-                        level.addParticle(ParticleTypes.SMOKE, d, e, f, 0.01, 0.05, 0.01);
-                    }
-                    else if (cauldronBlockEntity.lingeringParticles) {
-                        level.addParticle(ParticleTypes.DRAGON_BREATH, d, e, f, 0.01, 0.05, 0.01);
+                    if (cauldronBlockEntity.particleType != ParticleTypes.BUBBLE) {
+                        level.addParticle(cauldronBlockEntity.particleType, d,e,f,0.01, 0.05, 0.01);
                     }
                     else if (!effects.isEmpty()) {
                         for (MobEffectInstance effect : effects) {

@@ -6,6 +6,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
@@ -20,11 +23,13 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
     private final Ingredient reagent;
     private final PotionContents potion;
     private final PotionContents result;
+    private final ParticleOptions particleType;
 
-    public BrewingRecipe(Ingredient reagent, PotionContents potion, PotionContents result) {
+    public BrewingRecipe(Ingredient reagent, PotionContents potion, PotionContents result, ParticleOptions particleType) {
         this.reagent = reagent;
         this.potion = potion;
         this.result = result;
+        this.particleType = particleType;
     }
 
     @Override
@@ -74,11 +79,16 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         return CauldronModRecipes.BREWING.get();
     }
 
+    public ParticleOptions getParticleType() {
+        return particleType;
+    }
+
     public static class Serializer implements RecipeSerializer<BrewingRecipe> {
         public static final MapCodec<BrewingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 Ingredient.CODEC.fieldOf("reagent").forGetter(r->r.reagent),
                 PotionContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
-                PotionContents.CODEC.fieldOf("result").forGetter(r->r.result)
+                PotionContents.CODEC.fieldOf("result").forGetter(r->r.result),
+                ParticleTypes.CODEC.optionalFieldOf("particle_type", ParticleTypes.BUBBLE).forGetter(r->r.particleType)
         ).apply(inst, BrewingRecipe::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, BrewingRecipe> STREAM_CODEC = StreamCodec.of(BrewingRecipe.Serializer::toNetwork, BrewingRecipe.Serializer::fromNetwork);
@@ -87,13 +97,15 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
             var reagent = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
             var potion = PotionContents.STREAM_CODEC.decode(buf);
             var result = PotionContents.STREAM_CODEC.decode(buf);
-            return new BrewingRecipe(reagent, potion, result);
+            var particleType = ParticleTypes.STREAM_CODEC.decode(buf);
+            return new BrewingRecipe(reagent, potion, result, particleType);
         }
 
         private static void toNetwork(RegistryFriendlyByteBuf buf, BrewingRecipe recipe) {
             Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.reagent);
             PotionContents.STREAM_CODEC.encode(buf, recipe.potion);
             PotionContents.STREAM_CODEC.encode(buf, recipe.result);
+            ParticleTypes.STREAM_CODEC.encode(buf, recipe.particleType);
         }
 
         @Override
