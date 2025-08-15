@@ -165,15 +165,16 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         return new Pair<>(ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION, ItemStack.EMPTY);
     }
 
-    public void brew() {
+    public void brew(boolean cauldronHeated) {
         if (potion.potion().isEmpty() || reagent.isEmpty()) return;
+        var input = new BrewingRecipeInput(reagent, potion, cauldronHeated);
         if (!level.isClientSide()) {
-            Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = level.getRecipeManager().getRecipeFor(CauldronModRecipes.BREWING.get(), new BrewingRecipeInput(reagent, potion), level);
+            Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = level.getRecipeManager().getRecipeFor(CauldronModRecipes.BREWING.get(), input, level);
             if (brewingRecipe.isPresent()) {
                 this.potion = brewingRecipe.get().value().getResultPotion(level.registryAccess());
                 updateAfterBrewing(ItemStack.EMPTY, brewingRecipe.get().value().getParticleType());
             }
-            Optional<RecipeHolder<DippingRecipe>> dippingRecipe = level.getRecipeManager().getRecipeFor(CauldronModRecipes.DIPPING.get(), new BrewingRecipeInput(reagent, potion), level);
+            Optional<RecipeHolder<DippingRecipe>> dippingRecipe = level.getRecipeManager().getRecipeFor(CauldronModRecipes.DIPPING.get(), input, level);
             if (dippingRecipe.isPresent()) {
                 updateAfterBrewing(dippingRecipe.get().value().getResultItem(level.registryAccess()), dippingRecipe.get().value().getParticleType());
                 setFillLevel(0);
@@ -299,7 +300,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
                     maxProgress = (int) (maxProgress*CauldronMod.CONFIG.heatAmplification.value());
                 }
                 if (cauldronBlockEntity.progress > maxProgress) {
-                    cauldronBlockEntity.brew();
+                    cauldronBlockEntity.brew(cauldronHeated);
                     cauldronBlockEntity.progress = 0;
                 } else {
                     cauldronBlockEntity.progress++;

@@ -12,9 +12,9 @@ Cauldron Brewing recipes use the following format:
 |	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **item**: Optional: A resource location for an item.\
 |	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **tag**: Optional: A resource location for an item tag.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Potion Contents" /> **potion**: A [Potion Contents](https://minecraft.wiki/w/Data_component_format#potion_contents) data component that is consumed by the brew.\
-├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Potion Contents" /> **result**: A [Potion Contents](https://minecraft.wiki/w/Data_component_format#potion_contents) data component that will end up as the Cauldron Contents.
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Potion Contents" /> **result**: A [Potion Contents](https://minecraft.wiki/w/Data_component_format#potion_contents) data component that will end up as the Cauldron Contents.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **particle_type**: Optional: A particle type displayed after a successful brew..\
-|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: A [particle type](https://minecraft.wiki/w/Particles_(Java_Edition)).\
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: A [particle type](https://minecraft.wiki/w/Particles_(Java_Edition)).
 
 
 An example recipe is below, which crafts an Awkward Potion from the `toil_and_trouble:creates_awkward_potions` item tag (which contains Nether Wart) and the Water Bottle potion.
@@ -63,12 +63,13 @@ Cauldron Dipping recipes use the following format:
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **reagent**: An ingredient that is consumed by the brew.\
 |	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **item**: Optional: A resource location for an item.\
 |	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **tag**: Optional: A resource location for an item tag.\
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/boolean" title="Boolean" /> **requires_heat**: Optional, defaults to config: Whether heat is required to complete this recipe.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Potion Contents" /> **potion**: A [Potion Contents](https://minecraft.wiki/w/Data_component_format#potion_contents) data component that is consumed by the brew.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **result**: An item stack that will end up in an empty Cauldron.\
 |	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **id**: An [item id](https://minecraft.wiki/w/Java_Edition_data_values#Items).\
-|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **components**: Optional. Additional information about the item. See [item components](https://minecraft.wiki/w/Data_component_format).
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **components**: Optional. Additional information about the item. See [item components](https://minecraft.wiki/w/Data_component_format). \
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **particle_type**: Optional: A particle type displayed after a successful brew..\
-|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: A [particle type](https://minecraft.wiki/w/Particles_(Java_Edition)).\
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: A [particle type](https://minecraft.wiki/w/Particles_(Java_Edition)).
 
 
 An example recipe is below, which crafts an Cooked Cod with the custom name Awkward Fish from the `minecraft:fishes` item tag and the Awkward potion.

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Particles and heat requirements are now part of the recipe format.
+
+### Fixed
+- Duplicated item list in WTHIT/Jade.
+
+## [1.2.0] - 2025-08-14
+
+### Added
 - Data-driven dipping recipes, the format of which is documented on this mod's Modded Minecraft Wiki.
 - Hoppers can now extract items from Cauldrons.
 - Throwing items into vanilla Cauldrons now properly converts them into Brewing Cauldrons.

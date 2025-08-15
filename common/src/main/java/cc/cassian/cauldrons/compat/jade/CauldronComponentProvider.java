@@ -19,10 +19,6 @@ public enum CauldronComponentProvider implements IBlockComponentProvider {
     @Override
     public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
         if (blockAccessor.getBlockEntity() instanceof CauldronBlockEntity cauldronBlockEntity) {
-            if (!cauldronBlockEntity.getItem().isEmpty()) {
-                iTooltip.add(cauldronBlockEntity.getItem().getHoverName());
-                iTooltip.add(Component.empty());
-            }
             if (cauldronBlockEntity.getPotion() != PotionContents.EMPTY) {
                 iTooltip.add(Component.translatable("gui.toil_and_trouble.doses", blockAccessor.getBlockState().getValue(BrewingCauldronBlock.POTION_QUANTITY)).withStyle(ChatFormatting.DARK_PURPLE));
                 var item = Items.POTION;
@@ -33,6 +29,9 @@ public enum CauldronComponentProvider implements IBlockComponentProvider {
                 iTooltip.add(CauldronBlockEntity.createItemStack(item, cauldronBlockEntity.getPotion()).getHoverName());
                 if (Screen.hasShiftDown())
                     PotionContents.addPotionTooltip(cauldronBlockEntity.getPotion().getAllEffects(), iTooltip::add, 0, 0);
+                if (!cauldronBlockEntity.getItem().isEmpty()) {
+                    iTooltip.add(Component.empty());
+                }
             }
         }
     }
