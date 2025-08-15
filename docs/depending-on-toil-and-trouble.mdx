@@ -7,6 +7,16 @@ While Toil and Trouble's recipes are entirely data-driven, mod developers may wa
 toil_and_trouble_version = 1.2.0
 ```
 
+## Adding the maven
+```gradle
+repositories {
+    maven {
+        name = "cassian's maven"
+        url = "https://maven.cassian.cc"
+    }
+}
+```
+
 ## Fabric
 ```gradle
 modImplementation "cc.cassian.toil_and_trouble:toil_and_trouble-fabric:${toil_and_trouble_version}+${minecraft_version}"
