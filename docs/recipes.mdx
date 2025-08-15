@@ -48,7 +48,7 @@ As a more complicated example, this potion consumes a Nether Star to create a Ha
 Cauldron Dipping recipes use the following format:
 
 <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="NBT Compound/JSON Object" />: The root object.\
-├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: Which recipe to use, in this case `toil_and_trouble:brewing`.\
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: Which recipe to use, in this case `toil_and_trouble:dipping`.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **reagent**: An ingredient that is consumed by the brew. To use an item tag, prefix it with #.\
 |	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" />
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Potion Contents" /> **potion**: A [Potion Contents](https://minecraft.wiki/w/Data_component_format#potion_contents) data component that is consumed by the brew.\
