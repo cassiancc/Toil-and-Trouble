@@ -1,0 +1,23 @@
+# Depending on Toil and Trouble
+
+While Toil and Trouble's recipes are entirely data-driven, mod developers may want to add it to their developer environment in order to easily test against the mod. For that reason, it is available on my maven.
+
+## gradle.properties
+```gradle
+toil_and_trouble_version = 1.2.0
+```
+
+## Fabric
+```gradle
+modImplementation "cc.cassian.toil_and_trouble:toil_and_trouble-fabric:${toil_and_trouble_version}+${minecraft_version}"
+```
+
+## NeoForge
+```gradle
+implementation "cc.cassian.toil_and_trouble:toil_and_trouble-neoforge:${toil_and_trouble_version}+${minecraft_version}"
+```
+
+## Architectury Common
+```gradle
+modImplementation "cc.cassian.toil_and_trouble:toil_and_trouble-common:${toil_and_trouble_version}+${minecraft_version}"
+```
