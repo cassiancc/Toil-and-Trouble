@@ -175,7 +175,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
             }
             Optional<RecipeHolder<DippingRecipe>> dippingRecipe = level.getRecipeManager().getRecipeFor(CauldronModRecipes.DIPPING.get(), new BrewingRecipeInput(reagent, potion), level);
             if (dippingRecipe.isPresent()) {
-                updateAfterBrewing(dippingRecipe.get().value().getResultItem(level.registryAccess()), ParticleTypes.BUBBLE);
+                updateAfterBrewing(dippingRecipe.get().value().getResultItem(level.registryAccess()), dippingRecipe.get().value().getParticleType());
                 setFillLevel(0);
             }
             else if (reagent.is(CauldronModTags.CREATES_SPLASH_POTIONS)) {
