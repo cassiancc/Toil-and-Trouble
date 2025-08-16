@@ -38,7 +38,8 @@ public class CauldronModEmiPlugin implements EmiPlugin {
     public static final Map<ResourceLocation, EmiStack> OVERRIDES = Map.of(
             ResourceLocation.withDefaultNamespace("lava_cauldron"), EmiStack.of(Fluids.LAVA),
             ResourceLocation.withDefaultNamespace("water_cauldron"), EmiStack.of(Fluids.WATER),
-            ResourceLocation.withDefaultNamespace("powder_snow_cauldron"), EmiStack.of(Blocks.POWDER_SNOW)
+            ResourceLocation.withDefaultNamespace("powder_snow_cauldron"), EmiStack.of(Blocks.POWDER_SNOW),
+            ResourceLocation.withDefaultNamespace("honey"), EmiStack.of(CauldronModItems.HONEY_CONTENTS.get())
     );
 
     static Pair<EmiStack, EmiStack> getResultForDisplay(CauldronContents resultPotion) {

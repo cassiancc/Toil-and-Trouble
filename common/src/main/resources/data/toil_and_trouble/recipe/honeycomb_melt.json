@@ -1,0 +1,17 @@
+{
+  "type": "toil_and_trouble:brewing",
+  "reagent": {
+    "item": "minecraft:honeycomb"
+  },
+  "potion": {
+    "id": "minecraft:air"
+  },
+  "result": {
+    "id": "minecraft:honey",
+    "amount": 1
+  },
+  "requires_heat": true,
+  "particle_type": {
+    "type": "wax_on"
+  }
+}

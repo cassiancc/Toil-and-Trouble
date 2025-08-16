@@ -1,27 +1,111 @@
 {
   "variants": {
-    "potion_quantity=0,brewing=false": {
+    "brewing=false,contents=honey,heated=false,potion_quantity=0": {
       "model": "minecraft:block/cauldron"
     },
-    "potion_quantity=1,brewing=false": {
+    "brewing=false,contents=honey,heated=true,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "brewing=false,contents=potion,heated=false,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "brewing=false,contents=potion,heated=true,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "brewing=false,contents=water,heated=false,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "brewing=false,contents=water,heated=true,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "brewing=true,contents=empty,heated=false,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "brewing=true,contents=honey,heated=false,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "brewing=true,contents=honey,heated=true,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "brewing=true,contents=potion,heated=false,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "brewing=true,contents=potion,heated=true,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "brewing=true,contents=water,heated=false,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "brewing=true,contents=water,heated=true,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "contents=empty,heated=true,potion_quantity=0,brewing=true": {
+      "model": "minecraft:block/cauldron"
+    },
+    "contents=empty,potion_quantity=0,brewing=false": {
+      "model": "minecraft:block/cauldron"
+    },
+    "contents=empty,potion_quantity=1,brewing=false": {
+      "model": "minecraft:block/cauldron"
+    },
+    "contents=empty,potion_quantity=1,brewing=true": {
+      "model": "minecraft:block/cauldron"
+    },
+    "contents=empty,potion_quantity=2,brewing=false": {
+      "model": "minecraft:block/cauldron"
+    },
+    "contents=empty,potion_quantity=2,brewing=true": {
+      "model": "minecraft:block/cauldron"
+    },
+    "contents=empty,potion_quantity=3,brewing=false": {
+      "model": "minecraft:block/cauldron"
+    },
+    "contents=empty,potion_quantity=3,brewing=true": {
+      "model": "minecraft:block/cauldron"
+    },
+    "contents=honey,potion_quantity=1": {
+      "model": "toil_and_trouble:block/honey_cauldron_level1"
+    },
+    "contents=honey,potion_quantity=2": {
+      "model": "toil_and_trouble:block/honey_cauldron_level2"
+    },
+    "contents=honey,potion_quantity=3": {
+      "model": "toil_and_trouble:block/honey_cauldron_full"
+    },
+    "contents=potion,potion_quantity=1,brewing=false": {
       "model": "toil_and_trouble:block/cauldron_level1"
     },
-    "potion_quantity=2,brewing=false": {
-      "model": "toil_and_trouble:block/cauldron_level2"
-    },
-    "potion_quantity=3,brewing=false": {
-      "model": "toil_and_trouble:block/cauldron_full"
-    },
-    "potion_quantity=0,brewing=true": {
-      "model": "minecraft:block/cauldron"
-    },
-    "potion_quantity=1,brewing=true": {
+    "contents=potion,potion_quantity=1,brewing=true": {
       "model": "toil_and_trouble:block/active_cauldron_level1"
     },
-    "potion_quantity=2,brewing=true": {
+    "contents=potion,potion_quantity=2,brewing=false": {
+      "model": "toil_and_trouble:block/cauldron_level2"
+    },
+    "contents=potion,potion_quantity=2,brewing=true": {
       "model": "toil_and_trouble:block/active_cauldron_level2"
     },
-    "potion_quantity=3,brewing=true": {
+    "contents=potion,potion_quantity=3,brewing=false": {
+      "model": "toil_and_trouble:block/cauldron_full"
+    },
+    "contents=potion,potion_quantity=3,brewing=true": {
+      "model": "toil_and_trouble:block/active_cauldron_full"
+    },
+    "contents=water,potion_quantity=1,brewing=false": {
+      "model": "toil_and_trouble:block/cauldron_level1"
+    },
+    "contents=water,potion_quantity=1,brewing=true": {
+      "model": "toil_and_trouble:block/active_cauldron_level1"
+    },
+    "contents=water,potion_quantity=2,brewing=false": {
+      "model": "toil_and_trouble:block/cauldron_level2"
+    },
+    "contents=water,potion_quantity=2,brewing=true": {
+      "model": "toil_and_trouble:block/active_cauldron_level2"
+    },
+    "contents=water,potion_quantity=3,brewing=false": {
+      "model": "toil_and_trouble:block/cauldron_full"
+    },
+    "contents=water,potion_quantity=3,brewing=true": {
       "model": "toil_and_trouble:block/active_cauldron_full"
     }
   }

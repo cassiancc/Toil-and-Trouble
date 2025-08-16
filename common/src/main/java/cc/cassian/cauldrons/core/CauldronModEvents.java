@@ -5,6 +5,7 @@ import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -31,7 +32,7 @@ public class CauldronModEvents {
             return insert(player.getItemInHand(interactionHand), blockState, level, pos, player, interactionHand, direction);
         }
         else if (blockState.is(Blocks.WATER_CAULDRON) && !stack.is(Items.BUCKET)) {
-            var state =  CauldronModBlocks.BREWING_CAULDRON.get().defaultBlockState().setValue(BrewingCauldronBlock.POTION_QUANTITY, blockState.getValue(LayeredCauldronBlock.LEVEL));
+            var state =  CauldronModBlocks.BREWING_CAULDRON.get().defaultBlockState().setValue(BrewingCauldronBlock.CONTENTS, BrewingCauldronBlock.Contents.WATER).setValue(BrewingCauldronBlock.POTION_QUANTITY, blockState.getValue(LayeredCauldronBlock.LEVEL));
             level.setBlockAndUpdate(pos, state);
             level.setBlockEntity(new CauldronBlockEntity(pos, state, Potions.WATER));
             return insert(player.getItemInHand(interactionHand), blockState, level, pos, player, interactionHand, direction);
@@ -60,7 +61,7 @@ public class CauldronModEvents {
                         fillLevel = 3;
                     }
                     itemStack.setCount(itemStack.getCount()-tippedCount);
-                    var stack = CauldronBlockEntity.createItemStack(Items.TIPPED_ARROW, cauldronBlockEntity.getContents());
+                    var stack = CauldronContents.createItemStack(Items.TIPPED_ARROW, cauldronBlockEntity.getContents());
                     stack.setCount(tippedCount);
                     setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
                     addItem(player, interactionHand, level, pos, direction, stack);
@@ -74,10 +75,15 @@ public class CauldronModEvents {
                         fillLevel = 3;
                     }
                     itemStack.setCount(itemStack.getCount()-fillLevel);
-                    var potionItem = Items.POTION;
-                    if (cauldronBlockEntity.isPotionSplash()) potionItem = Items.SPLASH_POTION;
-                    else if (cauldronBlockEntity.isPotionLingering()) potionItem = Items.LINGERING_POTION;
-                    var stack = CauldronBlockEntity.createItemStack(potionItem, cauldronBlockEntity.getContents());
+                    var stack = ItemStack.EMPTY;
+                    if (cauldronBlockEntity.getContents().isPotion()) {
+                        var potionItem = Items.POTION;
+                        if (cauldronBlockEntity.isPotionSplash()) potionItem = Items.SPLASH_POTION;
+                        else if (cauldronBlockEntity.isPotionLingering()) potionItem = Items.LINGERING_POTION;
+                        stack = CauldronContents.createItemStack(potionItem, cauldronBlockEntity.getContents());
+                    } else if (cauldronBlockEntity.getContents().is(ResourceLocation.withDefaultNamespace("honey"))) {
+                        stack = Items.HONEY_BOTTLE.getDefaultInstance();
+                    }
                     stack.setCount(fillLevel);
                     setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
                     addItem(player, interactionHand, level, pos, direction, stack);

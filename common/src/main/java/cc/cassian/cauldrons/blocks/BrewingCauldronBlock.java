@@ -5,8 +5,11 @@ import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.core.CauldronModEvents;
 import cc.cassian.cauldrons.core.CauldronModHelpers;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,6 +28,7 @@ import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
@@ -34,12 +38,25 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     public static final IntegerProperty POTION_QUANTITY = IntegerProperty.create("potion_quantity", 0, 3);
     public static final BooleanProperty BREWING = BooleanProperty.create("brewing");
     public static final BooleanProperty HEATED = BooleanProperty.create("heated");
-    public static final BooleanProperty HAS_POTION = BooleanProperty.create("has_potion");
+    public static final EnumProperty<Contents> CONTENTS = EnumProperty.create("contents", Contents.class, Contents.POTION, Contents.HONEY, Contents.WATER, Contents.EMPTY);
 
+    public enum Contents implements StringRepresentable {
+        EMPTY("empty"), WATER("water"), POTION("potion"), HONEY("honey");
+        private final String name;
+
+        Contents(final String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return this.name;
+        }
+    }
 
     public BrewingCauldronBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(POTION_QUANTITY, 0).setValue(BREWING, false).setValue(HEATED, false).setValue(HAS_POTION, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(POTION_QUANTITY, 0).setValue(BREWING, false).setValue(HEATED, false).setValue(CONTENTS, Contents.EMPTY));
     }
 
     @Override
@@ -105,6 +122,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     }
 
     public static void setFillLevel(BlockState state, Level level, BlockPos pos, int i) {
+        if (i > 3 || i < -1) return;
         BlockState blockState = state.setValue(POTION_QUANTITY, i);
         level.setBlockAndUpdate(pos, blockState);
     }
@@ -145,7 +163,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(POTION_QUANTITY, BREWING, HEATED, HAS_POTION);
+        builder.add(POTION_QUANTITY, BREWING, HEATED, CONTENTS);
     }
 
     @Override
