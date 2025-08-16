@@ -6,16 +6,16 @@ import cc.cassian.cauldrons.core.CauldronModRecipes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -55,20 +55,29 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
     @Override
     public NonNullList<Ingredient> getIngredients() {
-        return NonNullList.of(reagent);
+        ItemStack cauldronContents = ItemStack.EMPTY;
+        return NonNullList.of(reagent, Ingredient.of(cauldronContents));
     }
 
     public Ingredient getReagent() {
         return reagent;
     }
 
-    public Holder<Potion> getPotion() {
-        return potion.potion().get();
+    public CauldronContents getPotion() {
+        return potion;
+    }
+
+    public ResourceLocation getContentsId() {
+        return potion.id();
     }
 
     @Override
     public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return PotionContents.createItemStack(Items.POTION, result.potion().get());
+        if (result.potion().isPresent()) {
+            return PotionContents.createItemStack(Items.POTION, result.potion().get());
+        } else {
+            return BuiltInRegistries.BLOCK.get(result.id()).asItem().getDefaultInstance();
+        }
     }
 
     public CauldronContents getResultPotion(HolderLookup.Provider registries) {

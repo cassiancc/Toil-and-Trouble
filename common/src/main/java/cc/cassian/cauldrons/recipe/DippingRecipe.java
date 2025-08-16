@@ -63,8 +63,8 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
         return reagent;
     }
 
-    public Holder<Potion> getPotion() {
-        return potion.potion().get();
+    public CauldronContents getPotion() {
+        return potion;
     }
 
     @Override
