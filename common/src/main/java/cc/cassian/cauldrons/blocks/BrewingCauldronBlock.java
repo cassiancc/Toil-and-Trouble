@@ -7,8 +7,6 @@ import cc.cassian.cauldrons.core.CauldronModEvents;
 import cc.cassian.cauldrons.core.CauldronModHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -19,7 +17,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
@@ -72,7 +69,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
             if (entity instanceof ItemEntity itemEntity && itemEntity.tickCount>10) {
                 CauldronModEvents.insert(itemEntity.getItem(), state, level, pos, null, null, null);
             }
-            else if (cauldronBlockEntity.getPotion() != CauldronContents.EMPTY) {
+            else if (cauldronBlockEntity.getContents() != CauldronContents.EMPTY) {
 //                level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS);
                 if (cauldronBlockEntity.isPotionWater()) {
                     if (entity.isOnFire()) {
@@ -83,7 +80,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                     }
                 } else if (entity instanceof LivingEntity livingEntity && CauldronMod.CONFIG.cauldronsApplyEffects.value()) {
                     if (livingEntity.isAffectedByPotions()) {
-                        for (MobEffectInstance effect : cauldronBlockEntity.getPotion().getAllEffects()) {
+                        for (MobEffectInstance effect : cauldronBlockEntity.getContents().getAllEffects()) {
                             livingEntity.addEffect(new MobEffectInstance(effect.getEffect(), 1, effect.getAmplifier(), true, true));
                         }
                     }

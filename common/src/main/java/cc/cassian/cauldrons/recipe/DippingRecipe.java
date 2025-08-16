@@ -13,17 +13,13 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.CampfireBlockEntity;
 
 public class DippingRecipe implements Recipe<BrewingRecipeInput> {
 
@@ -44,7 +40,7 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
     @Override
     public boolean matches(BrewingRecipeInput input, Level level) {
         if (!requiresHeat || input.isHeated())
-            return reagent.test(input.getItem(0)) && input.getPotionContents().is(getPotion());
+            return reagent.test(input.getItem(0)) && potion.test(input.getContents());
         return false;
     }
 

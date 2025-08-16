@@ -11,7 +11,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
@@ -40,7 +39,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
     @Override
     public boolean matches(BrewingRecipeInput input, Level level) {
         if (!requiresHeat || input.isHeated())
-            return reagent.test(input.getItem(0)) && input.getPotionContents().is(getPotion());
+            return reagent.test(input.getItem(0)) && potion.test(input.getContents());
         return false;
     }
 

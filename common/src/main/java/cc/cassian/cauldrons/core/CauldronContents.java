@@ -3,10 +3,8 @@ package cc.cassian.cauldrons.core;
 import com.google.common.collect.Iterables;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -16,8 +14,6 @@ import net.minecraft.world.item.alchemy.PotionContents;
 
 import java.util.List;
 import java.util.Optional;
-
-import static net.minecraft.world.item.alchemy.PotionContents.getColorOptional;
 
 public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> potion, Optional<Integer> customColor, List<MobEffectInstance> customEffects) {
     public static final CauldronContents EMPTY = new CauldronContents(ResourceLocation.withDefaultNamespace("air"), Optional.empty(), Optional.empty(), List.of());
@@ -67,15 +63,7 @@ public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> pot
     }
 
     public int getColor() {
-        return this.customColor.orElseGet(() -> getColor(this.getAllEffects()));
-    }
-
-    public static int getColor(Holder<Potion> potion) {
-        return getColor(potion.value().getEffects());
-    }
-
-    public static int getColor(Iterable<MobEffectInstance> effects) {
-        return getColorOptional(effects).orElse(-13083194);
+        return this.customColor.orElseGet(() -> PotionContents.getColor(this.getAllEffects()));
     }
 
     public Iterable<MobEffectInstance> getAllEffects() {
@@ -84,4 +72,10 @@ public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> pot
                 : Iterables.concat(((Potion) ((Holder) potionHolder).value()).getEffects(), this.customEffects)).orElse(this.customEffects);
     }
 
+    public boolean test(CauldronContents testedContents) {
+        if (this.potion.isPresent() && testedContents.potion.isPresent()) {
+            return this.is(testedContents.potion.get());
+        }
+        return this.is(testedContents.id);
+    }
 }

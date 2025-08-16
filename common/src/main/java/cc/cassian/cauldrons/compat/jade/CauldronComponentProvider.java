@@ -20,16 +20,16 @@ public enum CauldronComponentProvider implements IBlockComponentProvider {
     @Override
     public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
         if (blockAccessor.getBlockEntity() instanceof CauldronBlockEntity cauldronBlockEntity) {
-            if (cauldronBlockEntity.getPotion() != CauldronContents.EMPTY) {
+            if (cauldronBlockEntity.getContents() != CauldronContents.EMPTY) {
                 iTooltip.add(Component.translatable("gui.toil_and_trouble.doses", blockAccessor.getBlockState().getValue(BrewingCauldronBlock.POTION_QUANTITY)).withStyle(ChatFormatting.DARK_PURPLE));
                 var item = Items.POTION;
                 if (cauldronBlockEntity.isPotionSplash())
                     item = Items.SPLASH_POTION;
                 else if (cauldronBlockEntity.isPotionLingering())
                     item = Items.LINGERING_POTION;
-                iTooltip.add(CauldronBlockEntity.createItemStack(item, cauldronBlockEntity.getPotion()).getHoverName());
+                iTooltip.add(CauldronBlockEntity.createItemStack(item, cauldronBlockEntity.getContents()).getHoverName());
                 if (Screen.hasShiftDown())
-                    PotionContents.addPotionTooltip(cauldronBlockEntity.getPotion().getAllEffects(), iTooltip::add, 0, 0);
+                    PotionContents.addPotionTooltip(cauldronBlockEntity.getContents().getAllEffects(), iTooltip::add, 0, 0);
                 if (!cauldronBlockEntity.getItem().isEmpty()) {
                     iTooltip.add(Component.empty());
                 }

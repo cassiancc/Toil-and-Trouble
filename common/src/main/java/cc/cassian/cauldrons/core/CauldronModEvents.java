@@ -60,7 +60,7 @@ public class CauldronModEvents {
                         fillLevel = 3;
                     }
                     itemStack.setCount(itemStack.getCount()-tippedCount);
-                    var stack = CauldronBlockEntity.createItemStack(Items.TIPPED_ARROW, cauldronBlockEntity.getPotion());
+                    var stack = CauldronBlockEntity.createItemStack(Items.TIPPED_ARROW, cauldronBlockEntity.getContents());
                     stack.setCount(tippedCount);
                     setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
                     addItem(player, interactionHand, level, pos, direction, stack);
@@ -77,7 +77,7 @@ public class CauldronModEvents {
                     var potionItem = Items.POTION;
                     if (cauldronBlockEntity.isPotionSplash()) potionItem = Items.SPLASH_POTION;
                     else if (cauldronBlockEntity.isPotionLingering()) potionItem = Items.LINGERING_POTION;
-                    var stack = CauldronBlockEntity.createItemStack(potionItem, cauldronBlockEntity.getPotion());
+                    var stack = CauldronBlockEntity.createItemStack(potionItem, cauldronBlockEntity.getContents());
                     stack.setCount(fillLevel);
                     setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
                     addItem(player, interactionHand, level, pos, direction, stack);

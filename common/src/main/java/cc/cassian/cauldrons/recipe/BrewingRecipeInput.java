@@ -7,12 +7,12 @@ import net.minecraft.world.item.crafting.RecipeInput;
 public class BrewingRecipeInput implements RecipeInput {
 
     private final ItemStack reagent;
-    private final CauldronContents potion;
+    private final CauldronContents contents;
     private final boolean isHeated;
 
-    public BrewingRecipeInput(ItemStack reagent, CauldronContents potion, boolean isHeated) {
+    public BrewingRecipeInput(ItemStack reagent, CauldronContents contents, boolean isHeated) {
         this.reagent = reagent;
-        this.potion = potion;
+        this.contents = contents;
         this.isHeated = isHeated;
     }
 
@@ -21,8 +21,8 @@ public class BrewingRecipeInput implements RecipeInput {
         return reagent;
     }
 
-    public CauldronContents getPotionContents() {
-        return potion;
+    public CauldronContents getContents() {
+        return contents;
     }
 
     @Override

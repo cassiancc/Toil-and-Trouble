@@ -16,7 +16,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -171,7 +170,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     }
 
     public void brew(boolean cauldronHeated) {
-        if (potion.potion().isEmpty() || reagent.isEmpty()) return;
+        System.out.println(potion);
         var input = new BrewingRecipeInput(reagent, potion, cauldronHeated);
         if (!level.isClientSide()) {
             Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = level.getRecipeManager().getRecipeFor(CauldronModRecipes.BREWING.get(), input, level);
@@ -214,7 +213,6 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         if (!Objects.equals(potion.id(), ResourceLocation.withDefaultNamespace("potion"))) {
             Optional<Block> optional = BuiltInRegistries.BLOCK.getOptional(potion.id());
             if (optional.isPresent()) {
-                System.out.println(potion.id());
                 state = optional.get().defaultBlockState();
             }
         }
@@ -244,7 +242,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         return potion.getColor();
     }
 
-    public CauldronContents getPotion() {
+    public CauldronContents getContents() {
         return potion;
     }
 
@@ -282,9 +280,9 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
                 double d = pos.getX() + level.random.nextDouble();
                 double e = pos.getY() + 1;
                 double f = pos.getZ() + level.random.nextDouble();
-                if (cauldronBlockEntity.getPotion() != CauldronContents.EMPTY) {
+                if (cauldronBlockEntity.getContents() != CauldronContents.EMPTY) {
                     ArrayList<MobEffectInstance> effects = new ArrayList<>();
-                    cauldronBlockEntity.getPotion().getAllEffects().forEach(effects::add);
+                    cauldronBlockEntity.getContents().getAllEffects().forEach(effects::add);
                     if (cauldronBlockEntity.particleType != ParticleTypes.BUBBLE) {
                         level.addParticle(cauldronBlockEntity.particleType, d,e,f,0.01, 0.05, 0.01);
                     }
