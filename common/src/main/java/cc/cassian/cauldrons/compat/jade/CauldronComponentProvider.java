@@ -2,6 +2,7 @@ package cc.cassian.cauldrons.compat.jade;
 
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
+import cc.cassian.cauldrons.core.CauldronContents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -19,7 +20,7 @@ public enum CauldronComponentProvider implements IBlockComponentProvider {
     @Override
     public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
         if (blockAccessor.getBlockEntity() instanceof CauldronBlockEntity cauldronBlockEntity) {
-            if (cauldronBlockEntity.getPotion() != PotionContents.EMPTY) {
+            if (cauldronBlockEntity.getPotion() != CauldronContents.EMPTY) {
                 iTooltip.add(Component.translatable("gui.toil_and_trouble.doses", blockAccessor.getBlockState().getValue(BrewingCauldronBlock.POTION_QUANTITY)).withStyle(ChatFormatting.DARK_PURPLE));
                 var item = Items.POTION;
                 if (cauldronBlockEntity.isPotionSplash())

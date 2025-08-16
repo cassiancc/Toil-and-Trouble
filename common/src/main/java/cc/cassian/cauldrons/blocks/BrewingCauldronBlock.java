@@ -2,6 +2,7 @@ package cc.cassian.cauldrons.blocks;
 
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
+import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.core.CauldronModEvents;
 import cc.cassian.cauldrons.core.CauldronModHelpers;
 import net.minecraft.core.BlockPos;
@@ -71,7 +72,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
             if (entity instanceof ItemEntity itemEntity && itemEntity.tickCount>10) {
                 CauldronModEvents.insert(itemEntity.getItem(), state, level, pos, null, null, null);
             }
-            else if (cauldronBlockEntity.getPotion() != PotionContents.EMPTY) {
+            else if (cauldronBlockEntity.getPotion() != CauldronContents.EMPTY) {
 //                level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS);
                 if (cauldronBlockEntity.isPotionWater()) {
                     if (entity.isOnFire()) {

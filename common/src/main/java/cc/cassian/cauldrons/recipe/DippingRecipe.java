@@ -1,6 +1,7 @@
 package cc.cassian.cauldrons.recipe;
 
 import cc.cassian.cauldrons.CauldronMod;
+import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -22,16 +23,17 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.CampfireBlockEntity;
 
 public class DippingRecipe implements Recipe<BrewingRecipeInput> {
 
     private final Ingredient reagent;
-    private final PotionContents potion;
+    private final CauldronContents potion;
     private final ItemStack result;
     private final ParticleOptions particleType;
     private final boolean requiresHeat;
 
-    public DippingRecipe(Ingredient reagent, PotionContents potion, ItemStack result, ParticleOptions particleType, boolean requiresHeat) {
+    public DippingRecipe(Ingredient reagent, CauldronContents potion, ItemStack result, ParticleOptions particleType, boolean requiresHeat) {
         this.reagent = reagent;
         this.potion = potion;
         this.result = result;
@@ -91,7 +93,7 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
     public static class Serializer implements RecipeSerializer<DippingRecipe> {
         public static final MapCodec<DippingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 Ingredient.CODEC.fieldOf("reagent").forGetter(r->r.reagent),
-                PotionContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
+                CauldronContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
                 ItemStack.CODEC.fieldOf("result").forGetter(r->r.result),
                 ParticleTypes.CODEC.optionalFieldOf("particle_type", ParticleTypes.BUBBLE).forGetter(r->r.particleType),
                 Codec.BOOL.optionalFieldOf("requires_heat", CauldronMod.CONFIG.requiresHeat.value()).forGetter(r->r.requiresHeat)
@@ -101,7 +103,7 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
 
         private static DippingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
             var reagent = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
-            var potion = PotionContents.STREAM_CODEC.decode(buf);
+            var potion = CauldronContents.STREAM_CODEC.decode(buf);
             var result = ItemStack.STREAM_CODEC.decode(buf);
             var particleType = ParticleTypes.STREAM_CODEC.decode(buf);
             var requiresHeat = buf.readBoolean();
@@ -110,7 +112,7 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
 
         private static void toNetwork(RegistryFriendlyByteBuf buf, DippingRecipe recipe) {
             Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.reagent);
-            PotionContents.STREAM_CODEC.encode(buf, recipe.potion);
+            CauldronContents.STREAM_CODEC.encode(buf, recipe.potion);
             ItemStack.STREAM_CODEC.encode(buf, recipe.result);
             ParticleTypes.STREAM_CODEC.encode(buf, recipe.particleType);
             buf.writeBoolean(recipe.requiresHeat);

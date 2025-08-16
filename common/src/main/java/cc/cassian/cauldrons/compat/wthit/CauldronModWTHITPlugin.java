@@ -3,6 +3,7 @@ package cc.cassian.cauldrons.compat.wthit;
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
+import cc.cassian.cauldrons.core.CauldronContents;
 import mcp.mobius.waila.api.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -23,7 +24,7 @@ public class CauldronModWTHITPlugin implements IWailaPlugin, IBlockComponentProv
     @Override
     public void appendBody(ITooltip iTooltip, IBlockAccessor blockAccessor, IPluginConfig config) {
         if (blockAccessor.getBlockEntity() instanceof CauldronBlockEntity cauldronBlockEntity) {
-            if (cauldronBlockEntity.getPotion() != PotionContents.EMPTY) {
+            if (cauldronBlockEntity.getPotion() != CauldronContents.EMPTY) {
                 iTooltip.addLine(Component.translatable("gui.toil_and_trouble.doses", blockAccessor.getBlockState().getValue(BrewingCauldronBlock.POTION_QUANTITY)).withStyle(ChatFormatting.DARK_PURPLE));
                 var item = Items.POTION;
                 if (cauldronBlockEntity.isPotionSplash())

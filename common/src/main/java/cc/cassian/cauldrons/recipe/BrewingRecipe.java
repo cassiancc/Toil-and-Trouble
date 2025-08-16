@@ -1,6 +1,7 @@
 package cc.cassian.cauldrons.recipe;
 
 import cc.cassian.cauldrons.CauldronMod;
+import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -23,12 +24,12 @@ import net.minecraft.world.level.Level;
 public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
     private final Ingredient reagent;
-    private final PotionContents potion;
-    private final PotionContents result;
+    private final CauldronContents potion;
+    private final CauldronContents result;
     private final ParticleOptions particleType;
     private final boolean requiresHeat;
 
-    public BrewingRecipe(Ingredient reagent, PotionContents potion, PotionContents result, ParticleOptions particleType, boolean requiresHeat) {
+    public BrewingRecipe(Ingredient reagent, CauldronContents potion, CauldronContents result, ParticleOptions particleType, boolean requiresHeat) {
         this.reagent = reagent;
         this.potion = potion;
         this.result = result;
@@ -71,7 +72,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         return PotionContents.createItemStack(Items.POTION, result.potion().get());
     }
 
-    public PotionContents getResultPotion(HolderLookup.Provider registries) {
+    public CauldronContents getResultPotion(HolderLookup.Provider registries) {
         return result;
     }
 
@@ -92,8 +93,8 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
     public static class Serializer implements RecipeSerializer<BrewingRecipe> {
         public static final MapCodec<BrewingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 Ingredient.CODEC.fieldOf("reagent").forGetter(r->r.reagent),
-                PotionContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
-                PotionContents.CODEC.fieldOf("result").forGetter(r->r.result),
+                CauldronContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
+                CauldronContents.CODEC.fieldOf("result").forGetter(r->r.result),
                 ParticleTypes.CODEC.optionalFieldOf("particle_type", ParticleTypes.BUBBLE).forGetter(r->r.particleType),
                 Codec.BOOL.optionalFieldOf("requires_heat", CauldronMod.CONFIG.requiresHeat.value()).forGetter(r->r.requiresHeat)
         ).apply(inst, BrewingRecipe::new));
@@ -102,8 +103,8 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
         private static BrewingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
             var reagent = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
-            var potion = PotionContents.STREAM_CODEC.decode(buf);
-            var result = PotionContents.STREAM_CODEC.decode(buf);
+            var potion = CauldronContents.STREAM_CODEC.decode(buf);
+            var result = CauldronContents.STREAM_CODEC.decode(buf);
             var particleType = ParticleTypes.STREAM_CODEC.decode(buf);
             var requiresHeat = buf.readBoolean();
             return new BrewingRecipe(reagent, potion, result, particleType, requiresHeat);
@@ -111,8 +112,8 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
         private static void toNetwork(RegistryFriendlyByteBuf buf, BrewingRecipe recipe) {
             Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.reagent);
-            PotionContents.STREAM_CODEC.encode(buf, recipe.potion);
-            PotionContents.STREAM_CODEC.encode(buf, recipe.result);
+            CauldronContents.STREAM_CODEC.encode(buf, recipe.potion);
+            CauldronContents.STREAM_CODEC.encode(buf, recipe.result);
             ParticleTypes.STREAM_CODEC.encode(buf, recipe.particleType);
             buf.writeBoolean(recipe.requiresHeat);
         }
