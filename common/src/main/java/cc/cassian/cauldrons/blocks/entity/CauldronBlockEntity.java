@@ -237,6 +237,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
             }
         }
         //setblock
+        if (potionQuantity>3) potionQuantity = 3;
         this.level.setBlockAndUpdate(getBlockPos(), state.trySetValue(BrewingCauldronBlock.BREWING, false).trySetValue(POTION_QUANTITY, potionQuantity).trySetValue(CONTENTS, getContentsProperty()));
         this.bubbleTimer = 20;
         this.particleType = particleType;
