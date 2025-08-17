@@ -15,7 +15,7 @@ public class BrewingEmiRecipe extends BasicEmiRecipe {
     private final EmiStack resultForDisplay;
 
     public BrewingEmiRecipe(RecipeHolder<BrewingRecipe> recipeHolder, RegistryAccess registryAccess) {
-        super(CauldronModEmiPlugin.BREWING_CATEGORY, recipeHolder.id(), 100, 18);
+        super(CauldronModEmiPlugin.BREWING_CATEGORY, recipeHolder.id().location(), 100, 18);
         var recipe = recipeHolder.value();
         // reagent
         inputs.add(EmiIngredient.of(recipe.getReagent()));
@@ -24,7 +24,7 @@ public class BrewingEmiRecipe extends BasicEmiRecipe {
         inputs.add(EmiIngredient.of(input.getA().getEmiStacks()));
         potionForDisplay = input.getB();
         // output
-        var output = CauldronModEmiPlugin.getResultForDisplay(recipe.getResultPotion(registryAccess));
+        var output = CauldronModEmiPlugin.getResultForDisplay(recipe.getResultPotion());
         outputs.add(output.getA());
         resultForDisplay = output.getB();
     }

@@ -1,6 +1,7 @@
 package cc.cassian.cauldrons.compat.eiv.brewing;
 
 import cc.cassian.cauldrons.CauldronMod;
+import cc.cassian.cauldrons.core.CauldronContents;
 import de.crafty.eiv.common.api.recipe.EivRecipeType;
 import de.crafty.eiv.common.api.recipe.IEivServerRecipe;
 import de.crafty.eiv.common.recipe.util.EivTagUtil;
@@ -16,10 +17,10 @@ public class CauldronBrewingServerRecipe implements IEivServerRecipe {
             () -> new CauldronBrewingServerRecipe(null, null, null)
     );
     private Ingredient reagent;
-    private PotionContents potion;
-    private PotionContents result;
+    private CauldronContents potion;
+    private CauldronContents result;
 
-    public CauldronBrewingServerRecipe(Ingredient reagent, PotionContents potion, PotionContents result) {
+    public CauldronBrewingServerRecipe(Ingredient reagent, CauldronContents potion, CauldronContents result) {
         this.reagent = reagent;
         this.potion = potion;
         this.result = result;
@@ -29,15 +30,15 @@ public class CauldronBrewingServerRecipe implements IEivServerRecipe {
     @Override
     public void writeToTag(CompoundTag tag) {
         tag.put("reagent", EivTagUtil.writeIngredient(reagent));
-        tag.put("potion", PotionContents.CODEC.encodeStart(NbtOps.INSTANCE, potion).result().get());
-        tag.put("result", PotionContents.CODEC.encodeStart(NbtOps.INSTANCE, result).result().get());
+        tag.put("potion", CauldronContents.CODEC.encodeStart(NbtOps.INSTANCE, potion).result().get());
+        tag.put("result", CauldronContents.CODEC.encodeStart(NbtOps.INSTANCE, result).result().get());
     }
 
     @Override
     public void loadFromTag(CompoundTag tag) {
         reagent = EivTagUtil.readIngredient(tag.getCompoundOrEmpty("reagent"));
-        potion = PotionContents.CODEC.decode(NbtOps.INSTANCE, tag.get("potion")).result().get().getFirst();
-        result = PotionContents.CODEC.decode(NbtOps.INSTANCE, tag.get("result")).result().get().getFirst();
+        potion = CauldronContents.CODEC.decode(NbtOps.INSTANCE, tag.get("potion")).result().get().getFirst();
+        result = CauldronContents.CODEC.decode(NbtOps.INSTANCE, tag.get("result")).result().get().getFirst();
     }
 
     @Override
@@ -49,11 +50,11 @@ public class CauldronBrewingServerRecipe implements IEivServerRecipe {
         return reagent;
     }
 
-    public PotionContents getPotion() {
+    public CauldronContents getPotion() {
         return potion;
     }
 
-    public PotionContents getResult() {
+    public CauldronContents getResult() {
         return result;
     }
 }

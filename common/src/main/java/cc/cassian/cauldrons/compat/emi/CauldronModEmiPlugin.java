@@ -51,7 +51,7 @@ public class CauldronModEmiPlugin implements EmiPlugin {
             var stack = OVERRIDES.get(resultPotion.id());
             return new Pair<>(stack, stack);
         } else {
-            var stack = EmiStack.of(BuiltInRegistries.BLOCK.get(resultPotion.id()));
+            var stack = EmiStack.of(BuiltInRegistries.BLOCK.getValue(resultPotion.id()));
             return new Pair<>(stack, stack);
         }
     }

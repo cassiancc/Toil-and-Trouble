@@ -14,6 +14,8 @@ import cc.cassian.cauldrons.registry.CauldronModSoundEvents;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleOptions;
@@ -186,15 +188,15 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 
     public void brew(boolean cauldronHeated) {
         var input = new BrewingRecipeInput(reagent, potion, cauldronHeated);
-        if (!level.isClientSide()) {
-            Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = level.getRecipeManager().getRecipeFor(CauldronModRecipes.BREWING.get(), input, level);
+        if ((level instanceof ServerLevel serverLevel)) {
+            Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = serverLevel.recipeAccess().getRecipeFor(CauldronModRecipes.BREWING.get(), input, level);
             if (brewingRecipe.isPresent()) {
-                this.potion = brewingRecipe.get().value().getResultPotion(level.registryAccess());
+                this.potion = brewingRecipe.get().value().getResultPotion();
                 updateAfterBrewing(ItemStack.EMPTY, this.potion, brewingRecipe.get().value().getParticleType());
             }
-            Optional<RecipeHolder<DippingRecipe>> dippingRecipe = level.getRecipeManager().getRecipeFor(CauldronModRecipes.DIPPING.get(), input, level);
+            Optional<RecipeHolder<DippingRecipe>> dippingRecipe = serverLevel.recipeAccess().getRecipeFor(CauldronModRecipes.DIPPING.get(), input, level);
             if (dippingRecipe.isPresent()) {
-                updateAfterBrewing(dippingRecipe.get().value().getResultItem(level.registryAccess()), this.potion, dippingRecipe.get().value().getParticleType());
+                updateAfterBrewing(dippingRecipe.get().value().getResultItem(), this.potion, dippingRecipe.get().value().getParticleType());
                 setFillLevel(0);
             }
             else if (reagent.is(CauldronModTags.CREATES_SPLASH_POTIONS)) {

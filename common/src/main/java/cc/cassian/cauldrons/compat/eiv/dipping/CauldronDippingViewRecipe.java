@@ -1,5 +1,7 @@
 package cc.cassian.cauldrons.compat.eiv.dipping;
 
+import cc.cassian.cauldrons.compat.eiv.CauldronModEIVPlugin;
+import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.registry.CauldronModItems;
 import de.crafty.eiv.common.api.recipe.IEivRecipeViewType;
 import de.crafty.eiv.common.api.recipe.IEivViewRecipe;
@@ -12,7 +14,7 @@ import java.util.List;
 
 public class CauldronDippingViewRecipe implements IEivViewRecipe {
     private final SlotContent reagent;
-    private final PotionContents potion;
+    private final CauldronContents potion;
     private final SlotContent result;
 
     public CauldronDippingViewRecipe(CauldronDippingServerRecipe modRecipe) {
@@ -29,13 +31,13 @@ public class CauldronDippingViewRecipe implements IEivViewRecipe {
     @Override
     public void bindSlots(RecipeViewMenu.SlotFillContext slotFillContext) {
         slotFillContext.bindOptionalSlot(0, reagent, RecipeViewMenu.OptionalSlotRenderer.DEFAULT);
-        slotFillContext.bindOptionalSlot(1, SlotContent.of(PotionContents.createItemStack(CauldronModItems.CAULDRON_CONTENTS.get(), potion.potion().get())), RecipeViewMenu.OptionalSlotRenderer.DEFAULT);
+        slotFillContext.bindOptionalSlot(1, CauldronModEIVPlugin.getResultForDisplay(potion).getB(), RecipeViewMenu.OptionalSlotRenderer.DEFAULT);
         slotFillContext.bindOptionalSlot(2, result, RecipeViewMenu.OptionalSlotRenderer.DEFAULT);
     }
 
     @Override
     public List<SlotContent> getIngredients() {
-        return List.of(reagent, SlotContent.of(PotionContents.createItemStack(Items.POTION, potion.potion().get())));
+        return List.of(reagent, CauldronModEIVPlugin.getResultForDisplay(potion).getA());
     }
 
     @Override

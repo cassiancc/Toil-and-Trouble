@@ -83,11 +83,11 @@ public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> pot
     }
 
     public PotionContents toPotionContents() {
-        return new PotionContents(potion, customColor, customEffects);
+        return new PotionContents(potion, customColor, customEffects, Optional.empty());
     }
 
     public int getColor() {
-        return this.customColor.orElseGet(() -> PotionContents.getColor(this.getAllEffects()));
+        return this.customColor.orElseGet(() -> PotionContents.getColorOptional(this.getAllEffects()).orElse(-1));
     }
 
     public Iterable<MobEffectInstance> getAllEffects() {

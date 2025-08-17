@@ -19,6 +19,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 
 public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
@@ -44,19 +45,8 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     @Override
-    public ItemStack assemble(BrewingRecipeInput input) {
+    public ItemStack assemble(BrewingRecipeInput input, HolderLookup.Provider registries) {
         return getResultItem();
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        ItemStack cauldronContents = ItemStack.EMPTY;
-        return NonNullList.of(reagent, Ingredient.of(cauldronContents));
     }
 
     public Ingredient getReagent() {
@@ -71,12 +61,11 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         return potion.id();
     }
 
-    @Override
     public ItemStack getResultItem() {
         if (result.potion().isPresent()) {
             return PotionContents.createItemStack(Items.POTION, result.potion().get());
         } else {
-            return BuiltInRegistries.BLOCK.get(result.id()).asItem().getDefaultInstance();
+            return BuiltInRegistries.BLOCK.getValue(result.id()).asItem().getDefaultInstance();
         }
     }
 
