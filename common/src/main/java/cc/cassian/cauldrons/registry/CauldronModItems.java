@@ -16,6 +16,10 @@ public class CauldronModItems {
             "cauldron_contents", CauldronContentsItem::new, new Item.Properties()
     );
 
+    public static final Supplier<Item> HONEY_CONTENTS = register(
+            "honey", Item::new, new Item.Properties()
+    );
+
     private static Supplier<Item> register(ResourceKey<Item> resourceKey, Function<Item.Properties, Item> function, Item.Properties properties) {
         return CommonRegistry.registerItem(resourceKey.location().getPath(), ()-> function.apply(properties.setId(resourceKey)));
     }

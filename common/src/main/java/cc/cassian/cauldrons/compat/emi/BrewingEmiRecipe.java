@@ -1,44 +1,40 @@
 package cc.cassian.cauldrons.compat.emi;
 
 import cc.cassian.cauldrons.recipe.BrewingRecipe;
-import cc.cassian.cauldrons.registry.CauldronModItems;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
 public class BrewingEmiRecipe extends BasicEmiRecipe {
 
-    private final ItemStack potionForDisplay;
-    private final ItemStack resultForDisplay;
+    private final EmiStack potionForDisplay;
+    private final EmiStack resultForDisplay;
 
-    public BrewingEmiRecipe(RecipeHolder<BrewingRecipe> recipe, RegistryAccess registryAccess) {
-        super(CauldronModEmiPlugin.BREWING_CATEGORY, recipe.id().location(), 100, 18);
+    public BrewingEmiRecipe(RecipeHolder<BrewingRecipe> recipeHolder, RegistryAccess registryAccess) {
+        super(CauldronModEmiPlugin.BREWING_CATEGORY, recipeHolder.id(), 100, 18);
+        var recipe = recipeHolder.value();
         // reagent
-        inputs.add(EmiIngredient.of(recipe.value().getReagent()));
+        inputs.add(EmiIngredient.of(recipe.getReagent()));
         // potion item
-        var potion = PotionContents.createItemStack(Items.POTION, recipe.value().getPotion());
-        inputs.add(EmiStack.of(potion));
-        this.potionForDisplay = PotionContents.createItemStack(CauldronModItems.CAULDRON_CONTENTS.get(), recipe.value().getPotion());
+        var input = CauldronModEmiPlugin.getResultForDisplay(recipe.getPotion());
+        inputs.add(EmiIngredient.of(input.getA().getEmiStacks()));
+        potionForDisplay = input.getB();
         // output
-        var result = recipe.value().getResultItem();
-        outputs.add(EmiStack.of(result));
-        this.resultForDisplay = PotionContents.createItemStack(CauldronModItems.CAULDRON_CONTENTS.get(), recipe.value().getResultPotion().potion().get());
+        var output = CauldronModEmiPlugin.getResultForDisplay(recipe.getResultPotion(registryAccess));
+        outputs.add(output.getA());
+        resultForDisplay = output.getB();
     }
 
     @Override
     public void addWidgets(WidgetHolder widgetHolder) {
         widgetHolder.addSlot(inputs.getFirst(), 0, 0);
         widgetHolder.addTexture(EmiTexture.PLUS, 20, 2);
-        widgetHolder.addSlot(EmiStack.of(potionForDisplay), 36, 0);
+        widgetHolder.addSlot(potionForDisplay, 36, 0);
         widgetHolder.addTexture(EmiTexture.FULL_ARROW, 56, 1);
-        widgetHolder.addSlot(EmiStack.of(resultForDisplay), 81, 0).recipeContext(this);
-
+        widgetHolder.addSlot(resultForDisplay, 81, 0).recipeContext(this);
     }
 }

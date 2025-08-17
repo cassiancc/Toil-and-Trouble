@@ -1,0 +1,21 @@
+# Cauldron Contents
+
+To allow for arbitrary fluids as the result of brewing, Toil introduces the Cauldron Contents data type, which extends the vanilla [Potion Contents](https://minecraft.wiki/w/Data_component_format#potion_contents) data component.
+
+## Format
+
+<Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object/String" />: The root object. Alternatively, the ID of a potion type as a string.\
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **potion**: Optional: The ID of a potion type. See [Potion#Item data.](https://minecraft.wiki/w/Potion#Item_data).\
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **id**: Optional: The ID of the contents. Can be an block ID if you want to have a vanilla block, or one of the mod's supported fluids. Defaults to `potion`.\
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/integer" title="Integer" /> **amount**: Optional: How much fluid should be produced by a successful craft. Defaults to `3`.\
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/integer" title="Integer" /> **custom_color**: Optional: overrides the color of this potion texture, and/or the particles of the area effect cloud created..\
+|── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **custom_name**: Optional: overrides the name of this potion.\
+|── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **tag**: Optional: A resource location for an item tag.\
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/list" title="List" /> **custom_effects**: Optional: A list of the additional effects that this item should apply.\
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" />:  A single custom effect.\
+|	└──── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **id**: A single custom effect. \
+|	└──── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/byte" title="Byte" /> **amplifier**: Optional: The amplifier of the effect, with level I having value 0. Defaults to 0. \
+|	└──── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/integer" title="Integer" /> **duration**: Optional: The duration of the effect in ticks. Value -1 is treated as infinity. Values 0 or less than -2 are treated as 1. Defaults to 1 tick. \
+|	└──── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/boolean" title="Boolean" /> **ambient**: Optional: Whether or not this is an effect provided by a beacon and therefore should be less intrusive on the screen. Defaults to `false`. \
+|	└──── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/boolean" title="Boolean" /> **show_particles**: Optional: Whether or not this effect produces particles. Defaults to `true`. \
+|	└──── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/boolean" title="Boolean" /> **show_icon**: Optional: Whether or not an icon should be shown for this effect. Defaults to true.

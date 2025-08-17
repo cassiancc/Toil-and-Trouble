@@ -8,9 +8,13 @@ Cauldron Brewing recipes use the following format:
 
 <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="NBT Compound/JSON Object" />: The root object.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: Which recipe to use, in this case `toil_and_trouble:brewing`.\
-├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **reagent**: An ingredient that is consumed by the brew.  To use an item tag, prefix it with #.\
-├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Potion Contents" /> **potion**: A [Potion Contents](https://minecraft.wiki/w/Data_component_format#potion_contents) data component that is consumed by the brew.\
-├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Potion Contents" /> **result**: A [Potion Contents](https://minecraft.wiki/w/Data_component_format#potion_contents) data component that will end up as the Cauldron Contents.
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **reagent**: An ingredient that is consumed by the brew.\
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **item**: Optional: A resource location for an item.\
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **tag**: Optional: A resource location for an item tag.\
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Cauldron Contents" /> **potion**: A [Cauldron Contents](cauldron-contents) data component that is consumed by the brew.\
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Cauldron Contents" /> **result**: A [Cauldron Contents](cauldron-contents) data component that will end up as the Cauldron Contents.\
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **particle_type**: Optional: A particle type displayed after a successful brew, see [Particle Format](https://minecraft.wiki/w/Particle_format).\
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: A [particle type](https://minecraft.wiki/w/Particles_(Java_Edition)).
 
 
 An example recipe is below, which crafts an Awkward Potion from the `toil_and_trouble:creates_awkward_potions` item tag (which contains Nether Wart) and the Water Bottle potion.
@@ -39,6 +43,39 @@ As a more complicated example, this potion consumes a Nether Star to create a Ha
         "duration": 60
       }
     ]
+  },
+  "particle_type": {
+    "type": "minecraft:happy_villager"
+  }
+}
+```
+
+### Non-Potions
+
+Toil and Trouble also supports a variety of vanilla non-potion fluids and "fluids". Currently supported are:
+- Air ("minecraft:air")
+- Water ("toil_and_trouble:water")
+- Lava ("toil_and_trouble:lava")
+- Honey ("toil_and_trouble:honey")
+
+Toil and Trouble also allows arbitrary blocks to be created from a successful brew. For example, to replace the Cauldron with a Lava Cauldron, set the `id` field to `minecraft:lava_cauldron`.
+
+```
+{
+  "type": "toil_and_trouble:brewing",
+  "reagent": {
+    "item": "minecraft:cobblestone"
+  },
+  "potion": {
+    "id": "minecraft:air"
+  },
+  "result": {
+    "id": "toil_and_trouble:lava",
+    "amount": 1
+  },
+  "requires_heat": true,
+  "particle_type": {
+    "type": "flame"
   }
 }
 ```
@@ -49,12 +86,16 @@ Cauldron Dipping recipes use the following format:
 
 <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="NBT Compound/JSON Object" />: The root object.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: Which recipe to use, in this case `toil_and_trouble:dipping`.\
-├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **reagent**: An ingredient that is consumed by the brew. To use an item tag, prefix it with #.\
-|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" />
-├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Potion Contents" /> **potion**: A [Potion Contents](https://minecraft.wiki/w/Data_component_format#potion_contents) data component that is consumed by the brew.\
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **reagent**: An ingredient that is consumed by the brew.\
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **item**: Optional: A resource location for an item.\
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **tag**: Optional: A resource location for an item tag.\
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/boolean" title="Boolean" /> **requires_heat**: Optional, defaults to config: Whether heat is required to complete this recipe.\
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Cauldron Contents" /> **potion**: A [Cauldron Contents](cauldron-contents) data component that is consumed by the brew.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **result**: An item stack that will end up in an empty Cauldron.\
 |	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **id**: An [item id](https://minecraft.wiki/w/Java_Edition_data_values#Items).\
-|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **components**: Optional. Additional information about the item. See [item components](https://minecraft.wiki/w/Data_component_format).
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **components**: Optional. Additional information about the item. See [item components](https://minecraft.wiki/w/Data_component_format). \
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **particle_type**: Optional: A particle type displayed after a successful brew, see [Particle Format](https://minecraft.wiki/w/Particle_format).\
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: A [particle type](https://minecraft.wiki/w/Particles_(Java_Edition)).
 
 
 An example recipe is below, which crafts an Cooked Cod with the custom name Awkward Fish from the `minecraft:fishes` item tag and the Awkward potion.
@@ -71,6 +112,9 @@ An example recipe is below, which crafts an Cooked Cod with the custom name Awkw
       "minecraft:rarity": "epic",
       "minecraft:item_name": "\"Awkward Fish\""
     }
+  },
+  "particle_type": {
+    "type": "minecraft:angry_villager"
   }
 }
 ```
