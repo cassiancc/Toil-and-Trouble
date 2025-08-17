@@ -102,6 +102,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         splashing = tag.getBooleanOr("cauldron.splashing", false);
         lingering = tag.getBooleanOr("cauldron.lingering", false);
         bubbleTimer = tag.getIntOr("cauldron.bubble_timer", 0);
+        particleType = tag.read("cauldron.particle_type", ParticleTypes.CODEC).orElse(ParticleTypes.BUBBLE);
     }
 
     @Override
@@ -115,6 +116,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         tag.putBoolean("cauldron.splashing", splashing);
         tag.putBoolean("cauldron.lingering", lingering);
         tag.putInt("cauldron.bubble_timer", bubbleTimer);
+        tag.store("cauldron.particle_type", ParticleTypes.CODEC, particleType);
         super.saveAdditional(tag);
     }
 
