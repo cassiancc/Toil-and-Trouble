@@ -120,6 +120,11 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
             setFillLevel(3);
             this.potion = new CauldronContents(Potions.WATER);
             return new Pair<>(ItemInteractionResult.SUCCESS, Items.BUCKET.getDefaultInstance());
+        // fill with lava bucket
+        } else if (itemStack.is(Items.LAVA_BUCKET) && potionQuantity == 0) {
+            setFillLevel(3);
+            this.potion = new CauldronContents("lava");
+            return new Pair<>(ItemInteractionResult.SUCCESS, Items.BUCKET.getDefaultInstance());
         // fill with potion
         } else if (itemStack.has(DataComponents.POTION_CONTENTS) && potion.isPotion() && potionQuantity < 3 && !itemStack.is(CauldronModTags.CANNOT_FILL_CAULDRON)) {
             PotionContents insertedPotion = itemStack.get(DataComponents.POTION_CONTENTS);
@@ -137,7 +142,11 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         // drain with bucket
         } else if (itemStack.is(Items.BUCKET) && potionQuantity>=1) {
             ItemStack returnStack;
-            if (isPotionWater()) returnStack = Items.WATER_BUCKET.getDefaultInstance();
+            if (potionQuantity==3) {
+                if (isPotionWater()) returnStack = Items.WATER_BUCKET.getDefaultInstance();
+                else if (getContents().is("lava")) returnStack = Items.LAVA_BUCKET.getDefaultInstance();
+                else returnStack = Items.BUCKET.getDefaultInstance();
+            }
             else returnStack = Items.BUCKET.getDefaultInstance();
             setFillLevel(0);
             return new Pair<>(ItemInteractionResult.SUCCESS, returnStack);
@@ -148,7 +157,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
             setFillLevel(potionQuantity-1);
             return new Pair<>(ItemInteractionResult.SUCCESS, stack);
         } else if (itemStack.is(Items.HONEY_BOTTLE) && potionQuantity<4) {
-            this.potion = new CauldronContents(ResourceLocation.withDefaultNamespace("honey"));
+            this.potion = new CauldronContents("honey");
             setFillLevel(getFillLevel()+1);
             return new Pair<>(ItemInteractionResult.SUCCESS, Items.GLASS_BOTTLE.getDefaultInstance());
         }
@@ -158,6 +167,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
             if (getFillLevel()>0 && this.getLevel().isClientSide()) {
                 var particle = ParticleTypes.SPLASH;
                 if (this.potion.is("honey")) particle = ParticleTypes.LANDING_HONEY;
+                else if (this.potion.is("lava")) particle = ParticleTypes.LANDING_LAVA;
                 for (int i = 0; i < 20; i++) {
                     Random random = new Random();
                     double d = (random.nextDouble());
@@ -365,7 +375,8 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     private Contents getContentsProperty() {
         if (getContents().is(Potions.WATER)) return Contents.WATER;
         else if (getContents().potion().isPresent()) return Contents.POTION;
-        else if (getContents().is(ResourceLocation.withDefaultNamespace("honey"))) return Contents.HONEY;
+        else if (getContents().is("honey")) return Contents.HONEY;
+        else if (getContents().is("lava")) return Contents.LAVA;
         return Contents.EMPTY;
     }
 

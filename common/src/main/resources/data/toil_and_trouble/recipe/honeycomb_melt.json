@@ -7,7 +7,7 @@
     "id": "minecraft:air"
   },
   "result": {
-    "id": "minecraft:honey",
+    "id": "toil_and_trouble:honey",
     "amount": 1
   },
   "requires_heat": true,

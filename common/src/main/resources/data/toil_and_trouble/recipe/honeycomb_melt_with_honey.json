@@ -4,10 +4,10 @@
     "item": "minecraft:honeycomb"
   },
   "potion": {
-    "id": "minecraft:honey"
+    "id": "toil_and_trouble:honey"
   },
   "result": {
-    "id": "minecraft:honey",
+    "id": "toil_and_trouble:honey",
     "amount": 1
   },
   "requires_heat": true,

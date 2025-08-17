@@ -38,10 +38,10 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     public static final IntegerProperty POTION_QUANTITY = IntegerProperty.create("potion_quantity", 0, 3);
     public static final BooleanProperty BREWING = BooleanProperty.create("brewing");
     public static final BooleanProperty HEATED = BooleanProperty.create("heated");
-    public static final EnumProperty<Contents> CONTENTS = EnumProperty.create("contents", Contents.class, Contents.POTION, Contents.HONEY, Contents.WATER, Contents.EMPTY);
+    public static final EnumProperty<Contents> CONTENTS = EnumProperty.create("contents", Contents.class, Contents.POTION, Contents.HONEY, Contents.WATER, Contents.EMPTY, Contents.LAVA);
 
     public enum Contents implements StringRepresentable {
-        EMPTY("empty"), WATER("water"), POTION("potion"), HONEY("honey");
+        EMPTY("empty"), WATER("water"), LAVA("lava"), POTION("potion"), HONEY("honey");
         private final String name;
 
         Contents(final String name) {
@@ -95,6 +95,8 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                             lowerFillLevel(state, level, pos);
                         }
                     }
+                } else if (cauldronBlockEntity.getContents().is("lava")) {
+                    entity.lavaHurt();
                 } else if (entity instanceof LivingEntity livingEntity && CauldronMod.CONFIG.cauldronsApplyEffects.value()) {
                     if (livingEntity.isAffectedByPotions()) {
                         for (MobEffectInstance effect : cauldronBlockEntity.getContents().getAllEffects()) {

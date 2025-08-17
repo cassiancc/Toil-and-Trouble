@@ -87,7 +87,7 @@ public class CauldronModEvents {
                     stack.setCount(fillLevel);
                     setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
                     addItem(player, interactionHand, level, pos, direction, stack);
-                    return ItemInteractionResult.CONSUME;
+                    return ItemInteractionResult.SUCCESS;
                 } else {
                     Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
                     if (!(insert.getA() == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION)) {

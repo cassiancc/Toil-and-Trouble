@@ -72,6 +72,15 @@
     "contents=honey,potion_quantity=3": {
       "model": "toil_and_trouble:block/honey_cauldron_full"
     },
+    "contents=lava,potion_quantity=1": {
+      "model": "toil_and_trouble:block/lava_cauldron_level1"
+    },
+    "contents=lava,potion_quantity=2": {
+      "model": "toil_and_trouble:block/lava_cauldron_level2"
+    },
+    "contents=lava,potion_quantity=3": {
+      "model": "toil_and_trouble:block/lava_cauldron_full"
+    },
     "contents=potion,potion_quantity=1,brewing=false": {
       "model": "toil_and_trouble:block/cauldron_level1"
     },

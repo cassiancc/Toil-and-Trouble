@@ -1,5 +1,6 @@
 package cc.cassian.cauldrons.core;
 
+import cc.cassian.cauldrons.CauldronMod;
 import com.google.common.collect.Iterables;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -60,6 +61,10 @@ public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> pot
         this(potion, Optional.empty(), Optional.empty(), List.of(), 3);
     }
 
+    public CauldronContents(String potion) {
+        this(CauldronMod.of(potion));
+    }
+
     public static ItemStack createItemStack(Item item, CauldronContents potion) {
         if (potion.potion().isPresent()) {
             return PotionContents.createItemStack(item, potion.potion().get());
@@ -103,6 +108,6 @@ public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> pot
     }
 
     public boolean is(String name) {
-        return this.is(ResourceLocation.withDefaultNamespace(name));
+        return this.is(CauldronMod.of(name));
     }
 }

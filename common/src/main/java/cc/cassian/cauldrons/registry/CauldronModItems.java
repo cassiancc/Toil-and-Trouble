@@ -21,7 +21,7 @@ public class CauldronModItems {
     );
 
     public static final Supplier<Item> HONEY_CONTENTS = register(
-            "honey_contents", Item::new, new Item.Properties()
+            "honey", Item::new, new Item.Properties()
     );
 
     private static Supplier<Item> register(ResourceKey<Item> resourceKey, Function<Item.Properties, Item> function, Item.Properties properties) {

@@ -13,7 +13,12 @@ import java.util.function.Supplier;
 public class CauldronModBlocks {
 
     public static final Supplier<Block> BREWING_CAULDRON = register(
-            "cauldron", BrewingCauldronBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
+            "cauldron", BrewingCauldronBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON).lightLevel(properties->{
+                if (properties.getValue(BrewingCauldronBlock.CONTENTS) == BrewingCauldronBlock.Contents.LAVA) {
+                    return 15;
+                }
+                return 0;
+            })
     );
 
     private static Supplier<Block> register(ResourceKey<Block> resourceKey, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties) {
