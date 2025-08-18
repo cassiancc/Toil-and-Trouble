@@ -17,5 +17,5 @@ public class ModConfig extends ReflectiveConfig {
     @Comment("Allow Cauldrons to craft all recipes a Brewing Stand can.")
     public final TrackedValue<Boolean> useBrewingStandRecipes = this.value(true);
     @Comment("Whether an item entity in a vanilla cauldron should change it to a Toil and Trouble Cauldron and insert the item into the Cauldron's inventory.")
-    public boolean itemEntitiesConvertCauldrons = true;
+    public final TrackedValue<Boolean> itemEntitiesConvertCauldrons = this.value(true);
 }

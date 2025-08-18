@@ -26,7 +26,7 @@ public abstract class BlockBehaviourMixin  {
 
     @Inject(method = "entityInside", at = @At(value = "RETURN"))
     private void mixin(BlockState state, Level level, BlockPos pos, Entity entity, CallbackInfo ci) {
-        if (!level.isClientSide() && CauldronMod.CONFIG.itemEntitiesConvertCauldrons && state.is(Blocks.CAULDRON)) {
+        if (!level.isClientSide() && CauldronMod.CONFIG.itemEntitiesConvertCauldrons.value() && state.is(Blocks.CAULDRON)) {
             if (entity instanceof ItemEntity itemEntity && itemEntity.tickCount>10) {
                 var newState = CauldronModBlocks.BREWING_CAULDRON.get().defaultBlockState();
                 level.setBlockAndUpdate(pos, newState);
