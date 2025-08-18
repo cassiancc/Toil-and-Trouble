@@ -70,7 +70,7 @@ public class CauldronModEIVPlugin implements IExtendedItemViewIntegration {
             var stack = OVERRIDES.get(resultPotion.id());
             return new Pair<>(stack, stack);
         } else {
-            var stack = SlotContent.of(Ingredient.of(BuiltInRegistries.BLOCK.getValue(resultPotion.id())));
+            var stack = SlotContent.of(BuiltInRegistries.ITEM.getOptional(resultPotion.id()).orElse(Items.AIR));
             return new Pair<>(stack, stack);
         }
     }
