@@ -38,7 +38,7 @@ public abstract class LayeredCauldronBlockMixin extends AbstractCauldronBlock {
 
     @Inject(method = "entityInside", at = @At(value = "RETURN"))
     private void mixin(BlockState state, Level level, BlockPos pos, Entity entity, CallbackInfo ci) {
-        if (!level.isClientSide() && this.isEntityInsideContent(state, pos, entity) && state.is(Blocks.WATER_CAULDRON)) {
+        if (!level.isClientSide() && this.isEntityInsideContent(state, pos, entity) && CauldronMod.CONFIG.itemEntitiesConvertCauldrons && state.is(Blocks.WATER_CAULDRON)) {
             if (entity instanceof ItemEntity itemEntity && itemEntity.tickCount>10) {
                 var newState =  CauldronModBlocks.BREWING_CAULDRON.get().defaultBlockState().setValue(BrewingCauldronBlock.POTION_QUANTITY, state.getValue(LayeredCauldronBlock.LEVEL));
                 level.setBlockAndUpdate(pos, newState);
