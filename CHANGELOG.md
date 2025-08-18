@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- A config option for whether throwing an item into a vanilla Cauldron should convert it into a modded Cauldron and insert the item into its inventory.
+
+## [1.3.0] - 2025-08-17
+
+### Added
 - Particles and heat requirements are now part of the recipe format.
 - Brewing input and results no longer need to be a potion, specifying `id: "minecraft:lava_cauldron` for your `potion` or `result` will use that block as the result.
 
