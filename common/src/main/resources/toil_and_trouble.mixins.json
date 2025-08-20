@@ -7,7 +7,8 @@
   ],
   "mixins": [
     "AbstractCauldronBlockMixin",
-    "BlockBehaviourMixin"
+    "BlockBehaviourMixin",
+    "LayeredCauldronBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -36,21 +36,22 @@ public class CauldronModEvents {
         BlockState blockState = level.getBlockState(pos);
         ItemStack stack = player.getItemInHand(interactionHand);
         if (blockState.is(Blocks.CAULDRON) && !stack.is(Items.WATER_BUCKET)) {
-            level.setBlockAndUpdate(pos, CauldronModBlocks.BREWING_CAULDRON.get().defaultBlockState());
-            return insert(player.getItemInHand(interactionHand), blockState, level, pos, player, interactionHand, direction);
+            var state = CauldronModBlocks.BREWING_CAULDRON.get().defaultBlockState();
+            level.setBlockAndUpdate(pos, state);
+            return insert(player.getItemInHand(interactionHand), state, level, pos, player, interactionHand, direction);
         }
         else if (blockState.is(Blocks.WATER_CAULDRON) && !stack.is(Items.BUCKET)) {
             var state =  CauldronModBlocks.BREWING_CAULDRON.get().defaultBlockState().setValue(BrewingCauldronBlock.CONTENTS, BrewingCauldronBlock.Contents.WATER).setValue(POTION_QUANTITY, blockState.getValue(LayeredCauldronBlock.LEVEL));
             level.setBlockAndUpdate(pos, state);
             level.setBlockEntity(new CauldronBlockEntity(pos, state, new CauldronContents(Potions.WATER)));
-            return insert(player.getItemInHand(interactionHand), blockState, level, pos, player, interactionHand, direction);
+            return insert(player.getItemInHand(interactionHand), state, level, pos, player, interactionHand, direction);
 
         }
         else if (blockState.is(Blocks.LAVA_CAULDRON) && !stack.is(Items.BUCKET)) {
             var state =  CauldronModBlocks.BREWING_CAULDRON.get().defaultBlockState().setValue(BrewingCauldronBlock.CONTENTS, BrewingCauldronBlock.Contents.LAVA).setValue(POTION_QUANTITY, 3);
             level.setBlockAndUpdate(pos, state);
             level.setBlockEntity(new CauldronBlockEntity(pos, state, new CauldronContents("lava")));
-            return insert(player.getItemInHand(interactionHand), blockState, level, pos, player, interactionHand, direction);
+            return insert(player.getItemInHand(interactionHand), state, level, pos, player, interactionHand, direction);
         }
         return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
