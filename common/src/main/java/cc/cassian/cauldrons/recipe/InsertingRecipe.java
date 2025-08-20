@@ -10,10 +10,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
@@ -44,16 +41,6 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
         return this.resultItem.copy();
     }
 
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return NonNullList.of(Ingredient.of(reagent));
-    }
-
     public ItemStack getReagent() {
         return reagent;
     }
@@ -66,8 +53,7 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
         return amount;
     }
 
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries) {
+    public ItemStack getResultItem() {
         return resultItem.copy();
     }
 
@@ -79,6 +65,16 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
     @Override
     public RecipeType<InsertingRecipe> getType() {
         return CauldronModRecipes.INSERTING.get();
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return null;
     }
 
     public CauldronContents getResultPotion() {

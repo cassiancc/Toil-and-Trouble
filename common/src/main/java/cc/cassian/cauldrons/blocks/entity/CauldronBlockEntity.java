@@ -48,6 +48,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
@@ -121,7 +122,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     }
 
     @Deprecated
-    public Pair<ItemInteractionResult, ItemStack> insert(ItemStack itemStack) {
+    public Pair<InteractionResult, ItemStack> insert(ItemStack itemStack) {
         var potionQuantity = getFillLevel();
         // fill with potion
         if (itemStack.has(DataComponents.POTION_CONTENTS) && (potion.isPotion() || potion == CauldronContents.EMPTY) && potionQuantity < 3 && !itemStack.is(CauldronModTags.CANNOT_FILL_CAULDRON)) {

@@ -89,7 +89,7 @@ public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> pot
     public int getColor() {
         return this.customColor.orElseGet(() -> {
             if (isPotion())
-                return PotionContents.getColor(this.getAllEffects());
+                return PotionContents.getColorOptional(this.getAllEffects()).orElse(-13083194);
             return -1;
         });
     }
