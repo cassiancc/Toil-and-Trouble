@@ -16,14 +16,14 @@ logoFile = "icon.png"
 [[dependencies.toil_and_trouble]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.1.181,)"
+versionRange = "[21.1.181,21.2)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.toil_and_trouble]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.1,)"
+versionRange = "[1.21.1,1.21.2)"
 ordering = "NONE"
 side = "BOTH"
 
