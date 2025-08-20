@@ -1,0 +1,21 @@
+{
+  "type": "toil_and_trouble:inserting",
+  "item": {
+    "id": "minecraft:glass_bottle"
+  },
+  "contents": {
+    "potion": "minecraft:water"
+  },
+  "result_item": {
+    "id": "minecraft:potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "minecraft:water"
+      }
+    }
+  },
+  "result_contents": {
+    "potion": "minecraft:water"
+  },
+  "amount": -1
+}

@@ -72,6 +72,9 @@
     "contents=honey,potion_quantity=3": {
       "model": "toil_and_trouble:block/honey_cauldron_full"
     },
+    "contents=lava,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
     "contents=lava,potion_quantity=1": {
       "model": "toil_and_trouble:block/lava_cauldron_level1"
     },

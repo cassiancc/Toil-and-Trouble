@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - A config option for whether throwing an item into a vanilla Cauldron should convert it into a modded Cauldron and insert the item into its inventory.
+- Insertion recipes have been made data-driven.
+
+### Fixed
+- Missing lang key for Potion Cauldrons.
+- Lava cauldrons are now converted correctly.
+- Splash/Lingering recipes now only work on Potions.
 
 ## [1.3.0] - 2025-08-17
 

@@ -1,0 +1,16 @@
+{
+  "type": "toil_and_trouble:inserting",
+  "item": {
+    "id": "minecraft:glass_bottle"
+  },
+  "contents": {
+    "id": "toil_and_trouble:honey"
+  },
+  "result_item": {
+    "id": "minecraft:honey_bottle"
+  },
+  "result_contents": {
+    "id": "toil_and_trouble:honey"
+  },
+  "amount": -1
+}
