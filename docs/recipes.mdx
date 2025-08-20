@@ -114,3 +114,48 @@ An example recipe is below, which crafts an Cooked Cod with the custom name Awkw
   }
 }
 ```
+
+## Insertion
+
+Insertion recipes cover taking items inside and outside Cauldrons. Examples are below.
+
+### Filling
+```json
+{
+  "type": "toil_and_trouble:inserting",
+  "item": {
+    "id": "minecraft:honey_bottle"
+  },
+  "contents": {
+    "id": "minecraft:air"
+  },
+  "result_item": {
+    "id": "minecraft:glass_bottle"
+  },
+  "result_contents": {
+    "id": "toil_and_trouble:honey"
+  },
+  "amount": 1
+}
+```
+
+### Bottling
+
+```json
+{
+  "type": "toil_and_trouble:inserting",
+  "item": {
+    "id": "minecraft:glass_bottle"
+  },
+  "contents": {
+    "id": "toil_and_trouble:honey"
+  },
+  "result_item": {
+    "id": "minecraft:honey_bottle"
+  },
+  "result_contents": {
+    "id": "toil_and_trouble:honey"
+  },
+  "amount": -1
+}
+```
