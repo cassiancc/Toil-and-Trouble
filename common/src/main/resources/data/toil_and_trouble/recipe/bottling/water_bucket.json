@@ -1,0 +1,16 @@
+{
+  "type": "toil_and_trouble:inserting",
+  "item": {
+    "id": "minecraft:bucket"
+  },
+  "contents": {
+    "potion": "minecraft:water"
+  },
+  "result_item": {
+    "id": "minecraft:water_bucket"
+  },
+  "result_contents": {
+    "id": "minecraft:air"
+  },
+  "amount": -3
+}

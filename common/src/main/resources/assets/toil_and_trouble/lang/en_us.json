@@ -1,8 +1,10 @@
 {
     "block.toil_and_trouble.cauldron": "Potion Cauldron",
+    "block.toil_and_trouble.cauldron.chorus_honey": "Chorus Honey Cauldron",
     "block.toil_and_trouble.cauldron.honey": "Honey Cauldron",
     "block.toil_and_trouble.cauldron.empty": "Cauldron",
     "block.toil_and_trouble.cauldron.water": "Water Cauldron",
+    "block.toil_and_trouble.cauldron.potion": "Potion Cauldron",
     "block.toil_and_trouble.cauldron.lava": "Lava Cauldron",
     "lore.toil_and_trouble.cauldron": "This workstation can store and brew potions.",
     "cauldron.toil_and_trouble.honey": "Honey",

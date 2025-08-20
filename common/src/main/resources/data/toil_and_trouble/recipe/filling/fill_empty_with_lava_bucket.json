@@ -1,0 +1,16 @@
+{
+  "type": "toil_and_trouble:inserting",
+  "item": {
+    "id": "minecraft:lava_bucket"
+  },
+  "contents": {
+    "id": "minecraft:air"
+  },
+  "result_item": {
+    "id": "minecraft:bucket"
+  },
+  "result_contents": {
+    "id": "toil_and_trouble:lava"
+  },
+  "amount": 3
+}

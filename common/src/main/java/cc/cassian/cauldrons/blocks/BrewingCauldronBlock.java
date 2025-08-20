@@ -38,10 +38,10 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     public static final IntegerProperty POTION_QUANTITY = IntegerProperty.create("potion_quantity", 0, 3);
     public static final BooleanProperty BREWING = BooleanProperty.create("brewing");
     public static final BooleanProperty HEATED = BooleanProperty.create("heated");
-    public static final EnumProperty<Contents> CONTENTS = EnumProperty.create("contents", Contents.class, Contents.POTION, Contents.HONEY, Contents.WATER, Contents.EMPTY, Contents.LAVA);
+    public static final EnumProperty<Contents> CONTENTS = EnumProperty.create("contents", Contents.class, Contents.POTION, Contents.HONEY, Contents.WATER, Contents.EMPTY, Contents.LAVA, Contents.CHORUS_HONEY);
 
     public enum Contents implements StringRepresentable {
-        EMPTY("empty"), WATER("water"), LAVA("lava"), POTION("potion"), HONEY("honey");
+        EMPTY("empty"), WATER("water"), LAVA("lava"), POTION("potion"), HONEY("honey"), CHORUS_HONEY("chorus_honey");
         private final String name;
 
         Contents(final String name) {

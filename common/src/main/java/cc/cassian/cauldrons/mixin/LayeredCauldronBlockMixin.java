@@ -3,6 +3,7 @@ package cc.cassian.cauldrons.mixin;
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
+import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.core.CauldronModEvents;
 import cc.cassian.cauldrons.core.CauldronModHelpers;
 import cc.cassian.cauldrons.registry.CauldronModBlocks;
@@ -42,7 +43,7 @@ public abstract class LayeredCauldronBlockMixin extends AbstractCauldronBlock {
             if (entity instanceof ItemEntity itemEntity && itemEntity.tickCount>10) {
                 var newState =  CauldronModBlocks.BREWING_CAULDRON.get().defaultBlockState().setValue(BrewingCauldronBlock.POTION_QUANTITY, state.getValue(LayeredCauldronBlock.LEVEL));
                 level.setBlockAndUpdate(pos, newState);
-                level.setBlockEntity(new CauldronBlockEntity(pos, newState, Potions.WATER));
+                level.setBlockEntity(new CauldronBlockEntity(pos, newState, new CauldronContents(Potions.WATER)));
                 CauldronModEvents.insert(itemEntity.getItem(), newState, level, pos, null, null, null);
             }
         }
