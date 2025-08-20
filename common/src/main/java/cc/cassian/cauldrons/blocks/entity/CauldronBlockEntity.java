@@ -41,6 +41,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
@@ -225,9 +226,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     }
 
     public int getPotionColour() {
-        if (potion.isPotion())
-            return potion.getColor();
-        else return -1;
+       return potion.getColor();
     }
 
     public List<Component> getForWaila(BlockState state) {
@@ -244,7 +243,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
                 if (Screen.hasShiftDown())
                     PotionContents.addPotionTooltip(getContents().getAllEffects(), iTooltip::add, 0, 0);
             } else {
-                iTooltip.add(Component.translatableWithFallback(getContents().id().toLanguageKey("cauldron"), ""));
+                iTooltip.add(Component.translatableWithFallback(getContents().id().toLanguageKey("cauldron"), WordUtils.capitalize(getContents().id().getPath().replace("_", " "))));
             }
             if (!getItem().isEmpty()) {
                 iTooltip.add(Component.empty());
@@ -351,8 +350,10 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         if (getContents().is(Potions.WATER)) return Contents.WATER;
         else if (getContents().potion().isPresent()) return Contents.POTION;
         else if (getContents().is("honey")) return Contents.HONEY;
+        else if (getContents().is(ResourceLocation.fromNamespaceAndPath("chorus_honey", "chorus_honey"))) return Contents.CHORUS_HONEY;
         else if (getContents().is("lava")) return Contents.LAVA;
-        return Contents.EMPTY;
+        else if (getContents().is(ResourceLocation.withDefaultNamespace("air"))) return Contents.EMPTY;
+        return Contents.POTION;
     }
 
     private boolean isBubbling() {
