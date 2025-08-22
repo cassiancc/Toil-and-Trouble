@@ -58,7 +58,7 @@ public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> pot
     }
 
     public CauldronContents(PotionContents potion) {
-        this(ResourceLocation.withDefaultNamespace("potion"), potion.potion(), potion.customColor(), potion.customEffects(), 3, Optional.empty());
+        this(ResourceLocation.withDefaultNamespace("potion"), potion.potion(), potion.customColor(), potion.customEffects(), 3, potion.customName());
     }
 
     public CauldronContents(ResourceLocation potion) {
@@ -70,9 +70,8 @@ public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> pot
     }
 
     public static ItemStack createItemStack(Item item, CauldronContents potion) {
-        var stack = item.getDefaultInstance();
+        var stack = new ItemStack(item);
         stack.set(DataComponents.POTION_CONTENTS, potion.toPotionContents());
-        potion.customName.ifPresent(s -> stack.set(DataComponents.ITEM_NAME, Component.translatable(item.getDescriptionId() + ".effect." + s)));
         return stack;
     }
 
@@ -85,7 +84,7 @@ public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> pot
     }
 
     public PotionContents toPotionContents() {
-        return new PotionContents(potion, customColor, customEffects, Optional.empty());
+        return new PotionContents(potion, customColor, customEffects, customName);
     }
 
     public int getColor() {
