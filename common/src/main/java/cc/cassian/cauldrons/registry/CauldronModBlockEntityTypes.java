@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 public class CauldronModBlockEntityTypes {
     public static final Supplier<BlockEntityType<CauldronBlockEntity>> CAULDRON_BLOCK_ENTITY =
             CommonRegistry.registerBlockEntity("cauldron_block_entity", ()->
-                    FabricBlockEntityTypeBuilder.create(CauldronBlockEntity::new, CauldronModBlocks.BREWING_CAULDRON.get()).build(null));
+                    new BlockEntityType<>(CauldronBlockEntity::new, Set.of(CauldronModBlocks.BREWING_CAULDRON.get())));
 
     public static void touch() {
 

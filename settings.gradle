@@ -11,4 +11,4 @@ rootProject.name = 'toil_and_trouble'
 
 include 'common'
 include 'fabric'
-//include 'neoforge'
+include 'neoforge'

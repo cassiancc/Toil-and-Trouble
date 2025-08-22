@@ -50,6 +50,14 @@ processResources {
     filesMatching('META-INF/neoforge.mods.toml') {
         expand version: project.version
     }
+
+    from(rootProject.file("common/src/main/resources")) {
+        include("toil_and_trouble.accesswidener")
+    }
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
 }
 
 shadowJar {
