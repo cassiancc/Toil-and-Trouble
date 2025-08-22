@@ -74,7 +74,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
     @Override
     public ItemStack getResultItem(HolderLookup.Provider registries) {
         if (result.potion().isPresent()) {
-            return PotionContents.createItemStack(Items.POTION, result.potion().get());
+            return CauldronContents.createItemStack(Items.POTION, result);
         } else {
             return BuiltInRegistries.BLOCK.get(result.id()).asItem().getDefaultInstance();
         }

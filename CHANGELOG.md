@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Custom name property now works as intended.
+- Issues extracting custom potions from Cauldrons.
+
+## [1.4.0] - 2025-08-20
+
 ### Added
 - A config option for whether throwing an item into a vanilla Cauldron should convert it into a modded Cauldron and insert the item into its inventory.
 - Insertion recipes have been made data-driven.
