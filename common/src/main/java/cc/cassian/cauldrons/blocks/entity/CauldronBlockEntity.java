@@ -160,7 +160,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     }
 
     public void brew(boolean cauldronHeated) {
-        var input = new BrewingRecipeInput(reagent, potion, cauldronHeated);
+        var input = new BrewingRecipeInput(reagent, contents, cauldronHeated);
         if ((level instanceof ServerLevel serverLevel)) {
             Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = serverLevel.recipeAccess().getRecipeFor(CauldronModRecipes.BREWING.get(), input, level);
             if (brewingRecipe.isPresent()) {
