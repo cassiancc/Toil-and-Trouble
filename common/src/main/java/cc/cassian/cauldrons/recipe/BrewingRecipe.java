@@ -63,7 +63,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
     public ItemStack getResultItem() {
         if (result.potion().isPresent()) {
-            return PotionContents.createItemStack(Items.POTION, result.potion().get());
+            return CauldronContents.createItemStack(Items.POTION, result);
         } else {
             return BuiltInRegistries.BLOCK.getValue(result.id()).asItem().getDefaultInstance();
         }

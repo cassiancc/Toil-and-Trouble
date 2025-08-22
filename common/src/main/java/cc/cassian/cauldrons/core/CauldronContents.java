@@ -7,6 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -19,21 +20,22 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import java.util.List;
 import java.util.Optional;
 
-public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> potion, Optional<Integer> customColor, List<MobEffectInstance> customEffects, Integer amount) {
-    public static final CauldronContents EMPTY = new CauldronContents(ResourceLocation.withDefaultNamespace("air"), Optional.empty(), Optional.empty(), List.of(), 0);
+public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> potion, Optional<Integer> customColor, List<MobEffectInstance> customEffects, Integer amount, Optional<String> customName) {
+    public static final CauldronContents EMPTY = new CauldronContents(ResourceLocation.withDefaultNamespace("air"), Optional.empty(), Optional.empty(), List.of(), 0, Optional.empty());
 
     private static final Codec<CauldronContents> FULL_CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                            ResourceLocation.CODEC.fieldOf("id").forGetter(CauldronContents::id),
+                            ResourceLocation.CODEC.optionalFieldOf("id", ResourceLocation.withDefaultNamespace("potion")).forGetter(CauldronContents::id),
                             Potion.CODEC.optionalFieldOf("potion").forGetter(CauldronContents::potion),
                             Codec.INT.optionalFieldOf("custom_color").forGetter(CauldronContents::customColor),
                             MobEffectInstance.CODEC.listOf().optionalFieldOf("custom_effects", List.of()).forGetter(CauldronContents::customEffects),
-                            Codec.INT.optionalFieldOf("amount", 3).forGetter(CauldronContents::amount)
-                    )
+                            Codec.INT.optionalFieldOf("amount", 3).forGetter(CauldronContents::amount),
+                            Codec.STRING.optionalFieldOf("custom_name").forGetter(CauldronContents::customName)
+                            )
                     .apply(instance, CauldronContents::new)
     );
 
-    public static final Codec<CauldronContents> CODEC = Codec.withAlternative(FULL_CODEC, PotionContents.CODEC, CauldronContents::new);
+    public static final Codec<CauldronContents> CODEC = Codec.withAlternative(FULL_CODEC, Potion.CODEC, CauldronContents::new);
 
     public static final StreamCodec<RegistryFriendlyByteBuf, CauldronContents> STREAM_CODEC = StreamCodec.composite(
             ResourceLocation.STREAM_CODEC,
@@ -46,19 +48,21 @@ public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> pot
             CauldronContents::customEffects,
             ByteBufCodecs.INT,
             CauldronContents::amount,
+            ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs::optional),
+            CauldronContents::customName,
             CauldronContents::new
     );
 
     public CauldronContents(Holder<Potion> potion) {
-        this(ResourceLocation.withDefaultNamespace("potion"),Optional.of(potion), Optional.empty(), List.of(), 3);
+        this(ResourceLocation.withDefaultNamespace("potion"),Optional.of(potion), Optional.empty(), List.of(), 3, Optional.empty());
     }
 
     public CauldronContents(PotionContents potion) {
-        this(ResourceLocation.withDefaultNamespace("potion"), potion.potion(), potion.customColor(), potion.customEffects(), 3);
+        this(ResourceLocation.withDefaultNamespace("potion"), potion.potion(), potion.customColor(), potion.customEffects(), 3, Optional.empty());
     }
 
     public CauldronContents(ResourceLocation potion) {
-        this(potion, Optional.empty(), Optional.empty(), List.of(), 3);
+        this(potion, Optional.empty(), Optional.empty(), List.of(), 3, Optional.empty());
     }
 
     public CauldronContents(String potion) {
@@ -66,11 +70,9 @@ public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> pot
     }
 
     public static ItemStack createItemStack(Item item, CauldronContents potion) {
-        if (potion.potion().isPresent()) {
-            return PotionContents.createItemStack(item, potion.potion().get());
-        }
         var stack = item.getDefaultInstance();
         stack.set(DataComponents.POTION_CONTENTS, potion.toPotionContents());
+        potion.customName.ifPresent(s -> stack.set(DataComponents.ITEM_NAME, Component.translatable(item.getDescriptionId() + ".effect." + s)));
         return stack;
     }
 
