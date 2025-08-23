@@ -7,6 +7,7 @@ import cc.cassian.cauldrons.core.CauldronModEvents;
 import cc.cassian.cauldrons.core.CauldronModHelpers;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringRepresentable;
@@ -159,7 +160,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     }
 
     @Override
-    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos blockPos, Direction direction) {
         return state.getValue(POTION_QUANTITY);
     }
 
