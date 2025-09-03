@@ -78,6 +78,9 @@ subprojects {
                 includeGroup "mcp.mobius.waila"
             }
         }
+        flatDir{
+            dirs 'libs'
+        }
         mavenLocal()
     }
 

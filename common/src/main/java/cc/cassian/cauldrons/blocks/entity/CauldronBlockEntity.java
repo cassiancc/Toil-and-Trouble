@@ -20,6 +20,8 @@ import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.PowerParticleOption;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -180,7 +182,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
             else if (reagent.is(CauldronModTags.CREATES_LINGERING_POTIONS) && this.contents.isPotion()) {
                 this.splashing = false;
                 this.lingering = true;
-                updateAfterBrewing(ItemStack.EMPTY, this.contents, ParticleTypes.DRAGON_BREATH);
+                updateAfterBrewing(ItemStack.EMPTY, this.contents, PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1));
             }
             else if (CauldronMod.CONFIG.useBrewingStandRecipes.value()) {
                 var potionBrewing = this.level.potionBrewing();
@@ -235,29 +237,6 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 
     public int getPotionColour() {
        return contents.getColor();
-    }
-
-    public List<Component> getForWaila(BlockState state) {
-        List<Component> iTooltip = new ArrayList<>();
-        if (getContents() != CauldronContents.EMPTY) {
-            iTooltip.add(Component.translatable("gui.toil_and_trouble.doses", state.getValue(BrewingCauldronBlock.POTION_QUANTITY)).withStyle(ChatFormatting.DARK_PURPLE));
-            if (getContents().isPotion()) {
-                var item = Items.POTION;
-                if (isPotionSplash())
-                    item = Items.SPLASH_POTION;
-                else if (isPotionLingering())
-                    item = Items.LINGERING_POTION;
-                iTooltip.add(CauldronContents.createItemStack(item, getContents()).getHoverName());
-                if (Screen.hasShiftDown())
-                    PotionContents.addPotionTooltip(getContents().getAllEffects(), iTooltip::add, 0, 0);
-            } else {
-                iTooltip.add(Component.translatableWithFallback(getContents().id().toLanguageKey("cauldron"), WordUtils.capitalize(getContents().id().getPath().replace("_", " "))));
-            }
-            if (!getItem().isEmpty()) {
-                iTooltip.add(Component.empty());
-            }
-        }
-        return iTooltip;
     }
 
     public CauldronContents getContents() {

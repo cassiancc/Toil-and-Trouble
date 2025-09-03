@@ -1,6 +1,7 @@
 package cc.cassian.cauldrons.compat.wthit;
 
 import cc.cassian.cauldrons.CauldronMod;
+import cc.cassian.cauldrons.CauldronModClient;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import mcp.mobius.waila.api.*;
 import net.minecraft.network.chat.Component;
@@ -18,7 +19,7 @@ public class CauldronModWTHITPlugin implements IWailaPlugin, IBlockComponentProv
     @Override
     public void appendBody(ITooltip iTooltip, IBlockAccessor blockAccessor, IPluginConfig config) {
         if (blockAccessor.getBlockEntity() instanceof CauldronBlockEntity cauldronBlockEntity) {
-            for (Component component : cauldronBlockEntity.getForWaila(blockAccessor.getBlockState())) {
+            for (Component component : CauldronModClient.getForWaila(blockAccessor.getBlockState(), cauldronBlockEntity)) {
                 iTooltip.addLine(component);
             }
         }

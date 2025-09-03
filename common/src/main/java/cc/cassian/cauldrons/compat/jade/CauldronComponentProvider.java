@@ -1,5 +1,6 @@
 package cc.cassian.cauldrons.compat.jade;
 
+import cc.cassian.cauldrons.CauldronModClient;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import net.minecraft.ChatFormatting;
@@ -21,7 +22,7 @@ public enum CauldronComponentProvider implements IBlockComponentProvider {
     @Override
     public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
         if (blockAccessor.getBlockEntity() instanceof CauldronBlockEntity cauldronBlockEntity) {
-            for (Component component : cauldronBlockEntity.getForWaila(blockAccessor.getBlockState())) {
+            for (Component component : CauldronModClient.getForWaila(blockAccessor.getBlockState(), cauldronBlockEntity)) {
                 iTooltip.add(component);
             }
             iTooltip.replace(JadeIds.CORE_OBJECT_NAME, Component.translatable("block.toil_and_trouble.cauldron." + blockAccessor.getBlockState().getValue(BrewingCauldronBlock.CONTENTS).name().toLowerCase(Locale.ROOT)).withStyle(ChatFormatting.WHITE));
