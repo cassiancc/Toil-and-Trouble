@@ -77,6 +77,11 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
         return null;
     }
 
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
     public CauldronContents getResultPotion() {
         return this.resultPotion;
     }
