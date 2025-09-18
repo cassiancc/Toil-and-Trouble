@@ -93,6 +93,11 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         return null;
     }
 
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
     public ParticleOptions getParticleType() {
         return particleType;
     }
