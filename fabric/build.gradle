@@ -36,10 +36,10 @@ dependencies {
 //    modRuntimeOnly "lol.bai:badpackets:fabric-${badpackets_version}"
     //configs
     modImplementation(include("folk.sisby:kaleido-config:${kaleido_version}"))
-    // modImplementation "maven.modrinth:mcqoy:adCKjC4q"
-    // modImplementation("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_version}")
-    // modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
-    // modImplementation("maven.modrinth:eiv:$eiv_version-fabric")
+    modLocalRuntime("maven.modrinth:mcqoy:adCKjC4q")
+    modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_version}")
+    modLocalRuntime("com.terraformersmc:modmenu:${project.modmenu_version}")
+    modLocalRuntime("maven.modrinth:eiv:$eiv_version-fabric")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
