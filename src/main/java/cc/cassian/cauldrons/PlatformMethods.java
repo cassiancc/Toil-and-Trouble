@@ -1,0 +1,18 @@
+package cc.cassian.cauldrons;
+
+//? if fabric
+import net.fabricmc.loader.api.FabricLoader;
+//? if neoforge
+/*import net.neoforged.fml.loading.FMLPaths;*/
+
+import java.nio.file.Path;
+
+public class PlatformMethods {
+    public static Path getConfigDir() {
+        //? if fabric {
+        return FabricLoader.getInstance().getConfigDir();
+        //?} else {
+        /*return FMLPaths.CONFIGDIR.get();
+        *///?}
+    }
+}

@@ -1,8 +1,0 @@
-{
-  "type": "toil_and_trouble:brewing",
-  "reagent": {
-    "item": "minecraft:redstone"
-  },
-  "potion": "minecraft:invisibility",
-  "result": "minecraft:long_invisibility"
-}

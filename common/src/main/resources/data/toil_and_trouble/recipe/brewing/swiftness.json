@@ -1,8 +1,0 @@
-{
-  "type": "toil_and_trouble:brewing",
-  "reagent": {
-    "item": "minecraft:sugar"
-  },
-  "potion": "minecraft:awkward",
-  "result": "minecraft:swiftness"
-}
