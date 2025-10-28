@@ -1,5 +1,7 @@
 package cc.cassian.cauldrons.compat.eiv.dipping;
 
+//? if >1.21.4 {
+
 import cc.cassian.cauldrons.CauldronMod;
 import de.crafty.eiv.common.api.recipe.IEivRecipeViewType;
 import de.crafty.eiv.common.recipe.inventory.RecipeViewMenu;
@@ -62,3 +64,5 @@ public class CauldronDippingViewType implements IEivRecipeViewType {
         return Collections.singletonList(Items.CAULDRON.getDefaultInstance());
     }
 }
+
+//?}

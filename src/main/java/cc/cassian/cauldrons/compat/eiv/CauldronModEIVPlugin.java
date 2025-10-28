@@ -1,5 +1,7 @@
 package cc.cassian.cauldrons.compat.eiv;
 
+//? if >1.21.4 {
+
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.compat.eiv.brewing.CauldronBrewingServerRecipe;
 import cc.cassian.cauldrons.compat.eiv.brewing.CauldronBrewingViewRecipe;
@@ -74,3 +76,4 @@ public class CauldronModEIVPlugin implements IExtendedItemViewIntegration {
         }
     }
 }
+//?}

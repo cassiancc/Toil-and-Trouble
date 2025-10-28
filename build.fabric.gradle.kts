@@ -115,14 +115,20 @@ dependencies {
         modCompileOnly("mcp.mobius.waila:wthit-api:fabric-17.2.0")
     }
     // Development QOL
-    modLocalRuntime("cc.cassian.item-descriptions:item-descriptions-fabric:${property("deps.item_descriptions")}")
+    modLocalRuntime("cc.cassian.item-descriptions:item-descriptions-fabric:${property("deps.item_descriptions")}") {
+        isTransitive = false
+    }
 
     // Recipe Viewers
-    modCompileOnly("maven.modrinth:eiv:${property("deps.eiv")}-fabric")
-    modLocalRuntime("maven.modrinth:eiv:${property("deps.eiv")}-fabric")
-    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:${property("deps.rei")}")
-    modCompileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin:${property("deps.rei")}")
-    modCompileOnly("mezz.jei:jei-${property("deps.minecraft")}-fabric-api:${property("deps.jei")}")
+    if (hasProperty("deps.eiv")) {
+        modCompileOnly("maven.modrinth:eiv:${property("deps.eiv")}-fabric")
+        modLocalRuntime("maven.modrinth:eiv:${property("deps.eiv")}-fabric")
+    }
+    if (hasProperty("deps.emi")) {
+        modCompileOnly("dev.emi:emi-fabric:${property("deps.emi")}:api")
+        modLocalRuntime("dev.emi:emi-fabric:${property("deps.emi")}")
+    }
+//    modCompileOnly("mezz.jei:jei-${property("deps.minecraft")}-fabric-api:${property("deps.jei")}")
 
     val modules = listOf("transitive-access-wideners-v1", "registry-sync-v0", "resource-loader-v0")
     for (it in modules) modImplementation(fabricApi.module("fabric-$it", property("deps.fabric-api") as String))

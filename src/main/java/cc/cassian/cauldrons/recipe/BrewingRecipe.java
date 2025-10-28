@@ -65,7 +65,13 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         if (result.potion().isPresent()) {
             return CauldronContents.createItemStack(Items.POTION, result);
         } else {
-            return BuiltInRegistries.BLOCK.getValue(result.id()).asItem().getDefaultInstance();
+            return BuiltInRegistries.BLOCK.
+                    //? if >1.21.2 {
+                    getValue
+                    //?} else {
+                    /*get
+                    *///?}
+            (result.id()).asItem().getDefaultInstance();
         }
     }
 
@@ -83,6 +89,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         return CauldronModRecipes.BREWING.get();
     }
 
+    //? if >1.21.2 {
     @Override
     public PlacementInfo placementInfo() {
         return PlacementInfo.NOT_PLACEABLE;
@@ -92,6 +99,17 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
     public RecipeBookCategory recipeBookCategory() {
         return null;
     }
+    //?} else {
+    /*@Override
+    public boolean canCraftInDimensions(int width, int height) {
+        return true;
+    }
+
+    @Override
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
+        return getResultItem();
+    }
+    *///?}
 
     @Override
     public boolean isSpecial() {

@@ -1,5 +1,7 @@
 package cc.cassian.cauldrons.compat.eiv.dipping;
 
+//? if >1.21.4 {
+
 import cc.cassian.cauldrons.compat.eiv.CauldronModEIVPlugin;
 import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.registry.CauldronModItems;
@@ -45,3 +47,5 @@ public class CauldronDippingViewRecipe implements IEivViewRecipe {
         return List.of(result);
     }
 }
+
+//?}

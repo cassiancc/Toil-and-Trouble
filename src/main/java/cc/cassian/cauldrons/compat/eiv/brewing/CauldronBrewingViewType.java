@@ -1,4 +1,5 @@
 package cc.cassian.cauldrons.compat.eiv.brewing;
+//? if >1.21.4 {
 
 import cc.cassian.cauldrons.CauldronMod;
 import de.crafty.eiv.common.api.recipe.IEivRecipeViewType;
@@ -62,3 +63,4 @@ public class CauldronBrewingViewType implements IEivRecipeViewType {
         return Collections.singletonList(Items.CAULDRON.getDefaultInstance());
     }
 }
+//?}

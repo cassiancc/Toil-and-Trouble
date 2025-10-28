@@ -14,8 +14,10 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+//? if >1.21.4
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -66,10 +68,27 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     }
 
     @Override
-    protected InteractionResult useItemOn(
+    protected
+    //? if <1.21.4 {
+    /*ItemInteractionResult
+    *///?} else {
+    InteractionResult
+    //?}
+    useItemOn(
             ItemStack itemStack, BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult
     ) {
-        return CauldronModEvents.insert(itemStack, blockState, level, pos, player, interactionHand, blockHitResult.getDirection());
+        var result = CauldronModEvents.insert(itemStack, blockState, level, pos, player, interactionHand, blockHitResult.getDirection());
+        //? if >1.21.1 {
+        return result;
+        //?} else {
+        /*return switch (result) {
+            case SUCCESS_NO_ITEM_USED, SUCCESS -> ItemInteractionResult.SUCCESS;
+            case CONSUME -> ItemInteractionResult.CONSUME;
+            case CONSUME_PARTIAL -> ItemInteractionResult.CONSUME_PARTIAL;
+            case PASS -> ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            case FAIL -> ItemInteractionResult.FAIL;
+        };
+        *///?}
     }
 
     @Override
@@ -82,7 +101,9 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     }
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity
+                                //? if >1.21.4
+                                ,InsideBlockEffectApplier insideBlockEffectApplier,
                                 //? if >1.21.9
                                 ,boolean bl
     ) {
@@ -153,7 +174,10 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean bl) {
+    public ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState
+                                       //? if >1.21.4
+                                       ,boolean bl
+    ) {
         return new ItemStack(Blocks.CAULDRON);
     }
 
@@ -175,6 +199,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
         builder.add(POTION_QUANTITY, BREWING, HEATED, CONTENTS);
     }
 
+    //? if >1.21.4 {
     @Override
     protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
         if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
@@ -184,6 +209,23 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
             level.updateNeighbourForOutputSignal(pos, this);
         }
     }
+    //?} else {
+    /*@Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        if (!state.is(newState.getBlock())) {
+            if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
+                if (level instanceof ServerLevel) {
+                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cauldronBlockEntity.getItem());
+                }
+
+                super.onRemove(state, level, pos, newState, movedByPiston);
+                level.updateNeighbourForOutputSignal(pos, this);
+            } else {
+                super.onRemove(state, level, pos, newState, movedByPiston);
+            }
+        }
+    }
+    *///?}
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {

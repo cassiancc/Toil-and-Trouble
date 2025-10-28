@@ -84,7 +84,10 @@ public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity
     }
         //?} else {
     /*@Override
-    public void render(CauldronBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay, Vec3 cameraPos) {
+    public void render(CauldronBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay
+                       //? if >1.21.4
+                       ,Vec3 cameraPos
+    ) {
         ItemStack itemStack = blockEntity.getItem();
         int k = (int)blockEntity.getBlockPos().asLong();
 

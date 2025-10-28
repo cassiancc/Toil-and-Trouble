@@ -58,7 +58,13 @@ public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> pot
     }
 
     public CauldronContents(PotionContents potion) {
-        this(ResourceLocation.withDefaultNamespace("potion"), potion.potion(), potion.customColor(), potion.customEffects(), 3, potion.customName());
+        this(ResourceLocation.withDefaultNamespace("potion"), potion.potion(), potion.customColor(), potion.customEffects(), 3,
+            //? if >1.21.2 {
+            potion.customName()
+            //?} else {
+            /*Optional.empty()
+            *///?}
+        );
     }
 
     public CauldronContents(ResourceLocation potion) {
@@ -84,7 +90,10 @@ public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> pot
     }
 
     public PotionContents toPotionContents() {
-        return new PotionContents(potion, customColor, customEffects, customName);
+        return new PotionContents(potion, customColor, customEffects
+        //? if >1.21.2
+        , customName
+        );
     }
 
     public int getColor() {

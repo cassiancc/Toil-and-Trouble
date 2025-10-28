@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 
 public class CauldronContentsItem extends PotionItem {
@@ -12,9 +13,16 @@ public class CauldronContentsItem extends PotionItem {
         super(properties);
     }
 
+    //? if >1.21.2 {
     @Override
     public Component getName(ItemStack stack) {
         PotionContents potionContents = stack.get(DataComponents.POTION_CONTENTS);
         return potionContents != null ? potionContents.getName(Items.POTION.getDescriptionId() + ".effect.") : super.getName(stack);
     }
+    //?} else {
+    /*@Override
+    public String getDescriptionId(ItemStack stack) {
+        return Potion.getName(stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).potion(), Items.POTION.getDescriptionId() + ".effect.");
+    }
+    *///?}
 }

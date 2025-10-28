@@ -1,4 +1,5 @@
 package cc.cassian.cauldrons.compat.eiv.brewing;
+//? if >1.21.4 {
 
 import cc.cassian.cauldrons.compat.eiv.CauldronModEIVPlugin;
 import cc.cassian.cauldrons.core.CauldronContents;
@@ -45,3 +46,4 @@ public class CauldronBrewingViewRecipe implements IEivViewRecipe {
         return List.of(CauldronModEIVPlugin.getResultForDisplay(potion).getB());
     }
 }
+//?}

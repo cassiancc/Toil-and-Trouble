@@ -8,6 +8,7 @@ import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.world.entity.Entity;
+//? if >1.21.4
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.alchemy.Potions;
@@ -26,7 +27,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class BlockBehaviourMixin  {
 
     @Inject(method = "entityInside", at = @At(value = "RETURN"))
-    private void mixin(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier insideBlockEffectApplier,
+    private void mixin(BlockState state, Level level, BlockPos pos, Entity entity,
+                       //? if >1.21.4
+                       InsideBlockEffectApplier insideBlockEffectApplier,
                        //? if >1.21.9
                         boolean bl,
                        CallbackInfo ci) {

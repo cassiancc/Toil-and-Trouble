@@ -3,6 +3,7 @@ package cc.cassian.cauldrons.blocks.entity;
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.core.CauldronContents;
+import cc.cassian.cauldrons.core.CauldronModEvents;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
 import cc.cassian.cauldrons.core.CauldronModTags;
 import cc.cassian.cauldrons.recipe.BrewingRecipe;
@@ -50,9 +51,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+//? if >1.21.4 {
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import org.apache.commons.lang3.text.WordUtils;
+//?}
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
@@ -94,6 +96,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 
     }
 
+    //? if >1.21.4 {
     @Override
     public void loadAdditional(ValueInput tag) {
         super.loadAdditional(tag);
@@ -124,6 +127,38 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         tag.store("cauldron.particle_type", ParticleTypes.CODEC, particleType);
         super.saveAdditional(tag);
     }
+    //?} else {
+    /*@Override
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        Tag inventory = tag.get("cauldron.inventory");
+        if (inventory != null)
+            reagent = ItemStack.parse(registries, inventory).orElse(ItemStack.EMPTY);
+        else reagent = ItemStack.EMPTY;
+        progress = tag.getInt("cauldron.progress");
+        maxProgress = tag.getInt("cauldron.max_progress");
+        contents = CauldronContents.CODEC.decode(NbtOps.INSTANCE, tag.get("cauldron.potion")).result().get().getFirst();
+        splashing = tag.getBoolean("cauldron.splashing");
+        lingering = tag.getBoolean("cauldron.lingering");
+        bubbleTimer = tag.getInt("cauldron.bubble_timer");
+        if (tag.contains("cauldron.particle_type"))
+            particleType = ParticleTypes.CODEC.decode(NbtOps.INSTANCE, tag.get("cauldron.particle_type")).result().get().getFirst();
+    }
+
+    @Override
+    public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        if (!reagent.isEmpty())
+            tag.put("cauldron.inventory", reagent.save(registries));
+        tag.putInt("cauldron.progress", progress);
+        tag.putInt("cauldron.max_progress", maxProgress);
+        tag.put("cauldron.potion", CauldronContents.CODEC.encodeStart(NbtOps.INSTANCE, contents).result().get());
+        tag.putBoolean("cauldron.splashing", splashing);
+        tag.putBoolean("cauldron.lingering", lingering);
+        tag.putInt("cauldron.bubble_timer", bubbleTimer);
+        tag.put("cauldron.particle_type", ParticleTypes.CODEC.encodeStart(NbtOps.INSTANCE, particleType).result().get());
+        super.saveAdditional(tag, registries);
+    }
+    *///?}
 
     @Deprecated
     public Pair<InteractionResult, ItemStack> insert(ItemStack itemStack) {
@@ -160,18 +195,24 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
             }
             return new Pair<>(InteractionResult.SUCCESS, ItemStack.EMPTY);
         }
-        return new Pair<>(InteractionResult.TRY_WITH_EMPTY_HAND, ItemStack.EMPTY);
+        return new Pair<>(CauldronModEvents.PASS_TO_EMPTY_HAND, ItemStack.EMPTY);
     }
 
     public void brew(boolean cauldronHeated) {
         var input = new BrewingRecipeInput(reagent, contents, cauldronHeated);
         if ((level instanceof ServerLevel serverLevel)) {
-            Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = serverLevel.recipeAccess().getRecipeFor(CauldronModRecipes.BREWING.get(), input, level);
+            var recipeAccess =
+            //? if >1.21.2 {
+            serverLevel.recipeAccess();
+            //?} else {
+            /*serverLevel.getRecipeManager();
+            *///?}
+            Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = recipeAccess.getRecipeFor(CauldronModRecipes.BREWING.get(), input, level);
             if (brewingRecipe.isPresent()) {
                 this.contents = brewingRecipe.get().value().getResultPotion();
                 updateAfterBrewing(ItemStack.EMPTY, this.contents, brewingRecipe.get().value().getParticleType());
             }
-            Optional<RecipeHolder<DippingRecipe>> dippingRecipe = serverLevel.recipeAccess().getRecipeFor(CauldronModRecipes.DIPPING.get(), input, level);
+            Optional<RecipeHolder<DippingRecipe>> dippingRecipe = recipeAccess.getRecipeFor(CauldronModRecipes.DIPPING.get(), input, level);
             if (dippingRecipe.isPresent()) {
                 updateAfterBrewing(dippingRecipe.get().value().getResultItem(), this.contents, dippingRecipe.get().value().getParticleType());
                 setFillLevel(0);

@@ -1,4 +1,5 @@
 package cc.cassian.cauldrons.compat.eiv.brewing;
+//? if >1.21.4 {
 
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.core.CauldronContents;
@@ -58,3 +59,4 @@ public class CauldronBrewingServerRecipe implements IEivServerRecipe {
         return result;
     }
 }
+//?}

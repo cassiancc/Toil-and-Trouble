@@ -9,7 +9,21 @@ import java.util.function.Supplier;
 public class CauldronModBlockEntityTypes {
     public static final Supplier<BlockEntityType<CauldronBlockEntity>> CAULDRON_BLOCK_ENTITY =
             CommonRegistry.registerBlockEntity("cauldron_block_entity", ()->
-                    new BlockEntityType<>(CauldronBlockEntity::new, Set.of(CauldronModBlocks.BREWING_CAULDRON.get())));
+                    //? if >1.21.2 {
+                    new BlockEntityType<>
+                    //?} else {
+                    /*BlockEntityType.Builder.of
+                    *///?}
+                    (CauldronBlockEntity::new,
+                            //? if >1.21.2
+                            Set.of(
+                            CauldronModBlocks.BREWING_CAULDRON.get())
+                            //? if <1.21.2 {
+                            /*.build(null)
+                            *///?} else {
+                            )
+                            //?}
+            );
 
     public static void touch() {
 

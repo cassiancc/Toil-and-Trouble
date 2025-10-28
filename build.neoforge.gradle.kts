@@ -138,10 +138,15 @@ dependencies {
     }
 
     // Recipe Viewers
-    compileOnly("maven.modrinth:eiv:${property("deps.eiv")}-neoforge")
-    compileOnly("me.shedaniel:RoughlyEnoughItems-api-neoforge:${property("deps.rei")}")
-    compileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${property("deps.rei")}")
-    compileOnly("mezz.jei:jei-${property("deps.minecraft")}-neoforge:${property("deps.jei")}")
+    if (hasProperty("deps.eiv")) {
+        compileOnly("maven.modrinth:eiv:${property("deps.eiv")}-neoforge")
+        runtimeOnly("maven.modrinth:eiv:${property("deps.eiv")}-neoforge")
+    }
+    if (hasProperty("deps.emi")) {
+        compileOnly("dev.emi:emi-neoforge:${property("deps.emi")}:api")
+        runtimeOnly("dev.emi:emi-neoforge:${property("deps.emi")}")
+    }
+    //    compileOnly("mezz.jei:jei-${property("deps.minecraft")}-neoforge:${property("deps.jei")}")
 
 }
 

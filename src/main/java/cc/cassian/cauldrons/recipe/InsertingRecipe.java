@@ -67,6 +67,7 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
         return CauldronModRecipes.INSERTING.get();
     }
 
+    //? if >1.21.2 {
     @Override
     public PlacementInfo placementInfo() {
         return PlacementInfo.NOT_PLACEABLE;
@@ -76,6 +77,17 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
     public RecipeBookCategory recipeBookCategory() {
         return null;
     }
+    //?} else {
+    /*@Override
+    public boolean canCraftInDimensions(int width, int height) {
+        return true;
+    }
+
+    @Override
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
+        return getResultItem();
+    }
+    *///?}
 
     @Override
     public boolean isSpecial() {

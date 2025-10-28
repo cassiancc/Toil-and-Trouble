@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -31,6 +32,13 @@ import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.setFillLevel;
 import static net.minecraft.world.level.block.Block.popResourceFromFace;
 
 public class CauldronModEvents {
+    public static InteractionResult PASS_TO_EMPTY_HAND =
+    //? if <1.21.4 {
+    /*InteractionResult.PASS
+    *///?} else {
+     InteractionResult.TRY_WITH_EMPTY_HAND
+     //?}
+    ;
 
     public static InteractionResult useBlock(Player player, Level level, InteractionHand interactionHand, BlockPos pos, Direction direction) {
         BlockState blockState = level.getBlockState(pos);
@@ -53,7 +61,7 @@ public class CauldronModEvents {
             level.setBlockEntity(new CauldronBlockEntity(pos, state, new CauldronContents("lava")));
             return insert(player.getItemInHand(interactionHand), state, level, pos, player, interactionHand, direction);
         }
-        return InteractionResult.TRY_WITH_EMPTY_HAND;
+        return PASS_TO_EMPTY_HAND;
     }
 
     public static InteractionResult insert(
@@ -65,7 +73,13 @@ public class CauldronModEvents {
         if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
             if (!itemStack.isEmpty()) {
                 if (level instanceof ServerLevel serverLevel) {
-                    Optional<RecipeHolder<InsertingRecipe>> insertingRecipeRecipeHolder = serverLevel.recipeAccess().getRecipeFor(CauldronModRecipes.INSERTING.get(), new BrewingRecipeInput(itemStack, cauldronBlockEntity.getContents(), false), level);
+                    var recipeAccess =
+                            //? if >1.21.2 {
+                            serverLevel.recipeAccess();
+                             //?} else {
+                            /*serverLevel.getRecipeManager();
+                    *///?}
+                    Optional<RecipeHolder<InsertingRecipe>> insertingRecipeRecipeHolder = recipeAccess.getRecipeFor(CauldronModRecipes.INSERTING.get(), new BrewingRecipeInput(itemStack, cauldronBlockEntity.getContents(), false), level);
                     if (insertingRecipeRecipeHolder.isPresent()) {
                         var recipe = insertingRecipeRecipeHolder.get().value();
                         int newFillLevel = blockState.getValue(POTION_QUANTITY) + recipe.getAmount();
@@ -83,7 +97,7 @@ public class CauldronModEvents {
                 return InteractionResult.SUCCESS;
             }
         }
-        return InteractionResult.TRY_WITH_EMPTY_HAND;
+        return PASS_TO_EMPTY_HAND;
     }
 
     public static InteractionResult tryHardcodedRecipe(
@@ -126,7 +140,7 @@ public class CauldronModEvents {
             return InteractionResult.SUCCESS;
         } else {
             Pair<InteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
-            if (!(insert.getA() == InteractionResult.TRY_WITH_EMPTY_HAND)) {
+            if (!(insert.getA() == PASS_TO_EMPTY_HAND)) {
                 if (player == null || !player.isCreative())
                     itemStack.setCount(itemStack.getCount()-1);
                 addItem(player, interactionHand, level, pos, direction, insert.getB());
