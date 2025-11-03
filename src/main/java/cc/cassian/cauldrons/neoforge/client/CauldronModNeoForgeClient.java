@@ -5,9 +5,14 @@ package cc.cassian.cauldrons.neoforge.client;
 /*import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.client.renderer.CauldronRenderer;
+import cc.cassian.cauldrons.core.CauldronContents;
+import cc.cassian.cauldrons.items.CauldronContentsItem;
 import cc.cassian.cauldrons.registry.CauldronModBlockEntityTypes;
 import cc.cassian.cauldrons.registry.CauldronModBlocks;
+import cc.cassian.cauldrons.registry.CauldronModItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.FastColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -26,6 +31,12 @@ public final class CauldronModNeoForgeClient {
             }
             return 9551193;
         }), CauldronModBlocks.BREWING_CAULDRON.get());
+
+    }
+
+    @SubscribeEvent
+    public static void registerColorHandlers(RegisterColorHandlersEvent.Item event) {
+        event.register(((stack, tintIndex) -> FastColor.ARGB32.opaque(stack.get(DataComponents.POTION_CONTENTS).getColor())), CauldronModItems.CAULDRON_CONTENTS.get());
 
     }
 

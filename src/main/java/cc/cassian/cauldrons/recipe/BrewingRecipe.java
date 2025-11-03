@@ -46,7 +46,22 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
     @Override
     public ItemStack assemble(BrewingRecipeInput input, HolderLookup.Provider registries) {
-        return getResultItem();
+        return getResultItem(registries);
+    }
+
+    public boolean requiresHeat() {
+        return requiresHeat;
+    }
+
+    @Override
+    public boolean canCraftInDimensions(int width, int height) {
+        return true;
+    }
+
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        ItemStack cauldronContents = ItemStack.EMPTY;
+        return NonNullList.of(reagent, Ingredient.of(cauldronContents));
     }
 
     public Ingredient getReagent() {

@@ -42,7 +42,8 @@ public class CauldronModEmiPlugin implements EmiPlugin {
             ResourceLocation.withDefaultNamespace("water_cauldron"), EmiStack.of(Fluids.WATER),
             ResourceLocation.withDefaultNamespace("powder_snow_cauldron"), EmiStack.of(Blocks.POWDER_SNOW),
             CauldronMod.of("lava"), EmiStack.of(Fluids.LAVA),
-            CauldronMod.of("empty"), EmiStack.of(Items.AIR)
+            CauldronMod.of("empty"), EmiStack.of(Items.AIR),
+            CauldronMod.of("honey"), EmiStack.of(CauldronModItems.HONEY_CONTENTS.get())
     );
 
     static Pair<EmiStack, EmiStack> getResultForDisplay(CauldronContents resultPotion) {

@@ -23,7 +23,7 @@ Toil and Trouble is a client and server mod for Fabric and NeoForge 1.21.1. Its 
 ## Mod Compatibility
 - Modded brewing recipes will work out of the box, as this mod allows cauldrons to craft anything a Brewing Stand can.
 - [Jade](https://modrinth.com/mod/jade) and [WTHIT](https://modrinth.com/mod/wthit) shows the contents of Potion Cauldrons.
-- [EMI](https://modrinth.com/mod/emi) and [EIV](https://modrinth.com/mod/eiv) ([tested against my port](https://github.com/cassiancc/ExtendedItemView/releases/tag/2.5.3%2B1.21.8)) show data-driven Cauldron Brewing recipes.
+- [EMI](https://modrinth.com/mod/emi) and [EIV](https://modrinth.com/mod/eiv) show data-driven Cauldron Brewing recipes.
 - If you are using this mod alongside [Amendments](https://modrinth.com/mod/amendments), it's recommended to disable its Improved Cauldron functionality, as its changes to the cauldron intersect with this mod's.
 
 ## FAQ
