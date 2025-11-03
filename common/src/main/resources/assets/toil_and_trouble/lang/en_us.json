@@ -22,6 +22,6 @@
     "tag.item.toil_and_trouble.creates_awkward_potions": "Awkward Potion Reagents",
     "tag.item.toil_and_trouble.creates_splash_potions": "Splash Potion Reagents",
     "tag.item.toil_and_trouble.creates_lingering_potions": "Lingering Potion Reagents",
-    "tag.item.toil_and_trouble.creates_mundane_potions": "Mundane Potion Reagents"
-
+    "tag.item.toil_and_trouble.creates_mundane_potions": "Mundane Potion Reagents",
+    "tooltip.toil_and_trouble.heated": "Heated"
 }

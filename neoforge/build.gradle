@@ -40,6 +40,10 @@ dependencies {
     modRuntimeOnly "mcp.mobius.waila:wthit:neo-${wthit_version}"
     modRuntimeOnly "lol.bai:badpackets:neo-${badpackets_version}"
 
+    // EMI
+    modCompileOnly("dev.emi:emi-neoforge:$emi_version+$minecraft_version:api")
+    modLocalRuntime("dev.emi:emi-neoforge:$emi_version+$minecraft_version")
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 }

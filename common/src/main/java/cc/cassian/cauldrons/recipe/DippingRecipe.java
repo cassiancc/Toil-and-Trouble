@@ -49,6 +49,10 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
         return this.result.copy();
     }
 
+    public boolean requiresHeat() {
+        return requiresHeat;
+    }
+
     @Override
     public boolean canCraftInDimensions(int width, int height) {
         return true;

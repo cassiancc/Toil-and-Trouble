@@ -48,6 +48,10 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         return getResultItem(registries);
     }
 
+    public boolean requiresHeat() {
+        return requiresHeat;
+    }
+
     @Override
     public boolean canCraftInDimensions(int width, int height) {
         return true;
