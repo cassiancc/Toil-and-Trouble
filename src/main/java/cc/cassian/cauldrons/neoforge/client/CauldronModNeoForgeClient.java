@@ -12,7 +12,9 @@ import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import cc.cassian.cauldrons.registry.CauldronModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.util.FastColor;
+//? if <1.21.5 {
+/^import net.minecraft.util.FastColor;
+^///?}
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -34,11 +36,12 @@ public final class CauldronModNeoForgeClient {
 
     }
 
-    @SubscribeEvent
+    //? if <1.21.5 {
+    /^@SubscribeEvent
     public static void registerColorHandlers(RegisterColorHandlersEvent.Item event) {
         event.register(((stack, tintIndex) -> FastColor.ARGB32.opaque(stack.get(DataComponents.POTION_CONTENTS).getColor())), CauldronModItems.CAULDRON_CONTENTS.get());
-
     }
+    ^///?}
 
     @SubscribeEvent
     public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {

@@ -14,7 +14,9 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
+//? if <1.21.4 {
+/*import net.minecraft.world.ItemInteractionResult;
+*///?}
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 //? if >1.21.4
@@ -103,7 +105,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity
                                 //? if >1.21.4
-                                ,InsideBlockEffectApplier insideBlockEffectApplier,
+                                ,InsideBlockEffectApplier insideBlockEffectApplier
                                 //? if >1.21.9
                                 ,boolean bl
     ) {

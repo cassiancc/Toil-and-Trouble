@@ -51,16 +51,6 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
         return requiresHeat;
     }
 
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return NonNullList.of(reagent);
-    }
-
     public Ingredient getReagent() {
         return reagent;
     }
@@ -102,6 +92,11 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
     @Override
     public ItemStack getResultItem(HolderLookup.Provider registries) {
         return getResultItem();
+    }
+
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        return NonNullList.of(reagent);
     }
     *///?}
 
