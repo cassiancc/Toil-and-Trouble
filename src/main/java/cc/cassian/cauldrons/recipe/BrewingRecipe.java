@@ -13,7 +13,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -61,7 +61,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         return potion;
     }
 
-    public ResourceLocation getContentsId() {
+    public Identifier getContentsId() {
         return potion.id();
     }
 

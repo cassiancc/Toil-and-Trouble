@@ -1,12 +1,12 @@
 package cc.cassian.cauldrons.compat.eiv.dipping;
 
-//? if >1.21.4 {
+//? if >1.21.4 && <26 {
 
 import cc.cassian.cauldrons.CauldronMod;
 import de.crafty.eiv.common.api.recipe.IEivRecipeViewType;
 import de.crafty.eiv.common.recipe.inventory.RecipeViewMenu;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -33,7 +33,7 @@ public class CauldronDippingViewType implements IEivRecipeViewType {
     }
 
     @Override
-    public ResourceLocation getGuiTexture() {
+    public Identifier getGuiTexture() {
         return CauldronMod.of("textures/gui/eiv/brewing.png");
     }
 
@@ -50,7 +50,7 @@ public class CauldronDippingViewType implements IEivRecipeViewType {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return CauldronMod.of("dipping");
     }
 

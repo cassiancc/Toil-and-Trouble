@@ -1,6 +1,6 @@
 package cc.cassian.cauldrons.compat.eiv;
 
-//? if >1.21.4 {
+//? if >1.21.4 && <26 {
 
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.compat.eiv.brewing.CauldronBrewingServerRecipe;
@@ -17,7 +17,7 @@ import de.crafty.eiv.common.extra.FluidStack;
 import de.crafty.eiv.common.recipe.ServerRecipeManager;
 import de.crafty.eiv.common.recipe.inventory.SlotContent;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -55,10 +55,10 @@ public class CauldronModEIVPlugin implements IExtendedItemViewIntegration {
         ItemView.excludeItem(CauldronModItems.CAULDRON_CONTENTS.get());
     }
 
-    public static final Map<ResourceLocation, SlotContent> OVERRIDES = Map.of(
-            ResourceLocation.withDefaultNamespace("lava_cauldron"), SlotContent.of(new FluidStack(Fluids.LAVA)),
-            ResourceLocation.withDefaultNamespace("water_cauldron"), SlotContent.of(new FluidStack(Fluids.WATER)),
-            ResourceLocation.withDefaultNamespace("powder_snow_cauldron"), SlotContent.of(Ingredient.of(Blocks.POWDER_SNOW)),
+    public static final Map<Identifier, SlotContent> OVERRIDES = Map.of(
+            Identifier.withDefaultNamespace("lava_cauldron"), SlotContent.of(new FluidStack(Fluids.LAVA)),
+            Identifier.withDefaultNamespace("water_cauldron"), SlotContent.of(new FluidStack(Fluids.WATER)),
+            Identifier.withDefaultNamespace("powder_snow_cauldron"), SlotContent.of(Ingredient.of(Blocks.POWDER_SNOW)),
             CauldronMod.of("lava"), SlotContent.of(new FluidStack(Fluids.LAVA)),
             CauldronMod.of("empty"), SlotContent.of(Items.AIR)
     );

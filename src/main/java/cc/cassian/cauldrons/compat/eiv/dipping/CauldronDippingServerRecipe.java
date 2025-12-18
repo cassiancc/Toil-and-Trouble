@@ -1,6 +1,6 @@
 package cc.cassian.cauldrons.compat.eiv.dipping;
 
-//? if >1.21.4 {
+//? if >1.21.4 && <26 {
 
 
 import cc.cassian.cauldrons.CauldronMod;

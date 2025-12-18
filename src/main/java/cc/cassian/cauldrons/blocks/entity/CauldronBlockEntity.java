@@ -31,7 +31,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ContainerHelper;
@@ -318,9 +318,9 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         if (blockEntity instanceof CauldronBlockEntity cauldronBlockEntity) {
             // particle logic
             if (cauldronBlockEntity.isBubbling()) {
-                double d = pos.getX() + level.random.nextDouble();
+                double d = pos.getX() + level.getRandom().nextDouble();
                 double e = pos.getY() + 1;
-                double f = pos.getZ() + level.random.nextDouble();
+                double f = pos.getZ() + level.getRandom().nextDouble();
                 if (cauldronBlockEntity.getContents() != CauldronContents.EMPTY) {
                     ArrayList<MobEffectInstance> effects = new ArrayList<>();
                     cauldronBlockEntity.getContents().getAllEffects().forEach(effects::add);
@@ -386,9 +386,9 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         if (getContents().is(Potions.WATER)) return Contents.WATER;
         else if (getContents().potion().isPresent()) return Contents.POTION;
         else if (getContents().is("honey")) return Contents.HONEY;
-        else if (getContents().is(ResourceLocation.fromNamespaceAndPath("chorus_honey", "chorus_honey"))) return Contents.CHORUS_HONEY;
+        else if (getContents().is(Identifier.fromNamespaceAndPath("chorus_honey", "chorus_honey"))) return Contents.CHORUS_HONEY;
         else if (getContents().is("lava")) return Contents.LAVA;
-        else if (getContents().is(ResourceLocation.withDefaultNamespace("air"))) return Contents.EMPTY;
+        else if (getContents().is(Identifier.withDefaultNamespace("air"))) return Contents.EMPTY;
         return Contents.POTION;
     }
 

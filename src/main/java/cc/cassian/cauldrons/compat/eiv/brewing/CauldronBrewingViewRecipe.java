@@ -1,5 +1,5 @@
 package cc.cassian.cauldrons.compat.eiv.brewing;
-//? if >1.21.4 {
+//? if >1.21.4 && <26 {
 
 import cc.cassian.cauldrons.compat.eiv.CauldronModEIVPlugin;
 import cc.cassian.cauldrons.core.CauldronContents;

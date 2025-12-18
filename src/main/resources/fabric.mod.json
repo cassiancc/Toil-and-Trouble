@@ -32,7 +32,6 @@
   "mixins": [
     "toil_and_trouble.mixins.json"
   ],
-  "accessWidener": "toil_and_trouble.accesswidener",
   "depends": {
     "fabricloader": ">=0.16.14",
     "minecraft": "${minecraft}",
