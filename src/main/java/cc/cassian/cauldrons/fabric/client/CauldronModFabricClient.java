@@ -8,7 +8,10 @@ import cc.cassian.cauldrons.registry.CauldronModBlockEntityTypes;
 import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import cc.cassian.cauldrons.registry.CauldronModItems;
 import net.fabricmc.api.ClientModInitializer;
-//? if >1.21.4 {
+//? if >26 {
+/*import net.fabricmc.fabric.api.client.rendering.v1.ChunkSectionLayerMap;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+*///?} else if >1.21.4 {
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 //?} else {
@@ -44,7 +47,9 @@ public final class CauldronModFabricClient implements ClientModInitializer {
         }), CauldronModItems.CAULDRON_CONTENTS.get());
         *///?}
 
-        //? if >1.21.4 {
+        //? if >26 {
+        /*ChunkSectionLayerMap.putBlocks(ChunkSectionLayer.TRANSLUCENT,
+        *///?} else if >1.21.4 {
         BlockRenderLayerMap.putBlocks(ChunkSectionLayer.TRANSLUCENT,
         //?} else {
         /*BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(),
