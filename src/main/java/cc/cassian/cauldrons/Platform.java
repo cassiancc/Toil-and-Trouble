@@ -7,7 +7,7 @@ import net.fabricmc.loader.api.FabricLoader;
 
 import java.nio.file.Path;
 
-public class PlatformMethods {
+public class Platform {
     public static Path getConfigDir() {
         //? if fabric {
         return FabricLoader.getInstance().getConfigDir();
@@ -15,4 +15,8 @@ public class PlatformMethods {
         /*return FMLPaths.CONFIGDIR.get();
         *///?}
     }
+
+	public static boolean isModLoaded(String mod) {
+		return FabricLoader.getInstance().isModLoaded(mod);
+	}
 }

@@ -27,6 +27,9 @@
     ],
     "eiv": [
       "cc.cassian.cauldrons.compat.eiv.CauldronModEIVPlugin"
+    ],
+    "jei_mod_plugin": [
+      "cc.cassian.cauldrons.compat.jei.CauldronModJeiPlugin"
     ]
   },
   "mixins": [

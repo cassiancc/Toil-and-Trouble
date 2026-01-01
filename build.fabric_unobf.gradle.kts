@@ -115,7 +115,6 @@ repositories {
 dependencies {
     minecraft("com.mojang:minecraft:${property("deps.minecraft")}")
     implementation("net.fabricmc:fabric-loader:${property("deps.fabric-loader")}")
-
     implementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric-api")}")
 
     implementation("folk.sisby:kaleido-config:${property("deps.kaleido")}")
@@ -123,6 +122,7 @@ dependencies {
     compileOnly("maven.modrinth:jade:${property("deps.jade")}")
     compileOnly("mcp.mobius.waila:wthit-api:neo-${property("deps.wthit_version")}")
     compileOnly("maven.modrinth:eiv:${property("deps.eiv")}-neoforge")
+    compileOnly("maven.modrinth:jei:${property("deps.jei")}-neoforge")
 
 }
 

@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Support for JEI.
+
+### Changed
+- Improved EIV sprite (thanks ProbablyEkho!)
+
+## [1.4.3]
+
+### Fixed
+
+- Issues with EMI integration.
+
+## [1.4.2]
+
+### Fixed
+- Fix Slowness potion recipes not appearing in EIV.
+- Fix log spam from recipe book.
+
+## [1.4.1]
+
 ### Fixed
 - Custom name property now works as intended.
 - Issues extracting custom potions from Cauldrons.

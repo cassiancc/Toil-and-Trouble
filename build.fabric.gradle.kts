@@ -108,6 +108,13 @@ repositories {
             includeGroupAndSubgroups("dev.lambdaurora")
         }
     }
+    maven {
+        name = "JEI - Jared's maven"
+        url = uri("https://maven.blamejared.com/")
+        content {
+            includeGroup("mezz.jei")
+        }
+    }
 }
 
 dependencies {
@@ -133,11 +140,7 @@ dependencies {
         modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:19.0.147")
     }
     // Mod Menu
-    if (hasProperty("deps.modmenu"))
-        modApi("com.terraformersmc:modmenu:${property("deps.modmenu")}")
-    else {
-        modCompileOnly("com.terraformersmc:modmenu:15.0.0-beta.3")
-    }
+    modApi("com.terraformersmc:modmenu:${property("deps.modmenu")}")
 
     // Optional compat
     if (hasProperty("deps.jade")) {
@@ -167,7 +170,9 @@ dependencies {
         modCompileOnly("dev.emi:emi-fabric:${property("deps.emi")}:api")
         modLocalRuntime("dev.emi:emi-fabric:${property("deps.emi")}")
     }
-//    modCompileOnly("mezz.jei:jei-${property("deps.minecraft")}-fabric-api:${property("deps.jei")}")
+    modCompileOnly("maven.modrinth:jei:${property("deps.jei")}-fabric") {
+        isTransitive = false;
+    }
 
     val modules = listOf("transitive-access-wideners-v1", "registry-sync-v0", "resource-loader-v0")
     for (it in modules) modImplementation(fabricApi.module("fabric-$it", property("deps.fabric-api") as String))

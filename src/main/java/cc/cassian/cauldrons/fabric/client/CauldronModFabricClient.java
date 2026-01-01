@@ -32,10 +32,10 @@ public final class CauldronModFabricClient implements ClientModInitializer {
 
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
             if (view == null || tintIndex != 0) return 9551193;
-            if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
-                return cauldronBlockEntity.getPotionColour();
-            }
-            return 9551193;
+			if (Minecraft.getInstance().level != null && Minecraft.getInstance().level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
+				return cauldronBlockEntity.getPotionColour();
+			}
+			return 9551193;
         }, CauldronModBlocks.BREWING_CAULDRON.get());
 
         //? if <1.21.4 {
