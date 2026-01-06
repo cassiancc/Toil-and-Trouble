@@ -1,20 +1,17 @@
-package cc.cassian.cauldrons.compat.eiv.dipping;
+package cc.cassian.cauldrons.compat.rrv.dipping;
 
-//? if >1.21.4 && <26 {
+//? if >1.21.10 {
 
-import cc.cassian.cauldrons.compat.eiv.CauldronModEIVPlugin;
+import cc.cassian.cauldrons.compat.rrv.CauldronModRRVPlugin;
 import cc.cassian.cauldrons.core.CauldronContents;
-import cc.cassian.cauldrons.registry.CauldronModItems;
-import de.crafty.eiv.common.api.recipe.IEivRecipeViewType;
-import de.crafty.eiv.common.api.recipe.IEivViewRecipe;
-import de.crafty.eiv.common.recipe.inventory.RecipeViewMenu;
-import de.crafty.eiv.common.recipe.inventory.SlotContent;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionContents;
+import cc.cassian.rrv.api.recipe.ReliableClientRecipe;
+import cc.cassian.rrv.api.recipe.ReliableClientRecipeType;
+import cc.cassian.rrv.common.recipe.inventory.RecipeViewMenu;
+import cc.cassian.rrv.common.recipe.inventory.SlotContent;
 
 import java.util.List;
 
-public class CauldronDippingViewRecipe implements IEivViewRecipe {
+public class CauldronDippingViewRecipe implements ReliableClientRecipe {
     private final SlotContent reagent;
     private final CauldronContents potion;
     private final SlotContent result;
@@ -26,20 +23,20 @@ public class CauldronDippingViewRecipe implements IEivViewRecipe {
     }
 
     @Override
-    public IEivRecipeViewType getViewType() {
+    public ReliableClientRecipeType getViewType() {
         return CauldronDippingViewType.INSTANCE;
     }
 
     @Override
     public void bindSlots(RecipeViewMenu.SlotFillContext slotFillContext) {
         slotFillContext.bindOptionalSlot(0, reagent, RecipeViewMenu.OptionalSlotRenderer.DEFAULT);
-        slotFillContext.bindOptionalSlot(1, CauldronModEIVPlugin.getResultForDisplay(potion).getB(), RecipeViewMenu.OptionalSlotRenderer.DEFAULT);
+        slotFillContext.bindOptionalSlot(1, CauldronModRRVPlugin.getResultForDisplay(potion).getB(), RecipeViewMenu.OptionalSlotRenderer.DEFAULT);
         slotFillContext.bindOptionalSlot(2, result, RecipeViewMenu.OptionalSlotRenderer.DEFAULT);
     }
 
     @Override
     public List<SlotContent> getIngredients() {
-        return List.of(reagent, CauldronModEIVPlugin.getResultForDisplay(potion).getA());
+        return List.of(reagent, CauldronModRRVPlugin.getResultForDisplay(potion).getA());
     }
 
     @Override

@@ -1,9 +1,10 @@
-package cc.cassian.cauldrons.compat.eiv.brewing;
-//? if >1.21.4 && <26 {
+package cc.cassian.cauldrons.compat.rrv.dipping;
+
+//? if >1.21.10 {
 
 import cc.cassian.cauldrons.CauldronMod;
-import de.crafty.eiv.common.api.recipe.IEivRecipeViewType;
-import de.crafty.eiv.common.recipe.inventory.RecipeViewMenu;
+import cc.cassian.rrv.api.recipe.ReliableClientRecipeType;
+import cc.cassian.rrv.common.recipe.inventory.RecipeViewMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
@@ -12,13 +13,13 @@ import net.minecraft.world.item.Items;
 import java.util.Collections;
 import java.util.List;
 
-public class CauldronBrewingViewType implements IEivRecipeViewType {
+public class CauldronDippingViewType implements ReliableClientRecipeType {
 
-    public static final CauldronBrewingViewType INSTANCE = new CauldronBrewingViewType();
+    public static final CauldronDippingViewType INSTANCE = new CauldronDippingViewType();
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("emi.category.toil_and_trouble.brewing");
+        return Component.translatable("emi.category.toil_and_trouble.dipping");
     }
 
     @Override
@@ -50,7 +51,7 @@ public class CauldronBrewingViewType implements IEivRecipeViewType {
 
     @Override
     public Identifier getId() {
-        return CauldronMod.of("brewing");
+        return CauldronMod.of("dipping");
     }
 
     @Override
@@ -63,4 +64,5 @@ public class CauldronBrewingViewType implements IEivRecipeViewType {
         return Collections.singletonList(Items.CAULDRON.getDefaultInstance());
     }
 }
+
 //?}

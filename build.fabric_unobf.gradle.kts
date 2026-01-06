@@ -110,6 +110,13 @@ repositories {
             includeGroupAndSubgroups("fuzs")
         }
     }
+    maven {
+        name = "Cassian's Maven"
+        url = uri("https://maven.cassian.cc")
+        content {
+            includeGroupAndSubgroups("cc.cassian")
+        }
+    }
 }
 
 dependencies {
@@ -121,8 +128,9 @@ dependencies {
     include("folk.sisby:kaleido-config:${property("deps.kaleido")}")
     compileOnly("maven.modrinth:jade:${property("deps.jade")}")
     compileOnly("mcp.mobius.waila:wthit-api:neo-${property("deps.wthit_version")}")
-    compileOnly("maven.modrinth:eiv:${property("deps.eiv")}-neoforge")
     compileOnly("maven.modrinth:jei:${property("deps.jei")}-neoforge")
+    compileOnly("cc.cassian.rrv:reliable-recipe-viewer-fabric:${property("deps.rrv")}")
+    runtimeOnly("cc.cassian.rrv:reliable-recipe-viewer-fabric:${property("deps.rrv")}")
 
 }
 
@@ -158,8 +166,8 @@ loom.runs.named("server") {
 
 java {
     withSourcesJar()
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 val additionalVersionsStr = findProperty("publish.additionalVersions") as String?
@@ -186,15 +194,14 @@ publishMods {
         minecraftVersions.add(property("deps.minecraft").toString())
         minecraftVersions.addAll(additionalVersions)
         requires("fabric-api")
-        optional("cloth-config")
-        optional("jade")
-        optional("modmenu")
+        optional("mcqoy")
+        optional("rrv")
     }
 
     curseforge {
         projectId = property("publish.curseforge") as String
         accessToken = env.CURSEFORGE_API_KEY.orNull()
-        minecraftVersions.add(stonecutter.current.version)
+        minecraftVersions.add(property("publish.curseforge_minecraft_version").toString())
         minecraftVersions.addAll(additionalVersions)
         requires("fabric-api")
     }
@@ -203,8 +210,8 @@ publishMods {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "cc.cassian.item-descriptions"
-            artifactId = "item-descriptions-fabric"
+            groupId = "cc.cassian.cauldrons"
+            artifactId = "toil-and-trouble-fabric"
             version = "${property("mod.version")}+${property("deps.minecraft")}"
 
             from(components["java"])

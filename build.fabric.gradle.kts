@@ -162,9 +162,9 @@ dependencies {
     }
 
     // Recipe Viewers
-    if (hasProperty("deps.eiv")) {
-        modCompileOnly("maven.modrinth:eiv:${property("deps.eiv")}-fabric")
-        modLocalRuntime("maven.modrinth:eiv:${property("deps.eiv")}-fabric")
+    if (hasProperty("deps.rrv")) {
+        modCompileOnly("cc.cassian.rrv:reliable-recipe-viewer-fabric:${property("deps.rrv")}")
+        modLocalRuntime("cc.cassian.rrv:reliable-recipe-viewer-fabric:${property("deps.rrv")}")
     }
     if (hasProperty("deps.emi")) {
         modCompileOnly("dev.emi:emi-fabric:${property("deps.emi")}:api")
@@ -227,7 +227,7 @@ publishMods {
     file = tasks.remapJar.map { it.archiveFile.get() }
     additionalFiles.from(tasks.remapSourcesJar.map { it.archiveFile.get() })
 
-    type = BETA
+    type = STABLE
     displayName = "${property("mod.name")} ${property("mod.version")} for ${stonecutter.current.version} Fabric"
     version = "${property("mod.version")}+${property("deps.minecraft")}-fabric"
     changelog = provider { rootProject.file("CHANGELOG-LATEST.md").readText() }
@@ -240,6 +240,7 @@ publishMods {
         minecraftVersions.addAll(additionalVersions)
         requires("fabric-api")
         optional("mcqoy")
+        optional("rrv")
 
     }
 

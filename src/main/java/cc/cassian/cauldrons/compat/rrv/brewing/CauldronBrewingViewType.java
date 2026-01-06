@@ -1,10 +1,9 @@
-package cc.cassian.cauldrons.compat.eiv.dipping;
-
-//? if >1.21.4 && <26 {
+package cc.cassian.cauldrons.compat.rrv.brewing;
+//? if >1.21.11 {
 
 import cc.cassian.cauldrons.CauldronMod;
-import de.crafty.eiv.common.api.recipe.IEivRecipeViewType;
-import de.crafty.eiv.common.recipe.inventory.RecipeViewMenu;
+import cc.cassian.rrv.api.recipe.ReliableClientRecipeType;
+import cc.cassian.rrv.common.recipe.inventory.RecipeViewMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
@@ -13,13 +12,13 @@ import net.minecraft.world.item.Items;
 import java.util.Collections;
 import java.util.List;
 
-public class CauldronDippingViewType implements IEivRecipeViewType {
+public class CauldronBrewingViewType implements ReliableClientRecipeType {
 
-    public static final CauldronDippingViewType INSTANCE = new CauldronDippingViewType();
+    public static final CauldronBrewingViewType INSTANCE = new CauldronBrewingViewType();
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("emi.category.toil_and_trouble.dipping");
+        return Component.translatable("emi.category.toil_and_trouble.brewing");
     }
 
     @Override
@@ -44,14 +43,14 @@ public class CauldronDippingViewType implements IEivRecipeViewType {
 
     @Override
     public void placeSlots(RecipeViewMenu.SlotDefinition slotDefinition) {
-        slotDefinition.addItemSlot(0, 5, 5);
-        slotDefinition.addItemSlot(1, 41, 5);
-        slotDefinition.addItemSlot(2, 78, 5);
+        slotDefinition.addItemSlot(0, 5, 4);
+        slotDefinition.addItemSlot(1, 41, 4);
+        slotDefinition.addItemSlot(2, 78, 4);
     }
 
     @Override
     public Identifier getId() {
-        return CauldronMod.of("dipping");
+        return CauldronMod.of("brewing");
     }
 
     @Override
@@ -64,5 +63,4 @@ public class CauldronDippingViewType implements IEivRecipeViewType {
         return Collections.singletonList(Items.CAULDRON.getDefaultInstance());
     }
 }
-
 //?}

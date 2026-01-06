@@ -1,21 +1,20 @@
-package cc.cassian.cauldrons.compat.eiv;
+package cc.cassian.cauldrons.compat.rrv;
 
-//? if >1.21.4 && <26 {
+//? if >1.21.10 {
 
 import cc.cassian.cauldrons.CauldronMod;
-import cc.cassian.cauldrons.compat.eiv.brewing.CauldronBrewingServerRecipe;
-import cc.cassian.cauldrons.compat.eiv.brewing.CauldronBrewingViewRecipe;
-import cc.cassian.cauldrons.compat.eiv.dipping.CauldronDippingServerRecipe;
-import cc.cassian.cauldrons.compat.eiv.dipping.CauldronDippingViewRecipe;
+import cc.cassian.cauldrons.compat.rrv.brewing.CauldronBrewingServerRecipe;
+import cc.cassian.cauldrons.compat.rrv.brewing.CauldronBrewingViewRecipe;
+import cc.cassian.cauldrons.compat.rrv.dipping.CauldronDippingServerRecipe;
+import cc.cassian.cauldrons.compat.rrv.dipping.CauldronDippingViewRecipe;
 import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
 import cc.cassian.cauldrons.registry.CauldronModItems;
-import de.crafty.eiv.common.api.IExtendedItemViewIntegration;
-import de.crafty.eiv.common.api.recipe.ItemView;
-import de.crafty.eiv.common.builtin.brewing.BrewingServerRecipe;
-import de.crafty.eiv.common.extra.FluidStack;
-import de.crafty.eiv.common.recipe.ServerRecipeManager;
-import de.crafty.eiv.common.recipe.inventory.SlotContent;
+import cc.cassian.rrv.api.ReliableRecipeViewerPlugin;
+import cc.cassian.rrv.api.recipe.ItemView;
+import cc.cassian.rrv.common.extra.FluidStack;
+import cc.cassian.rrv.common.recipe.ServerRecipeManager;
+import cc.cassian.rrv.common.recipe.inventory.SlotContent;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
@@ -25,15 +24,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
 import oshi.util.tuples.Pair;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
-public class CauldronModEIVPlugin implements IExtendedItemViewIntegration {
+public class CauldronModRRVPlugin implements ReliableRecipeViewerPlugin {
     @Override
     public void onIntegrationInitialize() {
         // register the server recipes
-        ItemView.addRecipeProvider(recipeList -> {
+        ItemView.addServerRecipeProvider(recipeList -> {
             ServerRecipeManager.INSTANCE.getRecipesForType(CauldronModRecipes.BREWING.get()).forEach(recipe -> {
                 recipeList.add(new CauldronBrewingServerRecipe(recipe.getReagent(), recipe.getPotion(), recipe.getResultPotion()));
             });
@@ -43,10 +41,10 @@ public class CauldronModEIVPlugin implements IExtendedItemViewIntegration {
         });
 
         // and all the client recipes
-        ItemView.registerRecipeWrapper(CauldronBrewingServerRecipe.TYPE, modRecipe -> {
+        ItemView.registerClientRecipeWrapper(CauldronBrewingServerRecipe.TYPE, modRecipe -> {
             return Collections.singletonList(new CauldronBrewingViewRecipe(modRecipe));
         });
-        ItemView.registerRecipeWrapper(CauldronDippingServerRecipe.TYPE, modRecipe -> {
+        ItemView.registerClientRecipeWrapper(CauldronDippingServerRecipe.TYPE, modRecipe -> {
             return Collections.singletonList(new CauldronDippingViewRecipe(modRecipe));
         });
 
