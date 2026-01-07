@@ -36,6 +36,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
@@ -161,7 +162,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     *///?}
 
     @Deprecated
-    public Pair<InteractionResult, ItemStack> insert(ItemStack itemStack) {
+    public Pair<ItemInteractionResult, ItemStack> insert(ItemStack itemStack) {
         var potionQuantity = getFillLevel();
         // fill with potion
         if (itemStack.has(DataComponents.POTION_CONTENTS) && (contents.isPotion() || contents == CauldronContents.EMPTY) && potionQuantity < 3 && !itemStack.is(CauldronModTags.CANNOT_FILL_CAULDRON)) {
@@ -171,11 +172,11 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
             if (currentPotion.isEmpty()) {
                 this.contents = new CauldronContents(insertedPotion);
                 setFillLevel(1);
-                return new Pair<>(InteractionResult.SUCCESS, Items.GLASS_BOTTLE.getDefaultInstance());
+                return new Pair<>(ItemInteractionResult.SUCCESS, Items.GLASS_BOTTLE.getDefaultInstance());
             }
             else if (insertedPotion.is(currentPotion.get())) {
                 setFillLevel(potionQuantity+1);
-                return new Pair<>(InteractionResult.SUCCESS, Items.GLASS_BOTTLE.getDefaultInstance());
+                return new Pair<>(ItemInteractionResult.SUCCESS, Items.GLASS_BOTTLE.getDefaultInstance());
             }
         }
         // insert as inventory
@@ -193,7 +194,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
                 }
                 progress = 0;
             }
-            return new Pair<>(InteractionResult.SUCCESS, ItemStack.EMPTY);
+            return new Pair<>(ItemInteractionResult.SUCCESS, ItemStack.EMPTY);
         }
         return new Pair<>(CauldronModEvents.PASS_TO_EMPTY_HAND, ItemStack.EMPTY);
     }

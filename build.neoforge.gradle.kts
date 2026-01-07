@@ -99,6 +99,13 @@ repositories {
         name = "Kotlin for Forge"
         setUrl("https://thedarkcolour.github.io/KotlinForForge/")
     }
+    maven {
+        name = "JEI - Jared's maven"
+        url = uri("https://maven.blamejared.com/")
+        content {
+            includeGroup("mezz.jei")
+        }
+    }
 }
 
 dependencies {
@@ -146,7 +153,7 @@ dependencies {
         compileOnly("dev.emi:emi-neoforge:${property("deps.emi")}:api")
         runtimeOnly("dev.emi:emi-neoforge:${property("deps.emi")}")
     }
-    //    compileOnly("mezz.jei:jei-${property("deps.minecraft")}-neoforge:${property("deps.jei")}")
+    compileOnly("mezz.jei:jei-${property("deps.minecraft")}-neoforge:${property("deps.jei")}")
 
 }
 

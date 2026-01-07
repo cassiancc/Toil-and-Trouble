@@ -2,8 +2,10 @@ package cc.cassian.cauldrons;
 
 //? if fabric
 import net.fabricmc.loader.api.FabricLoader;
-//? if neoforge
-/*import net.neoforged.fml.loading.FMLPaths;*/
+//? if neoforge {
+/*import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLPaths;
+*///?}
 
 import java.nio.file.Path;
 
@@ -17,6 +19,11 @@ public class Platform {
     }
 
 	public static boolean isModLoaded(String mod) {
+		//? fabric {
 		return FabricLoader.getInstance().isModLoaded(mod);
+		//?} else {
+		/*return ModList.get().isLoaded(mod);
+		*///?}
+
 	}
 }

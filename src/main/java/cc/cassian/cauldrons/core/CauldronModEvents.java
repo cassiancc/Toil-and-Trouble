@@ -34,15 +34,15 @@ import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.setFillLevel;
 import static net.minecraft.world.level.block.Block.popResourceFromFace;
 
 public class CauldronModEvents {
-    public static InteractionResult PASS_TO_EMPTY_HAND =
+    public static ItemInteractionResult PASS_TO_EMPTY_HAND =
     //? if <1.21.4 {
-    /*InteractionResult.PASS
+            /*ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
     *///?} else {
-     InteractionResult.TRY_WITH_EMPTY_HAND
+     ItemInteractionResult.TRY_WITH_EMPTY_HAND
      //?}
     ;
 
-    public static InteractionResult useBlock(Player player, Level level, InteractionHand interactionHand, BlockPos pos, Direction direction) {
+    public static ItemInteractionResult useBlock(Player player, Level level, InteractionHand interactionHand, BlockPos pos, Direction direction) {
         BlockState blockState = level.getBlockState(pos);
         ItemStack stack = player.getItemInHand(interactionHand);
         if (blockState.is(Blocks.CAULDRON) && !stack.is(Items.WATER_BUCKET)) {
@@ -66,7 +66,7 @@ public class CauldronModEvents {
         return PASS_TO_EMPTY_HAND;
     }
 
-    public static InteractionResult insert(
+    public static ItemInteractionResult insert(
             ItemStack itemStack, BlockState blockState, Level level, BlockPos pos, @Nullable Player player, @Nullable InteractionHand interactionHand, @Nullable Direction direction
     ) {
         if (direction == null) {
@@ -91,18 +91,18 @@ public class CauldronModEvents {
                                 itemStack.setCount(itemStack.getCount()-1);
                             addItem(player, interactionHand, level, pos, direction, recipe.getResultItem());
                             setFillLevel(blockState, level, pos, newFillLevel);
-                            return InteractionResult.SUCCESS;
+                            return ItemInteractionResult.SUCCESS;
                         }
                     }
                     return tryHardcodedRecipe(itemStack, blockState, cauldronBlockEntity, level, pos, player, interactionHand, direction);
                 }
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
         return PASS_TO_EMPTY_HAND;
     }
 
-    public static InteractionResult tryHardcodedRecipe(
+    public static ItemInteractionResult tryHardcodedRecipe(
             ItemStack itemStack, BlockState blockState, CauldronBlockEntity cauldronBlockEntity, Level level, BlockPos pos, @Nullable Player player, @Nullable InteractionHand interactionHand, @Nullable Direction direction
     ) {
         if (itemStack.is(Items.ARROW) && itemStack.getCount()>=16 && cauldronBlockEntity.getFillLevel()>=1) {
@@ -121,7 +121,7 @@ public class CauldronModEvents {
             stack.setCount(tippedCount);
             setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
             addItem(player, interactionHand, level, pos, direction, stack);
-            return InteractionResult.CONSUME;
+            return ItemInteractionResult.CONSUME;
         } else if (itemStack.is(Items.GLASS_BOTTLE) && cauldronBlockEntity.getContents().isPotion() && cauldronBlockEntity.getFillLevel()>=1) {
             var fillLevel = 1;
             if (itemStack.getCount()==2 && cauldronBlockEntity.getFillLevel()==2) {
@@ -139,9 +139,9 @@ public class CauldronModEvents {
             stack.setCount(fillLevel);
             setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
             addItem(player, interactionHand, level, pos, direction, stack);
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         } else {
-            Pair<InteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
+            Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
             if (!(insert.getA() == PASS_TO_EMPTY_HAND)) {
                 if (player == null || !player.isCreative())
                     itemStack.setCount(itemStack.getCount()-1);

@@ -1,8 +1,5 @@
 ### Added
-- Support for JEI and RRV.
+- Support for JEI.
 
-### Changed
-- Improved RRV sprite (thanks ProbablyEkho!)
-
-### Removed
-- Support for EIV, which has not updated to 1.21.11. Please give Reliable Recipe Viewer a try once it's approved on Modrinth/CurseForge!
+### Fixed
+- Mundane potions can be crafted correctly.

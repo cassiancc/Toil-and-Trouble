@@ -37,6 +37,9 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
+import static net.minecraft.world.InteractionResult.SUCCESS_NO_ITEM_USED;
+import static org.apache.commons.compress.java.util.jar.Pack200.Packer.PASS;
+
 public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     public static final IntegerProperty POTION_QUANTITY = IntegerProperty.create("potion_quantity", 0, 3);
     public static final BooleanProperty BREWING = BooleanProperty.create("brewing");
@@ -82,11 +85,12 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
         return result;
         //?} else {
         /*return switch (result) {
-            case SUCCESS_NO_ITEM_USED, SUCCESS -> ItemInteractionResult.SUCCESS;
+            case SUCCESS -> ItemInteractionResult.SUCCESS;
             case CONSUME -> ItemInteractionResult.CONSUME;
             case CONSUME_PARTIAL -> ItemInteractionResult.CONSUME_PARTIAL;
-            case PASS -> ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-            case FAIL -> ItemInteractionResult.FAIL;
+            case PASS_TO_DEFAULT_BLOCK_INTERACTION -> ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+			case SKIP_DEFAULT_BLOCK_INTERACTION -> ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
+			case FAIL -> ItemInteractionResult.FAIL;
         };
         *///?}
     }
