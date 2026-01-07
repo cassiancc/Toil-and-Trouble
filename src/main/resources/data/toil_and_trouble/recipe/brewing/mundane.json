@@ -2,5 +2,5 @@
   "type": "toil_and_trouble:brewing",
   "reagent": "#toil_and_trouble:creates_mundane_potions",
   "potion": "minecraft:water",
-  "result": "minecraft:thick"
+  "result": "minecraft:mundane"
 }
