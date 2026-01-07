@@ -9,6 +9,8 @@ Cauldron Brewing recipes use the following format:
 <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="NBT Compound/JSON Object" />: The root object.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: Which recipe to use, in this case `toil_and_trouble:brewing`.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **reagent**: An ingredient that is consumed by the brew.\
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **item**: Optional: A resource location for an item.\
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **tag**: Optional: A resource location for an item tag.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Cauldron Contents" /> **potion**: A [Cauldron Contents](cauldron-contents) data component that is consumed by the brew.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Cauldron Contents" /> **result**: A [Cauldron Contents](cauldron-contents) data component that will end up as the Cauldron Contents.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **particle_type**: Optional: A particle type displayed after a successful brew, see [Particle Format](https://minecraft.wiki/w/Particle_format).\
@@ -20,7 +22,9 @@ An example recipe is below, which crafts an Awkward Potion from the `toil_and_tr
 ```json
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": "#toil_and_trouble:creates_awkward_potions",
+  "reagent": {
+    "tag": "toil_and_trouble:creates_awkward_potions"
+  },
   "potion": "minecraft:water",
   "result": "minecraft:awkward"
 }
@@ -30,7 +34,9 @@ As a more complicated example, this potion consumes a Nether Star to create a Ha
 ```json
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": "minecraft:nether_star",
+  "reagent": {
+    "item": "minecraft:nether_star"
+  },
   "potion": "minecraft:awkward",
   "result": {
     "custom_color": 16383998,
@@ -85,6 +91,8 @@ Cauldron Dipping recipes use the following format:
 <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="NBT Compound/JSON Object" />: The root object.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: Which recipe to use, in this case `toil_and_trouble:dipping`.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **reagent**: An ingredient that is consumed by the brew.\
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **item**: Optional: A resource location for an item.\
+|	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **tag**: Optional: A resource location for an item tag.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/boolean" title="Boolean" /> **requires_heat**: Optional, defaults to config: Whether heat is required to complete this recipe.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Cauldron Contents" /> **potion**: A [Cauldron Contents](cauldron-contents) data component that is consumed by the brew.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **result**: An item stack that will end up in an empty Cauldron.\
@@ -100,7 +108,9 @@ An example recipe is below, which crafts an Cooked Cod with the custom name Awkw
 ```json
 {
   "type": "toil_and_trouble:dipping",
-  "reagent": "#minecraft:fishes",
+  "reagent": {
+    "tag": "minecraft:fishes"
+  },
   "potion": "minecraft:awkward",
   "result": {
     "id": "minecraft:cooked_cod",
