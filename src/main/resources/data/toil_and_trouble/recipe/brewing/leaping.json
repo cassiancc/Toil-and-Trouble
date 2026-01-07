@@ -1,6 +1,8 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": "minecraft:rabbit_foot",
+  "reagent": {
+    "item": "minecraft:rabbit_foot"
+  },
   "potion": "minecraft:awkward",
   "result": "minecraft:leaping"
 }

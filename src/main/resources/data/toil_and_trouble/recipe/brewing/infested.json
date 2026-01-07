@@ -1,6 +1,8 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": "minecraft:stone",
+  "reagent": {
+    "item": "minecraft:stone"
+  },
   "potion": "minecraft:awkward",
   "result": "minecraft:infested"
 }

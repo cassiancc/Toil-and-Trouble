@@ -1,6 +1,8 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": "minecraft:magma_cream",
+  "reagent": {
+    "item": "minecraft:magma_cream"
+  },
   "potion": "minecraft:awkward",
   "result": "minecraft:fire_resistance"
 }

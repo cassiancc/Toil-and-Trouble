@@ -1,6 +1,8 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": "minecraft:chorus_fruit",
+  "reagent": {
+    "item": "minecraft:chorus_fruit"
+  },
   "potion": {
     "id": "toil_and_trouble:honey",
     "amount": 3

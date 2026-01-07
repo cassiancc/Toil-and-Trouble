@@ -1,6 +1,8 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": "minecraft:redstone",
+  "reagent": {
+    "item": "minecraft:redstone"
+  },
   "potion": "minecraft:weakness",
   "result": "minecraft:long_weakness"
 }

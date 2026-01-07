@@ -1,6 +1,8 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": "minecraft:honeycomb",
+  "reagent": {
+    "item": "minecraft:honeycomb"
+  },
   "potion": {
     "id": "toil_and_trouble:honey"
   },
