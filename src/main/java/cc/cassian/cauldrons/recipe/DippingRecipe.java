@@ -43,7 +43,10 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     @Override
-    public ItemStack assemble(BrewingRecipeInput input, HolderLookup.Provider registries) {
+    public ItemStack assemble(BrewingRecipeInput input
+              //? <26
+            /*, HolderLookup.Provider registries*/
+    ) {
         return this.result.copy();
     }
 

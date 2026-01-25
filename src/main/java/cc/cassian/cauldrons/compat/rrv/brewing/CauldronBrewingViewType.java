@@ -1,5 +1,5 @@
 package cc.cassian.cauldrons.compat.rrv.brewing;
-//? if >1.21.11 {
+//? if >1.21.7 {
 
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.rrv.api.recipe.ReliableClientRecipeType;

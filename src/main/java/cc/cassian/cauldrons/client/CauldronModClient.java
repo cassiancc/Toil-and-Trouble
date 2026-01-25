@@ -7,11 +7,14 @@ import cc.cassian.cauldrons.core.CauldronModHelpers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.text.WordUtils;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,4 +42,12 @@ public class CauldronModClient {
         }
         return iTooltip;
     }
+
+	public static int getColor(BlockState state, @Nullable BlockAndTintGetter view, @Nullable BlockPos pos, int tintIndex) {
+		if (view == null || pos == null || tintIndex != 0) return 9551193;
+		if (view.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
+			return cauldronBlockEntity.getPotionColour();
+		}
+		return 9551193;
+	}
 }

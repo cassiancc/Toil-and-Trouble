@@ -100,7 +100,11 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     @Override
     public void loadAdditional(ValueInput tag) {
         super.loadAdditional(tag);
-        Optional<ItemStack> inventory = tag.read("cauldron.inventory", ItemStack.SINGLE_ITEM_CODEC);
+        //? >26 {
+        Optional<ItemStack> inventory = tag.read("cauldron.inventory", ItemStack.CODEC);
+        //?} else {
+        /*Optional<ItemStack> inventory = tag.read("cauldron.inventory", ItemStack.SINGLE_ITEM_CODEC);
+         *///?}
         if (inventory.isPresent())
             reagent = inventory.get();
         else reagent = ItemStack.EMPTY;
@@ -116,7 +120,12 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     @Override
     public void saveAdditional(ValueOutput tag) {
         if (!reagent.isEmpty()) {
-            tag.store("cauldron.inventory", ItemStack.SINGLE_ITEM_CODEC, reagent);
+            //? >26 {
+            tag.store("cauldron.inventory", ItemStack.CODEC, reagent);
+            //?} else {
+            /*tag.store("cauldron.inventory", ItemStack.SINGLE_ITEM_CODEC, reagent);
+            *///?}
+
         }
         tag.putInt("cauldron.progress", progress);
         tag.putInt("cauldron.max_progress", maxProgress);
