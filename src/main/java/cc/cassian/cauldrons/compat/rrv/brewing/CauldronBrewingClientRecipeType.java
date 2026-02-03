@@ -12,9 +12,9 @@ import net.minecraft.world.item.Items;
 import java.util.Collections;
 import java.util.List;
 
-public class CauldronBrewingViewType implements ReliableClientRecipeType {
+public class CauldronBrewingClientRecipeType implements ReliableClientRecipeType {
 
-    public static final CauldronBrewingViewType INSTANCE = new CauldronBrewingViewType();
+    public static final CauldronBrewingClientRecipeType INSTANCE = new CauldronBrewingClientRecipeType();
 
     @Override
     public Component getDisplayName() {

@@ -4,7 +4,7 @@ package cc.cassian.cauldrons.compat.rrv;
 
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.compat.rrv.brewing.CauldronBrewingServerRecipe;
-import cc.cassian.cauldrons.compat.rrv.brewing.CauldronBrewingViewRecipe;
+import cc.cassian.cauldrons.compat.rrv.brewing.CauldronBrewingClientRecipe;
 import cc.cassian.cauldrons.compat.rrv.dipping.CauldronDippingServerRecipe;
 import cc.cassian.cauldrons.compat.rrv.dipping.CauldronDippingViewRecipe;
 import cc.cassian.cauldrons.core.CauldronContents;
@@ -41,12 +41,12 @@ public class CauldronModRRVPlugin implements ReliableRecipeViewerPlugin {
         });
 
         // and all the client recipes
-        ItemView.registerClientRecipeWrapper(CauldronBrewingServerRecipe.TYPE, modRecipe -> {
-            return Collections.singletonList(new CauldronBrewingViewRecipe(modRecipe));
-        });
-        ItemView.registerClientRecipeWrapper(CauldronDippingServerRecipe.TYPE, modRecipe -> {
-            return Collections.singletonList(new CauldronDippingViewRecipe(modRecipe));
-        });
+        ItemView.addClientRecipeWrapper(CauldronBrewingServerRecipe.TYPE, modRecipe -> {
+			return Collections.singletonList(new CauldronBrewingClientRecipe(modRecipe));
+		});
+        ItemView.addClientRecipeWrapper(CauldronDippingServerRecipe.TYPE, modRecipe -> {
+			return Collections.singletonList(new CauldronDippingViewRecipe(modRecipe));
+		});
 
         // hide cauldron contents
         // TODO move this into an event if/when neoforge 1.21.8

@@ -10,12 +10,12 @@ import cc.cassian.rrv.common.recipe.inventory.SlotContent;
 
 import java.util.List;
 
-public class CauldronBrewingViewRecipe implements ReliableClientRecipe {
+public class CauldronBrewingClientRecipe implements ReliableClientRecipe {
     private final SlotContent reagent;
     private final CauldronContents potion;
     private final CauldronContents result;
 
-    public CauldronBrewingViewRecipe(CauldronBrewingServerRecipe modRecipe) {
+    public CauldronBrewingClientRecipe(CauldronBrewingServerRecipe modRecipe) {
         this.reagent = SlotContent.of(modRecipe.getReagent());
         this.potion = modRecipe.getPotion();
         this.result = modRecipe.getResult();
@@ -23,7 +23,7 @@ public class CauldronBrewingViewRecipe implements ReliableClientRecipe {
 
     @Override
     public ReliableClientRecipeType getViewType() {
-        return CauldronBrewingViewType.INSTANCE;
+        return CauldronBrewingClientRecipeType.INSTANCE;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class CauldronBrewingViewRecipe implements ReliableClientRecipe {
 
     @Override
     public List<SlotContent> getResults() {
-        return List.of(CauldronModRRVPlugin.getResultForDisplay(potion).getB());
+        return List.of(CauldronModRRVPlugin.getResultForDisplay(result).getA());
     }
 }
 //?}
