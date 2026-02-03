@@ -49,29 +49,7 @@ public class CauldronModRRVPlugin implements ReliableRecipeViewerPlugin {
 		});
 
         // hide cauldron contents
-        // TODO move this into an event if/when neoforge 1.21.8
         ItemView.excludeItem(CauldronModItems.CAULDRON_CONTENTS.get());
-    }
-
-    public static final Map<Identifier, SlotContent> OVERRIDES = Map.of(
-            Identifier.withDefaultNamespace("lava_cauldron"), SlotContent.of(new FluidStack(Fluids.LAVA)),
-            Identifier.withDefaultNamespace("water_cauldron"), SlotContent.of(new FluidStack(Fluids.WATER)),
-            Identifier.withDefaultNamespace("powder_snow_cauldron"), SlotContent.of(Ingredient.of(Blocks.POWDER_SNOW)),
-            CauldronMod.of("lava"), SlotContent.of(new FluidStack(Fluids.LAVA)),
-            CauldronMod.of("empty"), SlotContent.of(Items.AIR)
-    );
-
-    public static Pair<SlotContent, SlotContent> getResultForDisplay(CauldronContents resultPotion) {
-        if (resultPotion.potion().isPresent()) {
-            var potion = resultPotion.potion().get();
-            return new Pair<>(SlotContent.of(PotionContents.createItemStack(Items.POTION, potion)), SlotContent.of(PotionContents.createItemStack(CauldronModItems.CAULDRON_CONTENTS.get(), potion)));
-        } else if (OVERRIDES.containsKey(resultPotion.id())) {
-            var stack = OVERRIDES.get(resultPotion.id());
-            return new Pair<>(stack, stack);
-        } else {
-            var stack = SlotContent.of(BuiltInRegistries.ITEM.getOptional(resultPotion.id()).orElse(Items.AIR));
-            return new Pair<>(stack, stack);
-        }
     }
 }
 //?}

@@ -97,11 +97,24 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
         return true;
     }
 
+    //? if >26 {
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public String group() {
+        return "";
+    }
+    //?}
+
     public CauldronContents getResultPotion() {
         return this.resultPotion;
     }
 
-    public static class Serializer implements RecipeSerializer<InsertingRecipe> {
+    //? if <26
+    /*public static class Serializer implements RecipeSerializer<InsertingRecipe> {*/
         public static final MapCodec<InsertingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 ItemStack.CODEC.fieldOf("item").forGetter(r->r.reagent),
                 CauldronContents.CODEC.fieldOf("contents").forGetter(r->r.potion),
@@ -112,7 +125,10 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
 
         ).apply(inst, InsertingRecipe::new));
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, InsertingRecipe> STREAM_CODEC = StreamCodec.of(InsertingRecipe.Serializer::toNetwork, InsertingRecipe.Serializer::fromNetwork);
+    //? if >26
+    public static final StreamCodec<RegistryFriendlyByteBuf, InsertingRecipe> STREAM_CODEC = StreamCodec.of(InsertingRecipe::toNetwork, InsertingRecipe::fromNetwork);
+    //? if <26
+    /*public static final StreamCodec<RegistryFriendlyByteBuf, InsertingRecipe> STREAM_CODEC = StreamCodec.of(InsertingRecipe.Serializer::toNetwork, InsertingRecipe.Serializer::fromNetwork);*/
 
         private static InsertingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
             var reagent = ItemStack.STREAM_CODEC.decode(buf);
@@ -133,7 +149,8 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
             buf.writeInt(recipe.amount);
         }
 
-        @Override
+        //? if <26 {
+        /*@Override
         public MapCodec<InsertingRecipe> codec() {
             return CODEC;
         }
@@ -143,4 +160,5 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
             return STREAM_CODEC;
         }
     }
+    *///?}
 }

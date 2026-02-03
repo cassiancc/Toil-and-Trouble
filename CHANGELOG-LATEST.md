@@ -1,2 +1,5 @@
+### Added
+- Support for 26.1-snapshot-6
+
 ### Fixed
-- Mundane potion recipe.
+- Some potions not displaying in RRV.

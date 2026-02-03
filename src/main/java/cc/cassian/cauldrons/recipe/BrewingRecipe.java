@@ -129,11 +129,24 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         return true;
     }
 
+    //? if >26 {
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public String group() {
+        return "";
+    }
+    //?}
+
     public ParticleOptions getParticleType() {
         return particleType;
     }
 
-    public static class Serializer implements RecipeSerializer<BrewingRecipe> {
+    //? if <26
+    /*public static class Serializer implements RecipeSerializer<BrewingRecipe> {*/
         public static final MapCodec<BrewingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 Ingredient.CODEC.fieldOf("reagent").forGetter(r->r.reagent),
                 CauldronContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
@@ -142,7 +155,10 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
                 Codec.BOOL.optionalFieldOf("requires_heat", CauldronMod.CONFIG.requiresHeat.value()).forGetter(r->r.requiresHeat)
         ).apply(inst, BrewingRecipe::new));
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, BrewingRecipe> STREAM_CODEC = StreamCodec.of(BrewingRecipe.Serializer::toNetwork, BrewingRecipe.Serializer::fromNetwork);
+        //? if >26
+        public static final StreamCodec<RegistryFriendlyByteBuf, BrewingRecipe> STREAM_CODEC = StreamCodec.of(BrewingRecipe::toNetwork, BrewingRecipe::fromNetwork);
+        //? if <26
+        /*public static final StreamCodec<RegistryFriendlyByteBuf, BrewingRecipe> STREAM_CODEC = StreamCodec.of(BrewingRecipe.Serializer::toNetwork, BrewingRecipe.Serializer::fromNetwork);*/
 
         private static BrewingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
             var reagent = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
@@ -161,7 +177,8 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
             buf.writeBoolean(recipe.requiresHeat);
         }
 
-        @Override
+        //? if <26 {
+        /*@Override
         public MapCodec<BrewingRecipe> codec() {
             return CODEC;
         }
@@ -171,4 +188,5 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
             return STREAM_CODEC;
         }
     }
+    *///?}
 }
