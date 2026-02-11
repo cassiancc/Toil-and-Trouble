@@ -24,16 +24,7 @@ public class CauldronModBlocks {
     private static Supplier<Block> register(ResourceKey<Block> resourceKey, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties) {
         // register block
         // return
-        return CommonRegistry.registerBlock(resourceKey
-                //? if neoforge {
-                /*.location()
-                *///?} else {
-                .identifier()
-                //?}
-                .getPath(), ()-> function.apply(properties
-                //? if >1.21.2
-                .setId(resourceKey)
-        ));
+        return CommonRegistry.registerBlock(resourceKey.identifier().getPath(), ()-> function.apply(properties.setId(resourceKey)));
     }
 
     private static ResourceKey<Block> registryKey(String string) {

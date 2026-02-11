@@ -24,26 +24,14 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 
-public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity
-        //? if >1.21.9
-        , CauldronBlockEntityRenderState
-        > {
+public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity, CauldronBlockEntityRenderState> {
     private static final float SIZE = 0.375F;
-    //? if >1.21.9 {
     private final ItemModelResolver itemRenderer;
-    //?} else {
-    /*private final ItemRenderer itemRenderer;
-    *///?}
 
     public CauldronRenderer(BlockEntityRendererProvider.Context context) {
-        //? if >1.21.9 {
         this.itemRenderer = context.itemModelResolver();
-         //?} else {
-        /*this.itemRenderer = context.getItemRenderer();
-        *///?}
     }
 
-    //? if >1.21.9 {
     @Override
     public CauldronBlockEntityRenderState createRenderState() {
         return new CauldronBlockEntityRenderState();
@@ -82,26 +70,6 @@ public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity
         itemStack.submit(poseStack, submitNodeCollector, blockEntityRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
     }
-        //?} else {
-    /*@Override
-    public void render(CauldronBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay
-                       //? if >1.21.4
-                       ,Vec3 cameraPos
-    ) {
-        ItemStack itemStack = blockEntity.getItem();
-        int k = (int)blockEntity.getBlockPos().asLong();
-
-        if (itemStack != ItemStack.EMPTY) {
-            poseStack.pushPose();
-            poseStack.translate(0.5F, 0.44921875F, 0.5F);
-            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-            poseStack.translate(0.0, 0, 0.0F);
-            poseStack.scale(SIZE, SIZE, SIZE);
-            this.itemRenderer.renderStatic(itemStack, ItemDisplayContext.FIXED, packedLight, packedOverlay, poseStack, bufferSource, blockEntity.getLevel(), k);
-            poseStack.popPose();
-        }
-    }
-    *///?}
 
 
 }

@@ -16,10 +16,6 @@ public class CauldronModHelpers {
     }
 
     public static boolean hasShiftDown() {
-        //? if >1.21.8 {
         return Minecraft.getInstance().hasShiftDown();
-        //?} else {
-        /*return Screen.hasShiftDown();
-         *///?}
     }
 }

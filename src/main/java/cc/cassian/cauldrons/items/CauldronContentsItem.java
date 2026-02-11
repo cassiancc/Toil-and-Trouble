@@ -13,16 +13,9 @@ public class CauldronContentsItem extends PotionItem {
         super(properties);
     }
 
-    //? if >1.21.2 {
     @Override
     public Component getName(ItemStack stack) {
         PotionContents potionContents = stack.get(DataComponents.POTION_CONTENTS);
         return potionContents != null ? potionContents.getName(Items.POTION.getDescriptionId() + ".effect.") : super.getName(stack);
     }
-    //?} else {
-    /*@Override
-    public String getDescriptionId(ItemStack stack) {
-        return Potion.getName(stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).potion(), Items.POTION.getDescriptionId() + ".effect.");
-    }
-    *///?}
 }

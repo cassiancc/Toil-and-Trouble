@@ -12,29 +12,17 @@ import cc.cassian.cauldrons.recipe.DippingRecipe;
 import cc.cassian.cauldrons.registry.CauldronModBlockEntityTypes;
 import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import cc.cassian.cauldrons.registry.CauldronModSoundEvents;
-import com.google.gson.JsonElement;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.JsonOps;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-//? if >1.21.9 {
 import net.minecraft.core.particles.PowerParticleOption;
-//?}
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -51,10 +39,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-//? if >1.21.4 {
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-//?}
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
@@ -96,18 +82,11 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 
     }
 
-    //? if >1.21.4 {
     @Override
     public void loadAdditional(ValueInput tag) {
         super.loadAdditional(tag);
-        //? >26 {
         Optional<ItemStack> inventory = tag.read("cauldron.inventory", ItemStack.CODEC);
-        //?} else {
-        /*Optional<ItemStack> inventory = tag.read("cauldron.inventory", ItemStack.SINGLE_ITEM_CODEC);
-         *///?}
-        if (inventory.isPresent())
-            reagent = inventory.get();
-        else reagent = ItemStack.EMPTY;
+		reagent = inventory.orElse(ItemStack.EMPTY);
         progress = tag.getIntOr("cauldron.progress", 0);
         maxProgress = tag.getIntOr("cauldron.max_progress", 0);
         contents = tag.read("cauldron.potion", CauldronContents.CODEC).orElse(CauldronContents.EMPTY);
@@ -120,12 +99,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     @Override
     public void saveAdditional(ValueOutput tag) {
         if (!reagent.isEmpty()) {
-            //? >26 {
             tag.store("cauldron.inventory", ItemStack.CODEC, reagent);
-            //?} else {
-            /*tag.store("cauldron.inventory", ItemStack.SINGLE_ITEM_CODEC, reagent);
-            *///?}
-
         }
         tag.putInt("cauldron.progress", progress);
         tag.putInt("cauldron.max_progress", maxProgress);
@@ -136,38 +110,6 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         tag.store("cauldron.particle_type", ParticleTypes.CODEC, particleType);
         super.saveAdditional(tag);
     }
-    //?} else {
-    /*@Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
-        Tag inventory = tag.get("cauldron.inventory");
-        if (inventory != null)
-            reagent = ItemStack.parse(registries, inventory).orElse(ItemStack.EMPTY);
-        else reagent = ItemStack.EMPTY;
-        progress = tag.getInt("cauldron.progress");
-        maxProgress = tag.getInt("cauldron.max_progress");
-        contents = CauldronContents.CODEC.decode(NbtOps.INSTANCE, tag.get("cauldron.potion")).result().get().getFirst();
-        splashing = tag.getBoolean("cauldron.splashing");
-        lingering = tag.getBoolean("cauldron.lingering");
-        bubbleTimer = tag.getInt("cauldron.bubble_timer");
-        if (tag.contains("cauldron.particle_type"))
-            particleType = ParticleTypes.CODEC.decode(NbtOps.INSTANCE, tag.get("cauldron.particle_type")).result().get().getFirst();
-    }
-
-    @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        if (!reagent.isEmpty())
-            tag.put("cauldron.inventory", reagent.save(registries));
-        tag.putInt("cauldron.progress", progress);
-        tag.putInt("cauldron.max_progress", maxProgress);
-        tag.put("cauldron.potion", CauldronContents.CODEC.encodeStart(NbtOps.INSTANCE, contents).result().get());
-        tag.putBoolean("cauldron.splashing", splashing);
-        tag.putBoolean("cauldron.lingering", lingering);
-        tag.putInt("cauldron.bubble_timer", bubbleTimer);
-        tag.put("cauldron.particle_type", ParticleTypes.CODEC.encodeStart(NbtOps.INSTANCE, particleType).result().get());
-        super.saveAdditional(tag, registries);
-    }
-    *///?}
 
     @Deprecated
     public Pair<InteractionResult, ItemStack> insert(ItemStack itemStack) {
@@ -210,12 +152,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     public void brew(boolean cauldronHeated) {
         var input = new BrewingRecipeInput(reagent, contents, cauldronHeated);
         if ((level instanceof ServerLevel serverLevel)) {
-            var recipeAccess =
-            //? if >1.21.2 {
-            serverLevel.recipeAccess();
-            //?} else {
-            /*serverLevel.getRecipeManager();
-            *///?}
+            var recipeAccess = serverLevel.recipeAccess();
             Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = recipeAccess.getRecipeFor(CauldronModRecipes.BREWING.get(), input, level);
             if (brewingRecipe.isPresent()) {
                 this.contents = brewingRecipe.get().value().getResultPotion();
@@ -234,13 +171,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
             else if (reagent.is(CauldronModTags.CREATES_LINGERING_POTIONS) && this.contents.isPotion()) {
                 this.splashing = false;
                 this.lingering = true;
-                updateAfterBrewing(ItemStack.EMPTY, this.contents,
-                    //? if >1.21.9
-                    PowerParticleOption.create(
-                        ParticleTypes.DRAGON_BREATH
-                    //? if >1.21.9
-                    , 1)
-                );
+                updateAfterBrewing(ItemStack.EMPTY, this.contents, PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1));
             }
             else if (CauldronMod.CONFIG.useBrewingStandRecipes.value()) {
                 var potionBrewing = this.level.potionBrewing();

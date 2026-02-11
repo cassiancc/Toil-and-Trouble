@@ -12,12 +12,8 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-//? if <1.21.4 {
-/*import net.minecraft.world.ItemInteractionResult;
-*///?}
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-//? if >1.21.4
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -68,27 +64,10 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     }
 
     @Override
-    protected
-    //? if <1.21.4 {
-    /*ItemInteractionResult
-    *///?} else {
-    InteractionResult
-    //?}
-    useItemOn(
+    protected InteractionResult useItemOn(
             ItemStack itemStack, BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult
     ) {
-        var result = CauldronModEvents.insert(itemStack, blockState, level, pos, player, interactionHand, blockHitResult.getDirection());
-        //? if >1.21.1 {
-        return result;
-        //?} else {
-        /*return switch (result) {
-            case SUCCESS_NO_ITEM_USED, SUCCESS -> ItemInteractionResult.SUCCESS;
-            case CONSUME -> ItemInteractionResult.CONSUME;
-            case CONSUME_PARTIAL -> ItemInteractionResult.CONSUME_PARTIAL;
-            case PASS -> ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-            case FAIL -> ItemInteractionResult.FAIL;
-        };
-        *///?}
+		return CauldronModEvents.insert(itemStack, blockState, level, pos, player, interactionHand, blockHitResult.getDirection());
     }
 
     @Override
@@ -101,12 +80,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     }
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity
-                                //? if >1.21.4
-                                ,InsideBlockEffectApplier insideBlockEffectApplier
-                                //? if >1.21.9
-                                ,boolean bl
-    ) {
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity ,InsideBlockEffectApplier insideBlockEffectApplier,boolean bl) {
         if (!level.isClientSide() && level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
             if (entity instanceof ItemEntity itemEntity && itemEntity.tickCount>10) {
                 CauldronModEvents.insert(itemEntity.getItem(), state, level, pos, null, null, null);
@@ -174,9 +148,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState
-                                       //? if >1.21.4
-                                       ,boolean bl
+    public ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState,boolean bl
     ) {
         return new ItemStack(Blocks.CAULDRON);
     }
@@ -187,9 +159,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     }
 
     @Override
-    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos blockPos
-    //? if >1.21.9
-    , Direction direction
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos blockPos, Direction direction
     ) {
         return state.getValue(POTION_QUANTITY);
     }
@@ -199,7 +169,6 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
         builder.add(POTION_QUANTITY, BREWING, HEATED, CONTENTS);
     }
 
-    //? if >1.21.4 {
     @Override
     protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
         if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
@@ -209,23 +178,6 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
             level.updateNeighbourForOutputSignal(pos, this);
         }
     }
-    //?} else {
-    /*@Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock())) {
-            if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
-                if (level instanceof ServerLevel) {
-                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cauldronBlockEntity.getItem());
-                }
-
-                super.onRemove(state, level, pos, newState, movedByPiston);
-                level.updateNeighbourForOutputSignal(pos, this);
-            } else {
-                super.onRemove(state, level, pos, newState, movedByPiston);
-            }
-        }
-    }
-    *///?}
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {

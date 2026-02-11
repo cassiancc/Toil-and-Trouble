@@ -45,10 +45,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     @Override
-    public ItemStack assemble(BrewingRecipeInput input
-              //? <26
-            /*, HolderLookup.Provider registries*/
-    ) {
+    public ItemStack assemble(BrewingRecipeInput input) {
         return getResultItem();
     }
 
@@ -72,13 +69,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         if (result.potion().isPresent()) {
             return CauldronContents.createItemStack(Items.POTION, result);
         } else {
-            return BuiltInRegistries.BLOCK.
-                    //? if >1.21.2 {
-                    getValue
-                    //?} else {
-                    /*get
-                    *///?}
-            (result.id()).asItem().getDefaultInstance();
+            return BuiltInRegistries.BLOCK.getValue(result.id()).asItem().getDefaultInstance();
         }
     }
 
@@ -96,7 +87,6 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         return CauldronModRecipes.BREWING.get();
     }
 
-    //? if >1.21.2 {
     @Override
     public PlacementInfo placementInfo() {
         return PlacementInfo.NOT_PLACEABLE;
@@ -106,30 +96,12 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
     public RecipeBookCategory recipeBookCategory() {
         return null;
     }
-    //?} else {
-    /*@Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return getResultItem();
-    }
-
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        ItemStack cauldronContents = ItemStack.EMPTY;
-        return NonNullList.of(reagent, Ingredient.of(cauldronContents));
-    }
-    *///?}
 
     @Override
     public boolean isSpecial() {
         return true;
     }
 
-    //? if >26 {
     @Override
     public boolean showNotification() {
         return false;
@@ -139,15 +111,12 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
     public String group() {
         return "";
     }
-    //?}
 
     public ParticleOptions getParticleType() {
         return particleType;
     }
 
-    //? if <26
-    /*public static class Serializer implements RecipeSerializer<BrewingRecipe> {*/
-        public static final MapCodec<BrewingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+    public static final MapCodec<BrewingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 Ingredient.CODEC.fieldOf("reagent").forGetter(r->r.reagent),
                 CauldronContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
                 CauldronContents.CODEC.fieldOf("result").forGetter(r->r.result),
@@ -155,38 +124,22 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
                 Codec.BOOL.optionalFieldOf("requires_heat", CauldronMod.CONFIG.requiresHeat.value()).forGetter(r->r.requiresHeat)
         ).apply(inst, BrewingRecipe::new));
 
-        //? if >26
-        public static final StreamCodec<RegistryFriendlyByteBuf, BrewingRecipe> STREAM_CODEC = StreamCodec.of(BrewingRecipe::toNetwork, BrewingRecipe::fromNetwork);
-        //? if <26
-        /*public static final StreamCodec<RegistryFriendlyByteBuf, BrewingRecipe> STREAM_CODEC = StreamCodec.of(BrewingRecipe.Serializer::toNetwork, BrewingRecipe.Serializer::fromNetwork);*/
+    public static final StreamCodec<RegistryFriendlyByteBuf, BrewingRecipe> STREAM_CODEC = StreamCodec.of(BrewingRecipe::toNetwork, BrewingRecipe::fromNetwork);
 
-        private static BrewingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
-            var reagent = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
-            var potion = CauldronContents.STREAM_CODEC.decode(buf);
-            var result = CauldronContents.STREAM_CODEC.decode(buf);
-            var particleType = ParticleTypes.STREAM_CODEC.decode(buf);
-            var requiresHeat = buf.readBoolean();
-            return new BrewingRecipe(reagent, potion, result, particleType, requiresHeat);
-        }
-
-        private static void toNetwork(RegistryFriendlyByteBuf buf, BrewingRecipe recipe) {
-            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.reagent);
-            CauldronContents.STREAM_CODEC.encode(buf, recipe.potion);
-            CauldronContents.STREAM_CODEC.encode(buf, recipe.result);
-            ParticleTypes.STREAM_CODEC.encode(buf, recipe.particleType);
-            buf.writeBoolean(recipe.requiresHeat);
-        }
-
-        //? if <26 {
-        /*@Override
-        public MapCodec<BrewingRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, BrewingRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
+    private static BrewingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
+        var reagent = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
+        var potion = CauldronContents.STREAM_CODEC.decode(buf);
+        var result = CauldronContents.STREAM_CODEC.decode(buf);
+        var particleType = ParticleTypes.STREAM_CODEC.decode(buf);
+        var requiresHeat = buf.readBoolean();
+        return new BrewingRecipe(reagent, potion, result, particleType, requiresHeat);
     }
-    *///?}
+
+    private static void toNetwork(RegistryFriendlyByteBuf buf, BrewingRecipe recipe) {
+        Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.reagent);
+        CauldronContents.STREAM_CODEC.encode(buf, recipe.potion);
+        CauldronContents.STREAM_CODEC.encode(buf, recipe.result);
+        ParticleTypes.STREAM_CODEC.encode(buf, recipe.particleType);
+        buf.writeBoolean(recipe.requiresHeat);
+    }
 }

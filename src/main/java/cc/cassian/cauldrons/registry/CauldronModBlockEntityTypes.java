@@ -15,10 +15,7 @@ public class CauldronModBlockEntityTypes {
                     //? if fabric {
                     FabricBlockEntityTypeBuilder.create(CauldronBlockEntity::new,
                             CauldronModBlocks.BREWING_CAULDRON.get()).build()
-                    //?} else if >1.21.2 {
-                    /*new BlockEntityType<>(CauldronBlockEntity::new,Set.of(
-                            CauldronModBlocks.BREWING_CAULDRON.get()))
-                    *///?} else {
+                    //?} else {
                     /*BlockEntityType.Builder.of(CauldronBlockEntity::new,
                             CauldronModBlocks.BREWING_CAULDRON.get()).build(null)
                     *///?}

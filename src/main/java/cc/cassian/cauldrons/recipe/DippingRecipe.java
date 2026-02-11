@@ -43,10 +43,7 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     @Override
-    public ItemStack assemble(BrewingRecipeInput input
-              //? <26
-            /*, HolderLookup.Provider registries*/
-    ) {
+    public ItemStack assemble(BrewingRecipeInput input) {
         return this.result.copy();
     }
 
@@ -76,7 +73,6 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
         return CauldronModRecipes.DIPPING.get();
     }
 
-    //? if >1.21.2 {
     @Override
     public PlacementInfo placementInfo() {
         return PlacementInfo.NOT_PLACEABLE;
@@ -86,29 +82,12 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
     public RecipeBookCategory recipeBookCategory() {
         return null;
     }
-    //?} else {
-    /*@Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return getResultItem();
-    }
-
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return NonNullList.of(reagent);
-    }
-    *///?}
 
     @Override
     public boolean isSpecial() {
         return true;
     }
 
-    //? if >26 {
     @Override
     public boolean showNotification() {
         return false;
@@ -118,14 +97,11 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
     public String group() {
         return "";
     }
-    //?}
 
     public ParticleOptions getParticleType() {
         return particleType;
     }
 
-    //? if <26
-    /*public static class Serializer implements RecipeSerializer<DippingRecipe> {*/
         public static final MapCodec<DippingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 Ingredient.CODEC.fieldOf("reagent").forGetter(r->r.reagent),
                 CauldronContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
@@ -134,10 +110,7 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
                 Codec.BOOL.optionalFieldOf("requires_heat", CauldronMod.CONFIG.requiresHeat.value()).forGetter(r->r.requiresHeat)
         ).apply(inst, DippingRecipe::new));
 
-        //? if >26
         public static final StreamCodec<RegistryFriendlyByteBuf, DippingRecipe> STREAM_CODEC = StreamCodec.of(DippingRecipe::toNetwork, DippingRecipe::fromNetwork);
-        //? if <26
-        /*public static final StreamCodec<RegistryFriendlyByteBuf, DippingRecipe> STREAM_CODEC = StreamCodec.of(DippingRecipe.Serializer::toNetwork, DippingRecipe.Serializer::fromNetwork);*/
 
         private static DippingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
             var reagent = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
@@ -155,18 +128,4 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
             ParticleTypes.STREAM_CODEC.encode(buf, recipe.particleType);
             buf.writeBoolean(recipe.requiresHeat);
         }
-
-        //? if <26 {
-        /*@Override
-        public MapCodec<DippingRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, DippingRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-
-    }
-     *///?}
 }
