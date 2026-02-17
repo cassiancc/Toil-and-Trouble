@@ -52,12 +52,12 @@ public class CommonRegistry {
         return Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, CauldronMod.of(name), supplier.get());
     }
 
-    public static <B extends RecipeSerializer<?>> Supplier<B> registerRecipeSerializer(String name, Supplier<B> supplier) {
-        return register(name, supplier, BuiltInRegistries.RECIPE_SERIALIZER);
+    public static <B extends RecipeSerializer<?>> B registerRecipeSerializer(String name, Supplier<B> supplier) {
+        return register(name, supplier, BuiltInRegistries.RECIPE_SERIALIZER).get();
     }
 
-    public static <B extends RecipeType<?>> Supplier<B> registerRecipe(String name, Supplier<B> supplier) {
-        return register(name, supplier, BuiltInRegistries.RECIPE_TYPE);
+    public static <B extends RecipeType<?>> B registerRecipe(String name, Supplier<B> supplier) {
+        return register(name, supplier, BuiltInRegistries.RECIPE_TYPE).get();
     }
 
     public static <B extends BlockEntityType<?>> Supplier<B> registerBlockEntity(String name, Supplier<B> supplier) {

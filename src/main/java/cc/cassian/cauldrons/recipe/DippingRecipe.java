@@ -65,12 +65,12 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
 
     @Override
     public RecipeSerializer<DippingRecipe> getSerializer() {
-        return CauldronModRecipes.DIPPING_SERIALIZER.get();
+        return CauldronModRecipes.DIPPING_SERIALIZER;
     }
 
     @Override
     public RecipeType<DippingRecipe> getType() {
-        return CauldronModRecipes.DIPPING.get();
+        return CauldronModRecipes.DIPPING;
     }
 
     @Override

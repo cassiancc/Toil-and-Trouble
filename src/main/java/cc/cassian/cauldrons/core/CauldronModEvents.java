@@ -3,13 +3,10 @@ package cc.cassian.cauldrons.core;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.recipe.BrewingRecipeInput;
-import cc.cassian.cauldrons.recipe.DippingRecipe;
 import cc.cassian.cauldrons.recipe.InsertingRecipe;
 import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 //? if <1.21.4 {
@@ -75,24 +72,21 @@ public class CauldronModEvents {
         }
         if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
             if (!itemStack.isEmpty()) {
-                if (level instanceof ServerLevel serverLevel) {
-                    var recipeAccess = serverLevel.recipeAccess();
-                    Optional<RecipeHolder<InsertingRecipe>> insertingRecipeRecipeHolder = recipeAccess.getRecipeFor(CauldronModRecipes.INSERTING.get(), new BrewingRecipeInput(Collections.singletonList(itemStack), cauldronBlockEntity.getContents(), false), level);
-                    if (insertingRecipeRecipeHolder.isPresent()) {
-                        var recipe = insertingRecipeRecipeHolder.get().value();
-                        int newFillLevel = blockState.getValue(POTION_QUANTITY) + recipe.getAmount();
-                        if (newFillLevel > -1 && newFillLevel < 4) {
-                            cauldronBlockEntity.setContents(recipe.getResultPotion());
-                            if (player == null || !player.isCreative())
-                                itemStack.setCount(itemStack.getCount()-1);
-                            addItem(player, interactionHand, level, pos, direction, recipe.getResultItem());
-                            setFillLevel(blockState, level, pos, newFillLevel);
-                            return InteractionResult.SUCCESS;
-                        }
+                var recipeAccess = level.recipeAccess().getSynchronizedRecipes();
+                Optional<RecipeHolder<InsertingRecipe>> insertingRecipeRecipeHolder = recipeAccess.getFirstMatch(CauldronModRecipes.INSERTING, new BrewingRecipeInput(Collections.singletonList(itemStack), cauldronBlockEntity.getContents(), false), level);
+                if (insertingRecipeRecipeHolder.isPresent()) {
+                    var recipe = insertingRecipeRecipeHolder.get().value();
+                    int newFillLevel = blockState.getValue(POTION_QUANTITY) + recipe.getAmount();
+                    if (newFillLevel > -1 && newFillLevel < 4) {
+                        cauldronBlockEntity.setContents(recipe.getResultPotion());
+                        if (player == null || !player.isCreative())
+                            itemStack.setCount(itemStack.getCount()-1);
+                        giveToPlayer(player, interactionHand, level, pos, direction, recipe.getResultItem());
+                        setFillLevel(blockState, level, pos, newFillLevel);
+                        return InteractionResult.SUCCESS;
                     }
-                    return tryHardcodedRecipe(itemStack, blockState, cauldronBlockEntity, level, pos, player, interactionHand, direction);
                 }
-                return InteractionResult.SUCCESS;
+                return tryHardcodedRecipe(itemStack, blockState, cauldronBlockEntity, level, pos, player, interactionHand, direction);
             }
         }
         return PASS_TO_EMPTY_HAND;
@@ -116,7 +110,7 @@ public class CauldronModEvents {
             var stack = CauldronContents.createItemStack(Items.TIPPED_ARROW, cauldronBlockEntity.getContents());
             stack.setCount(tippedCount);
             setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
-            addItem(player, interactionHand, level, pos, direction, stack);
+            giveToPlayer(player, interactionHand, level, pos, direction, stack);
             return InteractionResult.CONSUME;
         } else if (itemStack.is(Items.GLASS_BOTTLE) && cauldronBlockEntity.getContents().isPotion() && cauldronBlockEntity.getFillLevel()>=1) {
             var fillLevel = 1;
@@ -134,20 +128,20 @@ public class CauldronModEvents {
             stack = CauldronContents.createItemStack(potionItem, cauldronBlockEntity.getContents());
             stack.setCount(fillLevel);
             setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
-            addItem(player, interactionHand, level, pos, direction, stack);
+            giveToPlayer(player, interactionHand, level, pos, direction, stack);
             return InteractionResult.SUCCESS;
         } else {
             Pair<InteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
             if (!(insert.getA() == PASS_TO_EMPTY_HAND)) {
                 if (player == null || !player.isCreative())
                     itemStack.setCount(itemStack.getCount()-1);
-                addItem(player, interactionHand, level, pos, direction, insert.getB());
+                giveToPlayer(player, interactionHand, level, pos, direction, insert.getB());
             }
             return insert.getA();
         }
     }
 
-    public static void addItem(Player player, InteractionHand interactionHand, Level level, BlockPos pos, Direction direction, ItemStack stack) {
+    public static void giveToPlayer(Player player, InteractionHand interactionHand, Level level, BlockPos pos, Direction direction, ItemStack stack) {
         if (player != null) {
             if (interactionHand != null && player.getItemInHand(interactionHand).isEmpty()) {
                 player.setItemInHand(interactionHand, stack);

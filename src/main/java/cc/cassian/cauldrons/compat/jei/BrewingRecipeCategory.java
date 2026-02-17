@@ -33,19 +33,12 @@ public class BrewingRecipeCategory implements IRecipeCategory<RecipeHolder<Brewi
 		this.icon = guiHelper.createDrawableItemLike(Blocks.CAULDRON);
 	}
 
-	//? if >1.21.9 {
-	public static final IRecipeType<RecipeHolder<BrewingRecipe>> CATEGORY = IRecipeType.create(CauldronModRecipes.BREWING.get());
+	public static final IRecipeType<RecipeHolder<BrewingRecipe>> CATEGORY = IRecipeType.create(CauldronModRecipes.BREWING);
+
 	@Override
 	public IRecipeType<RecipeHolder<BrewingRecipe>> getRecipeType() {
 		return CATEGORY;
 	}
-	//?} else {
-	/*public static final RecipeType<RecipeHolder<BrewingRecipe>> CATEGORY = RecipeType.createFromDeferredVanilla(CauldronModRecipes.BREWING).get();
-	@Override
-	public RecipeType<RecipeHolder<BrewingRecipe>> getRecipeType() {
-		return CATEGORY;
-	}
-	*///?}
 
 	@Override
 	public Component getTitle() {
@@ -58,19 +51,18 @@ public class BrewingRecipeCategory implements IRecipeCategory<RecipeHolder<Brewi
 	}
 
 	@Override
-	@SuppressWarnings("all")
 	public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<BrewingRecipe> recipeHolder, IFocusGroup iFocusGroup) {
 		var recipe = recipeHolder.value();
 		// reagent
-		builder.addSlot(RecipeIngredientRole.INPUT, 5, 4).addIngredients(recipe.getReagent()).setStandardSlotBackground();
+		builder.addSlot(RecipeIngredientRole.INPUT, 5, 4).add(recipe.getReagent()).setStandardSlotBackground();
 		// potion item
 		var input = CauldronModJeiPlugin.getResultForDisplay(recipe.getPotion());
-		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 41, 4).addItemStack(input.getB()).setStandardSlotBackground();
-		builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStack(input.getA());
+		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 41, 4).add(input.getB()).setStandardSlotBackground();
+		builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).add(input.getA());
 		// output
 		var output = CauldronModJeiPlugin.getResultForDisplay(recipe.getResultPotion());
-		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 78, 4).addItemStack(output.getB()).setStandardSlotBackground();
-		builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(output.getA());
+		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 78, 4).add(output.getB()).setStandardSlotBackground();
+		builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).add(output.getA());
 	}
 
 	@Override

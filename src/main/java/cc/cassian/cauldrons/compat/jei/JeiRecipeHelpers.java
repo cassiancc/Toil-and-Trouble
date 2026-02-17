@@ -27,11 +27,11 @@ public class JeiRecipeHelpers {
 	}
 
 	public List<RecipeHolder<BrewingRecipe>> getBrewingRecipes() {
-		return List.copyOf(synchronizedRecipes.getAllOfType(CauldronModRecipes.BREWING.get()));
+		return List.copyOf(synchronizedRecipes.getAllOfType(CauldronModRecipes.BREWING));
 	}
 
 	public List<RecipeHolder<DippingRecipe>> getDippingRecipes() {
-		return List.copyOf(synchronizedRecipes.getAllOfType(CauldronModRecipes.DIPPING.get()));
+		return List.copyOf(synchronizedRecipes.getAllOfType(CauldronModRecipes.DIPPING));
 	}
 	//?} else {
 	/*private final RecipeManager synchronizedRecipes;

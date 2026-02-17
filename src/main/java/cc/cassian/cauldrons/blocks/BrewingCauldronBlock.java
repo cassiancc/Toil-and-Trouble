@@ -74,7 +74,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult) {
 		if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
 			if (!cauldronBlockEntity.isEmpty()) {
-				CauldronModEvents.addItem(player, null, level, pos, blockHitResult.getDirection(), cauldronBlockEntity.retrieve());
+				CauldronModEvents.giveToPlayer(player, null, level, pos, blockHitResult.getDirection(), cauldronBlockEntity.retrieve());
 				return InteractionResult.SUCCESS;
 			} else if (CauldronMod.CONFIG.client.showContentsWhenInteracting.value()) {
                 player.sendOverlayMessage(cauldronBlockEntity.getContentsName());

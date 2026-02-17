@@ -59,12 +59,12 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
 
     @Override
     public RecipeSerializer<InsertingRecipe> getSerializer() {
-        return CauldronModRecipes.INSERTION_SERIALIZER.get();
+        return CauldronModRecipes.INSERTION_SERIALIZER;
     }
 
     @Override
     public RecipeType<InsertingRecipe> getType() {
-        return CauldronModRecipes.INSERTING.get();
+        return CauldronModRecipes.INSERTING;
     }
 
     @Override

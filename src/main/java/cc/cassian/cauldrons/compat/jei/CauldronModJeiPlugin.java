@@ -44,10 +44,9 @@ public class CauldronModJeiPlugin implements IModPlugin {
 	}
 
 	@Override
-	@SuppressWarnings("all")
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-		registration.addRecipeCatalyst(Blocks.CAULDRON, BrewingRecipeCategory.CATEGORY);
-		registration.addRecipeCatalyst(Blocks.CAULDRON, DippingRecipeCategory.CATEGORY);
+		registration.addCraftingStation(BrewingRecipeCategory.CATEGORY, Blocks.CAULDRON);
+		registration.addCraftingStation(DippingRecipeCategory.CATEGORY, Blocks.CAULDRON);
 	}
 
 	public static final Map<Identifier, ItemStack> OVERRIDES = Map.of(
@@ -67,19 +66,8 @@ public class CauldronModJeiPlugin implements IModPlugin {
 			var stack = OVERRIDES.get(resultPotion.id());
 			return new Pair<>(stack, stack);
 		} else {
-			//? if >1.21.2 {
 			var stack = new ItemStack(BuiltInRegistries.BLOCK.getValue(resultPotion.id()));
-			//?} else {
-			/*var stack = new ItemStack(BuiltInRegistries.BLOCK.get(resultPotion.id()));
-			*///?}
 			return new Pair<>(stack, stack);
 		}
 	}
-
-	//? if >1.21.9 {
-	public static void syncRecipes() {
-		RecipeSynchronization.synchronizeRecipeSerializer(CauldronModRecipes.BREWING_SERIALIZER.get());
-		RecipeSynchronization.synchronizeRecipeSerializer(CauldronModRecipes.DIPPING_SERIALIZER.get());
-	}
-	//?}
 }

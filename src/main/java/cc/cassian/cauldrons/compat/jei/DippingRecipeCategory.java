@@ -31,7 +31,7 @@ public class DippingRecipeCategory implements IRecipeCategory<RecipeHolder<Dippi
 	}
 
 	//? if >1.21.9 {
-	public static final IRecipeType<RecipeHolder<DippingRecipe>> CATEGORY = IRecipeType.create(CauldronModRecipes.DIPPING.get());
+	public static final IRecipeType<RecipeHolder<DippingRecipe>> CATEGORY = IRecipeType.create(CauldronModRecipes.DIPPING);
 	@Override
 	public IRecipeType<RecipeHolder<DippingRecipe>> getRecipeType() {
 		return CATEGORY;

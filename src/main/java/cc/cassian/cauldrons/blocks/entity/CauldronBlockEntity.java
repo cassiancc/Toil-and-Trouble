@@ -137,6 +137,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         // insert as inventory
         if (hasSpace()) {
             items.add(itemStack);
+            setChanged();
 			if (level != null && getFillLevel() > 0 && level.isClientSide()) {
 				var particle = ParticleTypes.SPLASH;
 				if (this.contents.is("honey")) particle = ParticleTypes.LANDING_HONEY;
@@ -157,42 +158,41 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 
     public void brew(boolean cauldronHeated) {
         var input = new BrewingRecipeInput(items, contents, cauldronHeated);
-        if ((level instanceof ServerLevel serverLevel)) {
-            var recipeAccess = serverLevel.recipeAccess();
-            Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = recipeAccess.getRecipeFor(CauldronModRecipes.BREWING.get(), input, level);
-            if (brewingRecipe.isPresent()) {
-                this.contents = brewingRecipe.get().value().getResultPotion();
-                updateAfterBrewing(ItemStack.EMPTY, this.contents, brewingRecipe.get().value().getParticleType());
-            }
-            Optional<RecipeHolder<DippingRecipe>> dippingRecipe = recipeAccess.getRecipeFor(CauldronModRecipes.DIPPING.get(), input, level);
-            if (dippingRecipe.isPresent()) {
-                updateAfterBrewing(dippingRecipe.get().value().getResultItem(), this.contents, dippingRecipe.get().value().getParticleType());
-                setFillLevel(0);
-            }
-            else if (items.size() == 1) {
-                if (items.getFirst().is(CauldronModTags.CREATES_SPLASH_POTIONS) && this.contents.isPotion()) {
-                    this.splashing = true;
-                    this.lingering = false;
-                    updateAfterBrewing(ItemStack.EMPTY, this.contents, ParticleTypes.SMOKE);
-                }
-                else if (items.getFirst().is(CauldronModTags.CREATES_LINGERING_POTIONS) && this.contents.isPotion()) {
-                    this.splashing = false;
-                    this.lingering = true;
-                    updateAfterBrewing(ItemStack.EMPTY, this.contents, PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1));
-                }
-                else if (CauldronMod.CONFIG.useBrewingStandRecipes.value()) {
-                    var potionBrewing = this.level.potionBrewing();
-                    var potionItem = CauldronContents.createItemStack(Items.POTION, contents);
-                    if (potionBrewing.hasMix(potionItem, items.getFirst())) {
-                        ItemStack mix = potionBrewing.mix(items.getFirst(), potionItem);
-                        this.contents = new CauldronContents(Objects.requireNonNullElse(mix.getComponents().get(DataComponents.POTION_CONTENTS), PotionContents.EMPTY));
-                        updateAfterBrewing(ItemStack.EMPTY, this.contents, ParticleTypes.BUBBLE);
-                    }
-                }
-            }
-        }
+        if (level == null) return;
+		var recipeAccess = level.recipeAccess().getSynchronizedRecipes();
+		Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = recipeAccess.getFirstMatch(CauldronModRecipes.BREWING, input, level);
+		if (brewingRecipe.isPresent()) {
+			this.contents = brewingRecipe.get().value().getResultPotion();
+			updateAfterBrewing(ItemStack.EMPTY, this.contents, brewingRecipe.get().value().getParticleType());
+		}
+		Optional<RecipeHolder<DippingRecipe>> dippingRecipe = recipeAccess.getFirstMatch(CauldronModRecipes.DIPPING, input, level);
+		if (dippingRecipe.isPresent()) {
+			updateAfterBrewing(dippingRecipe.get().value().getResultItem(), this.contents, dippingRecipe.get().value().getParticleType());
+			setFillLevel(0);
+		}
+		else if (items.size() == 1) {
+			if (items.getFirst().is(CauldronModTags.CREATES_SPLASH_POTIONS) && this.contents.isPotion()) {
+				this.splashing = true;
+				this.lingering = false;
+				updateAfterBrewing(ItemStack.EMPTY, this.contents, ParticleTypes.SMOKE);
+			}
+			else if (items.getFirst().is(CauldronModTags.CREATES_LINGERING_POTIONS) && this.contents.isPotion()) {
+				this.splashing = false;
+				this.lingering = true;
+				updateAfterBrewing(ItemStack.EMPTY, this.contents, PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1));
+			}
+			else if (CauldronMod.CONFIG.useBrewingStandRecipes.value()) {
+				var potionBrewing = this.level.potionBrewing();
+				var potionItem = CauldronContents.createItemStack(Items.POTION, contents);
+				if (potionBrewing.hasMix(potionItem, items.getFirst())) {
+					ItemStack mix = potionBrewing.mix(items.getFirst(), potionItem);
+					this.contents = new CauldronContents(Objects.requireNonNullElse(mix.getComponents().get(DataComponents.POTION_CONTENTS), PotionContents.EMPTY));
+					updateAfterBrewing(ItemStack.EMPTY, this.contents, ParticleTypes.BUBBLE);
+				}
+			}
+		}
 
-    }
+	}
 
     private void updateAfterBrewing(ItemStack stack, CauldronContents contents, ParticleOptions particleType) {
         updateAfterBrewing(List.of(stack), contents, particleType);
