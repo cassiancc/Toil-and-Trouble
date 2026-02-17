@@ -5,8 +5,6 @@ import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.core.CauldronModHelpers;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
@@ -36,7 +34,7 @@ public class CauldronModClient {
             } else {
                 iTooltip.add(Component.translatableWithFallback(entity.getContents().id().toLanguageKey("cauldron"), WordUtils.capitalize(entity.getContents().id().getPath().replace("_", " "))));
             }
-            if (!entity.getItem().isEmpty()) {
+            if (!entity.getItems().isEmpty()) {
                 iTooltip.add(Component.empty());
             }
         }

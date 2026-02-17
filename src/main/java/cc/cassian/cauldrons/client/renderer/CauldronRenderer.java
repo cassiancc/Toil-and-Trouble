@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.state.CameraRenderState;
-import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 //?} else {
@@ -22,8 +21,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity, CauldronBlockEntityRenderState> {
     private static final float SIZE = 0.375F;
@@ -49,28 +48,37 @@ public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity
     ) {
         BlockEntityRenderer.super.extractRenderState(cauldronBlockEntity, cauldronBlockEntityRenderState, f, vec3, crumblingOverlay);
 
-        ItemStackRenderState itemStackRenderState = new ItemStackRenderState();
+
         int k = (int)cauldronBlockEntity.getBlockPos().asLong();
 
-        List<ItemStack> items = cauldronBlockEntity.getItem();
-        if (!items.isEmpty())
-            this.itemRenderer.updateForTopItem(itemStackRenderState, items.getFirst(), ItemDisplayContext.FIXED, cauldronBlockEntity.getLevel(), null, k);
-        cauldronBlockEntityRenderState.item = itemStackRenderState;
+        List<ItemStack> items = cauldronBlockEntity.getItems();
+        cauldronBlockEntityRenderState.items.clear();
+        if (!items.isEmpty()) {
+            items.forEach(itemStack -> {
+                ItemStackRenderState itemStackRenderState = new ItemStackRenderState();
+                this.itemRenderer.updateForTopItem(itemStackRenderState, itemStack, ItemDisplayContext.FIXED, cauldronBlockEntity.getLevel(), null, k);
+                cauldronBlockEntityRenderState.items.add(itemStackRenderState);
+            });
+		}
+
     }
 
 
     @Override
     public void submit(CauldronBlockEntityRenderState blockEntityRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
-        ItemStackRenderState itemStack = blockEntityRenderState.item;
-        int k = (int)blockEntityRenderState.blockPos.asLong();
+        AtomicReference<Float> yo = new AtomicReference<>(0.44921875F);
+        blockEntityRenderState.items.forEach(itemStack -> {
+            int k = (int)blockEntityRenderState.blockPos.asLong();
+            poseStack.pushPose();
+            poseStack.translate(0.5F, yo.get(), 0.5F);
+            yo.updateAndGet(v -> (float) (v + .33));
+            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            poseStack.translate(0.0, 0, 0.0F);
+            poseStack.scale(SIZE, SIZE, SIZE);
+            itemStack.submit(poseStack, submitNodeCollector, blockEntityRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+            poseStack.popPose();
+        });
 
-        poseStack.pushPose();
-        poseStack.translate(0.5F, 0.44921875F, 0.5F);
-        poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-        poseStack.translate(0.0, 0, 0.0F);
-        poseStack.scale(SIZE, SIZE, SIZE);
-        itemStack.submit(poseStack, submitNodeCollector, blockEntityRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
-        poseStack.popPose();
     }
 
 

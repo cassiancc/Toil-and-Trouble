@@ -19,4 +19,8 @@ public class Platform {
 	public static boolean isModLoaded(String mod) {
 		return FabricLoader.getInstance().isModLoaded(mod);
 	}
+
+	public static boolean isDev() {
+		return FabricLoader.getInstance().isDevelopmentEnvironment();
+	}
 }

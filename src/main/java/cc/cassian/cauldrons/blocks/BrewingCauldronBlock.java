@@ -1,15 +1,15 @@
 package cc.cassian.cauldrons.blocks;
 
 import cc.cassian.cauldrons.CauldronMod;
+import cc.cassian.cauldrons.Platform;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.core.CauldronModEvents;
 import cc.cassian.cauldrons.core.CauldronModHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -79,6 +79,8 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
 			} else if (CauldronMod.CONFIG.client.showContentsWhenInteracting.value()) {
                 player.sendOverlayMessage(cauldronBlockEntity.getContentsName());
             }
+            if (Platform.isDev())
+                player.sendSystemMessage(Component.literal(cauldronBlockEntity.getItems().toString()));
 		}
         return InteractionResult.PASS;
     }
