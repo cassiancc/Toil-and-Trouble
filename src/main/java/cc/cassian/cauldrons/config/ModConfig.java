@@ -5,6 +5,14 @@ import folk.sisby.kaleido.lib.quiltconfig.api.annotations.Comment;
 import folk.sisby.kaleido.lib.quiltconfig.api.values.TrackedValue;
 
 public class ModConfig extends ReflectiveConfig {
+
+    public final Client client = new Client();
+    public static class Client extends Section {
+        @Comment("Whether to show the current Cauldron Contents when right clicking on a cauldron.")
+        public final TrackedValue<Boolean> showContentsWhenInteracting = this.value(true);
+
+    }
+
     @Comment("Whether to only allow brewing if the Cauldron is heated.")
     public final TrackedValue<Boolean> requiresHeat = this.value(false);
     @Comment("How much to speed up the brewing process if the Cauldron is heated.")

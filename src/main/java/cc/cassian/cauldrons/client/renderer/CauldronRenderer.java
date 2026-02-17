@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity, CauldronBlockEntityRenderState> {
     private static final float SIZE = 0.375F;
@@ -51,8 +52,9 @@ public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity
         ItemStackRenderState itemStackRenderState = new ItemStackRenderState();
         int k = (int)cauldronBlockEntity.getBlockPos().asLong();
 
-        this.itemRenderer
-                .updateForTopItem(itemStackRenderState, cauldronBlockEntity.getItem(), ItemDisplayContext.FIXED, cauldronBlockEntity.getLevel(), null, k);
+        List<ItemStack> items = cauldronBlockEntity.getItem();
+        if (!items.isEmpty())
+            this.itemRenderer.updateForTopItem(itemStackRenderState, items.getFirst(), ItemDisplayContext.FIXED, cauldronBlockEntity.getLevel(), null, k);
         cauldronBlockEntityRenderState.item = itemStackRenderState;
     }
 

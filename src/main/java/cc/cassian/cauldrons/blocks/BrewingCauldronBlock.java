@@ -37,7 +37,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     public static final IntegerProperty POTION_QUANTITY = IntegerProperty.create("potion_quantity", 0, 3);
     public static final BooleanProperty BREWING = BooleanProperty.create("brewing");
     public static final BooleanProperty HEATED = BooleanProperty.create("heated");
-    public static final EnumProperty<Contents> CONTENTS = EnumProperty.create("contents", Contents.class, Contents.POTION, Contents.HONEY, Contents.WATER, Contents.EMPTY, Contents.LAVA, Contents.CHORUS_HONEY);
+    public static final EnumProperty<Contents> CONTENTS = EnumProperty.create("contents", Contents.class, Contents.values());
 
     public enum Contents implements StringRepresentable {
         EMPTY("empty"), WATER("water"), LAVA("lava"), POTION("potion"), HONEY("honey"), CHORUS_HONEY("chorus_honey");
@@ -72,10 +72,14 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult) {
-        if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity && !cauldronBlockEntity.isEmpty()) {
-            CauldronModEvents.addItem(player, null, level, pos, blockHitResult.getDirection(), cauldronBlockEntity.retrieve());
-            return InteractionResult.SUCCESS;
-        }
+		if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
+			if (!cauldronBlockEntity.isEmpty()) {
+				CauldronModEvents.addItem(player, null, level, pos, blockHitResult.getDirection(), cauldronBlockEntity.retrieve());
+				return InteractionResult.SUCCESS;
+			} else if (CauldronMod.CONFIG.client.showContentsWhenInteracting.value()) {
+                player.sendOverlayMessage(cauldronBlockEntity.getContentsName());
+            }
+		}
         return InteractionResult.PASS;
     }
 
@@ -169,15 +173,18 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
         builder.add(POTION_QUANTITY, BREWING, HEATED, CONTENTS);
     }
 
-    @Override
-    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
-        if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
-            if (level instanceof ServerLevel) {
-                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cauldronBlockEntity.getItem());
-            }
-            level.updateNeighbourForOutputSignal(pos, this);
-        }
-    }
+    //FIXME
+//    @Override
+//    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+//        if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
+//            if (level instanceof ServerLevel) {
+//                cauldronBlockEntity.getItem().forEach(itemStack -> {
+//                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), itemStack);
+//                });
+//            }
+//            level.updateNeighbourForOutputSignal(pos, this);
+//        }
+//    }
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {

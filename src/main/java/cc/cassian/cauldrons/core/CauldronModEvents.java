@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.POTION_QUANTITY;
@@ -75,13 +76,8 @@ public class CauldronModEvents {
         if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
             if (!itemStack.isEmpty()) {
                 if (level instanceof ServerLevel serverLevel) {
-                    var recipeAccess =
-                            //? if >1.21.2 {
-                            serverLevel.recipeAccess();
-                             //?} else {
-                            /*serverLevel.getRecipeManager();
-                    *///?}
-                    Optional<RecipeHolder<InsertingRecipe>> insertingRecipeRecipeHolder = recipeAccess.getRecipeFor(CauldronModRecipes.INSERTING.get(), new BrewingRecipeInput(itemStack, cauldronBlockEntity.getContents(), false), level);
+                    var recipeAccess = serverLevel.recipeAccess();
+                    Optional<RecipeHolder<InsertingRecipe>> insertingRecipeRecipeHolder = recipeAccess.getRecipeFor(CauldronModRecipes.INSERTING.get(), new BrewingRecipeInput(Collections.singletonList(itemStack), cauldronBlockEntity.getContents(), false), level);
                     if (insertingRecipeRecipeHolder.isPresent()) {
                         var recipe = insertingRecipeRecipeHolder.get().value();
                         int newFillLevel = blockState.getValue(POTION_QUANTITY) + recipe.getAmount();

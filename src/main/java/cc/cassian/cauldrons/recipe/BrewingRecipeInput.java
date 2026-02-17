@@ -4,13 +4,15 @@ import cc.cassian.cauldrons.core.CauldronContents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
 
+import java.util.List;
+
 public class BrewingRecipeInput implements RecipeInput {
 
-    private final ItemStack reagent;
+    private final List<ItemStack> reagent;
     private final CauldronContents contents;
     private final boolean isHeated;
 
-    public BrewingRecipeInput(ItemStack reagent, CauldronContents contents, boolean isHeated) {
+    public BrewingRecipeInput(List<ItemStack> reagent, CauldronContents contents, boolean isHeated) {
         this.reagent = reagent;
         this.contents = contents;
         this.isHeated = isHeated;
@@ -18,7 +20,7 @@ public class BrewingRecipeInput implements RecipeInput {
 
     @Override
     public ItemStack getItem(int index) {
-        return reagent;
+        return reagent.get(index);
     }
 
     public CauldronContents getContents() {
@@ -27,7 +29,7 @@ public class BrewingRecipeInput implements RecipeInput {
 
     @Override
     public int size() {
-        return 2;
+        return reagent.size();
     }
 
     public boolean isHeated() {
