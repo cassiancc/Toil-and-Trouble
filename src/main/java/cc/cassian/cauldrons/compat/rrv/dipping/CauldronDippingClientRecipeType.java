@@ -13,9 +13,9 @@ import net.minecraft.world.item.Items;
 import java.util.Collections;
 import java.util.List;
 
-public class CauldronDippingViewType implements ReliableClientRecipeType {
+public class CauldronDippingClientRecipeType implements ReliableClientRecipeType {
 
-    public static final CauldronDippingViewType INSTANCE = new CauldronDippingViewType();
+    public static final CauldronDippingClientRecipeType INSTANCE = new CauldronDippingClientRecipeType();
 
     @Override
     public Component getDisplayName() {
@@ -39,14 +39,21 @@ public class CauldronDippingViewType implements ReliableClientRecipeType {
 
     @Override
     public int getSlotCount() {
-        return 3;
+        return 11;
     }
 
     @Override
     public void placeSlots(RecipeViewMenu.SlotDefinition slotDefinition) {
-        slotDefinition.addItemSlot(0, 5, 5);
-        slotDefinition.addItemSlot(1, 41, 5);
-        slotDefinition.addItemSlot(2, 78, 5);
+        // reagents
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                slotDefinition.addItemSlot(x + y * 3, 1 + x * 18,  1 + y * 18);
+            }
+        }
+        // cauldron contents
+        slotDefinition.addItemSlot(9, 41, 5);
+        // results
+        slotDefinition.addItemSlot(10, 78, 5);
     }
 
     @Override

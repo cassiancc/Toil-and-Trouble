@@ -33,6 +33,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -166,6 +167,13 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 			updateAfterBrewing(ItemStack.EMPTY, this.contents, brewingRecipe.get().value().getParticleType());
 		}
 		Optional<RecipeHolder<DippingRecipe>> dippingRecipe = recipeAccess.getFirstMatch(CauldronModRecipes.DIPPING, input, level);
+        for (RecipeHolder<DippingRecipe> recipe : recipeAccess.getAllOfType(CauldronModRecipes.DIPPING)) {
+            ArrayList<List<ItemStack>> ingredients = new ArrayList<>();
+            for (Ingredient reagent : recipe.value().getReagents()) {
+                ingredients.add(reagent.items().map(ItemStack::new).toList());
+            }
+            System.out.println(ingredients);
+        }
 		if (dippingRecipe.isPresent()) {
 			updateAfterBrewing(dippingRecipe.get().value().getResultItem(), this.contents, dippingRecipe.get().value().getParticleType());
 			setFillLevel(0);

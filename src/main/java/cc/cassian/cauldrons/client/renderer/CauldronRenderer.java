@@ -71,14 +71,13 @@ public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity
             int k = (int)blockEntityRenderState.blockPos.asLong();
             poseStack.pushPose();
             poseStack.translate(0.5F, yo.get(), 0.5F);
-            yo.updateAndGet(v -> (float) (v + .33));
+            yo.updateAndGet(v -> (float) (v + .2));
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
             poseStack.translate(0.0, 0, 0.0F);
             poseStack.scale(SIZE, SIZE, SIZE);
             itemStack.submit(poseStack, submitNodeCollector, blockEntityRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         });
-
     }
 
 

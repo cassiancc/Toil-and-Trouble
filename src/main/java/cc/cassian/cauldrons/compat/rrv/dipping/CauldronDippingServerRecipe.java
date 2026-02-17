@@ -1,18 +1,15 @@
 package cc.cassian.cauldrons.compat.rrv.dipping;
 
-//? if >1.21.10 {
-
-
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.rrv.api.TagUtil;
 import cc.cassian.rrv.api.recipe.ReliableServerRecipe;
 import cc.cassian.rrv.api.recipe.ReliableServerRecipeType;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+
+import java.util.List;
 
 public class CauldronDippingServerRecipe implements ReliableServerRecipe {
 
@@ -20,27 +17,26 @@ public class CauldronDippingServerRecipe implements ReliableServerRecipe {
             CauldronMod.of("dipping"),
             () -> new CauldronDippingServerRecipe(null, null, null)
     );
-    private Ingredient reagent;
+    private List<Ingredient> reagents;
     private CauldronContents potion;
     private ItemStack result;
 
-    public CauldronDippingServerRecipe(Ingredient reagent, CauldronContents potion, ItemStack result) {
-        this.reagent = reagent;
+    public CauldronDippingServerRecipe(List<Ingredient> reagents, CauldronContents potion, ItemStack result) {
+        this.reagents = reagents;
         this.potion = potion;
         this.result = result;
     }
 
-
     @Override
     public void writeToTag(CompoundTag tag) {
-        tag.put("reagent", TagUtil.writeIngredient(reagent));
+        tag.put("reagent", TagUtil.writeList(reagents, (ingredient, tag2)->TagUtil.writeIngredient(ingredient)));
         tag.store("potion", CauldronContents.CODEC, potion);
         tag.put("result", TagUtil.encodeItemStackOnServer(result));
     }
 
     @Override
     public void loadFromTag(CompoundTag tag) {
-        reagent = TagUtil.readIngredient(tag.getCompoundOrEmpty("reagent"));
+        reagents = TagUtil.readList(tag, "reagent", TagUtil::readIngredient);
         potion = tag.read("potion", CauldronContents.CODEC).orElse(CauldronContents.EMPTY);
         result = TagUtil.decodeItemStackOnClient(tag.getCompoundOrEmpty("result"));
     }
@@ -50,8 +46,8 @@ public class CauldronDippingServerRecipe implements ReliableServerRecipe {
         return TYPE;
     }
 
-    public Ingredient getReagent() {
-        return reagent;
+    public List<Ingredient> getReagents() {
+        return reagents;
     }
 
     public CauldronContents getPotion() {
@@ -62,5 +58,3 @@ public class CauldronDippingServerRecipe implements ReliableServerRecipe {
         return result;
     }
 }
-
-//?}

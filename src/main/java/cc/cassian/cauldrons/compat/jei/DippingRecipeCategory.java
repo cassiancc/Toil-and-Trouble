@@ -55,18 +55,19 @@ public class DippingRecipeCategory implements IRecipeCategory<RecipeHolder<Dippi
 	}
 
 	@Override
-	@SuppressWarnings("all")
 	public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<DippingRecipe> recipeHolder, IFocusGroup iFocusGroup) {
 		var recipe = recipeHolder.value();
 		// reagent
-		builder.addSlot(RecipeIngredientRole.INPUT, 5, 4).addIngredients(recipe.getReagent()).setStandardSlotBackground();
+		recipe.getReagents().forEach(reagent -> {
+			builder.addSlot(RecipeIngredientRole.INPUT, 5, 4).add(reagent).setStandardSlotBackground();
+		});
 		// potion item
 		var input = CauldronModJeiPlugin.getResultForDisplay(recipe.getPotion());
-		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 41, 4).addItemStack(input.getB()).setStandardSlotBackground();
-		builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStack(input.getA());
+		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 41, 4).add(input.getB()).setStandardSlotBackground();
+		builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).add(input.getA());
 		// output
 		var output = recipe.getResultItem();
-		builder.addSlot(RecipeIngredientRole.OUTPUT, 78, 4).addItemStack(output).setStandardSlotBackground();
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 78, 4).add(output).setStandardSlotBackground();
 	}
 
 	@Override
