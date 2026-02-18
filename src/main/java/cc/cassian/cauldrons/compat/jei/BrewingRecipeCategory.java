@@ -3,10 +3,8 @@ package cc.cassian.cauldrons.compat.jei;
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
 import cc.cassian.cauldrons.recipe.BrewingRecipe;
-import cc.cassian.cauldrons.recipe.DippingRecipe;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
@@ -21,7 +19,6 @@ import net.minecraft.client.renderer.RenderPipelines;
 *///?}
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;

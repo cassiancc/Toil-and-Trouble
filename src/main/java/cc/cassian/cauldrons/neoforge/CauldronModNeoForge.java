@@ -40,7 +40,7 @@ public final class CauldronModNeoForge {
 
     @SubscribeEvent
     public static void register(OnDatapackSyncEvent event) {
-        event.sendRecipes(CauldronModRecipes.BREWING, CauldronModRecipes.DIPPING, CauldronModRecipes.INSERTING);
+        event.sendRecipes(CauldronModRecipes.BREWING, CauldronModRecipes.ALCHEMY, CauldronModRecipes.INSERTING);
     }
 }
 

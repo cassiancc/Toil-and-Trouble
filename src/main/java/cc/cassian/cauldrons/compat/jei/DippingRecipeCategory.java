@@ -2,7 +2,7 @@ package cc.cassian.cauldrons.compat.jei;
 
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
-import cc.cassian.cauldrons.recipe.DippingRecipe;
+import cc.cassian.cauldrons.recipe.AlchemyRecipe;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -22,7 +22,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 
-public class DippingRecipeCategory implements IRecipeCategory<RecipeHolder<DippingRecipe>> {
+public class DippingRecipeCategory implements IRecipeCategory<RecipeHolder<AlchemyRecipe>> {
 
 	private final IDrawable icon;
 
@@ -31,9 +31,9 @@ public class DippingRecipeCategory implements IRecipeCategory<RecipeHolder<Dippi
 	}
 
 	//? if >1.21.9 {
-	public static final IRecipeType<RecipeHolder<DippingRecipe>> CATEGORY = IRecipeType.create(CauldronModRecipes.DIPPING);
+	public static final IRecipeType<RecipeHolder<AlchemyRecipe>> CATEGORY = IRecipeType.create(CauldronModRecipes.ALCHEMY);
 	@Override
-	public IRecipeType<RecipeHolder<DippingRecipe>> getRecipeType() {
+	public IRecipeType<RecipeHolder<AlchemyRecipe>> getRecipeType() {
 		return CATEGORY;
 	}
 	//?} else {
@@ -55,7 +55,7 @@ public class DippingRecipeCategory implements IRecipeCategory<RecipeHolder<Dippi
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<DippingRecipe> recipeHolder, IFocusGroup iFocusGroup) {
+	public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<AlchemyRecipe> recipeHolder, IFocusGroup iFocusGroup) {
 		var recipe = recipeHolder.value();
 		// reagent
 		recipe.getReagents().forEach(reagent -> {
@@ -81,7 +81,7 @@ public class DippingRecipeCategory implements IRecipeCategory<RecipeHolder<Dippi
 	}
 
 	@Override
-	public void draw(RecipeHolder<DippingRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+	public void draw(RecipeHolder<AlchemyRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
 		guiGraphics.blit(
 				//? if >1.21.2
 				RenderPipelines.GUI_TEXTURED,

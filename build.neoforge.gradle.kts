@@ -111,6 +111,14 @@ repositories {
         name = "Kotlin for Forge"
         setUrl("https://thedarkcolour.github.io/KotlinForForge/")
     }
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = uri("https://maven.blamejared.com/")
+        content {
+            includeGroupAndSubgroups("mezz.jei")
+        }
+    }
     mavenCentral()
 }
 
@@ -151,7 +159,7 @@ dependencies {
 //    }
 
     // Recipe Viewers
-    compileOnly("maven.modrinth:jei:${property("deps.jei")}-neoforge")
+    compileOnly("mezz.jei:jei-26.1-snapshot-4-neoforge:${property("deps.jei")}")
     compileOnly("cc.cassian.rrv:reliable-recipe-viewer-neoforge:${property("deps.rrv")}")
     runtimeOnly("cc.cassian.rrv:reliable-recipe-viewer-neoforge:${property("deps.rrv")}")
 }

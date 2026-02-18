@@ -1,7 +1,5 @@
 package cc.cassian.cauldrons.compat.rrv.dipping;
 
-//? if >1.21.10 {
-
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.rrv.api.recipe.ReliableClientRecipeType;
 import cc.cassian.rrv.common.recipe.inventory.RecipeViewMenu;
@@ -13,28 +11,28 @@ import net.minecraft.world.item.Items;
 import java.util.Collections;
 import java.util.List;
 
-public class CauldronDippingClientRecipeType implements ReliableClientRecipeType {
+public class CauldronAlchemyClientRecipeType implements ReliableClientRecipeType {
 
-    public static final CauldronDippingClientRecipeType INSTANCE = new CauldronDippingClientRecipeType();
+    public static final CauldronAlchemyClientRecipeType INSTANCE = new CauldronAlchemyClientRecipeType();
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("emi.category.toil_and_trouble.dipping");
+        return Component.translatable("emi.category.toil_and_trouble.alchemy");
     }
 
     @Override
     public int getDisplayWidth() {
-        return 100;
+        return 116;
     }
 
     @Override
     public int getDisplayHeight() {
-        return 25;
+        return 54;
     }
 
     @Override
     public Identifier getGuiTexture() {
-        return CauldronMod.of("textures/gui/eiv/brewing.png");
+        return Identifier.fromNamespaceAndPath("rrv", "textures/gui/type/crafting.png");
     }
 
     @Override
@@ -51,14 +49,14 @@ public class CauldronDippingClientRecipeType implements ReliableClientRecipeType
             }
         }
         // cauldron contents
-        slotDefinition.addItemSlot(9, 41, 5);
+        slotDefinition.addItemSlot(9, 61, 37);
         // results
-        slotDefinition.addItemSlot(10, 78, 5);
+        slotDefinition.addItemSlot(10, 95, 19);
     }
 
     @Override
     public Identifier getId() {
-        return CauldronMod.of("dipping");
+        return CauldronMod.of("alchemy");
     }
 
     @Override
@@ -71,5 +69,3 @@ public class CauldronDippingClientRecipeType implements ReliableClientRecipeType
         return Collections.singletonList(Items.CAULDRON.getDefaultInstance());
     }
 }
-
-//?}

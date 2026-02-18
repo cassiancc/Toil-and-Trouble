@@ -110,6 +110,14 @@ repositories {
             includeGroupAndSubgroups("cc.cassian")
         }
     }
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = uri("https://maven.blamejared.com/")
+        content {
+            includeGroupAndSubgroups("mezz.jei")
+        }
+    }
 }
 
 dependencies {
@@ -122,7 +130,7 @@ dependencies {
     implementation("com.terraformersmc:modmenu:${property("deps.modmenu")}")
     compileOnly("maven.modrinth:jade:${property("deps.jade")}")
     compileOnly("mcp.mobius.waila:wthit-api:neo-${property("deps.wthit_version")}")
-    compileOnly("maven.modrinth:jei:${property("deps.jei")}-neoforge")
+    compileOnly("mezz.jei:jei-26.1-snapshot-4-fabric:${property("deps.jei")}")
     compileOnly("cc.cassian.rrv:reliable-recipe-viewer-fabric:${property("deps.rrv")}") {
         isTransitive = false
     }

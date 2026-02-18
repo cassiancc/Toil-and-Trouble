@@ -2,18 +2,18 @@ package cc.cassian.cauldrons.compat.jei;
 
 import cc.cassian.cauldrons.core.CauldronModRecipes;
 
+import cc.cassian.cauldrons.recipe.AlchemyRecipe;
 import cc.cassian.cauldrons.recipe.BrewingRecipe;
-import cc.cassian.cauldrons.recipe.DippingRecipe;
 //? if fabric {
 import net.fabricmc.fabric.api.recipe.v1.sync.SynchronizedRecipes;
 //?} else {
 /*import cc.cassian.cauldrons.neoforge.client.CauldronModNeoForgeClient;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 *///?}
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeMap;
 
 import java.util.List;
 
@@ -35,8 +35,8 @@ public class JeiRecipeHelpers {
 		return List.copyOf(synchronizedRecipes.getAllOfType(CauldronModRecipes.BREWING));
 	}
 
-	public List<RecipeHolder<DippingRecipe>> getDippingRecipes() {
-		return List.copyOf(synchronizedRecipes.getAllOfType(CauldronModRecipes.DIPPING));
+	public List<RecipeHolder<AlchemyRecipe>> getDippingRecipes() {
+		return List.copyOf(synchronizedRecipes.getAllOfType(CauldronModRecipes.ALCHEMY));
 	}
 	//?} else {
 	/*private final RecipeMap synchronizedRecipes;
@@ -48,8 +48,8 @@ public class JeiRecipeHelpers {
 		return List.copyOf(synchronizedRecipes.byType(CauldronModRecipes.BREWING));
 	}
 
-	public List<RecipeHolder<DippingRecipe>> getDippingRecipes() {
-		return List.copyOf(synchronizedRecipes.byType(CauldronModRecipes.DIPPING));
+	public List<RecipeHolder<AlchemyRecipe>> getDippingRecipes() {
+		return List.copyOf(synchronizedRecipes.byType(CauldronModRecipes.ALCHEMY));
 	}
 	*///?}
 

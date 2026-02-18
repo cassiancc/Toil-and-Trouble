@@ -9,7 +9,7 @@ import cc.cassian.cauldrons.core.CauldronModRecipes;
 import cc.cassian.cauldrons.core.CauldronModTags;
 import cc.cassian.cauldrons.recipe.BrewingRecipe;
 import cc.cassian.cauldrons.recipe.BrewingRecipeInput;
-import cc.cassian.cauldrons.recipe.DippingRecipe;
+import cc.cassian.cauldrons.recipe.AlchemyRecipe;
 import cc.cassian.cauldrons.registry.CauldronModBlockEntityTypes;
 import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import cc.cassian.cauldrons.registry.CauldronModSoundEvents;
@@ -23,7 +23,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.WorldlyContainer;
@@ -34,7 +33,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -166,7 +164,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 			this.contents = brewingRecipe.get().value().getResultPotion();
 			updateAfterBrewing(ItemStack.EMPTY, this.contents, brewingRecipe.get().value().getParticleType());
 		}
-		Optional<RecipeHolder<DippingRecipe>> dippingRecipe = Platform.getFirstRecipe(CauldronModRecipes.DIPPING, input, level);
+		Optional<RecipeHolder<AlchemyRecipe>> dippingRecipe = Platform.getFirstRecipe(CauldronModRecipes.ALCHEMY, input, level);
 		if (dippingRecipe.isPresent()) {
 			updateAfterBrewing(dippingRecipe.get().value().getResultItem(), this.contents, dippingRecipe.get().value().getParticleType());
 			setFillLevel(0);

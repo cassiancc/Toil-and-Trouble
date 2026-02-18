@@ -11,7 +11,6 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
@@ -19,7 +18,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-public class DippingRecipe implements Recipe<BrewingRecipeInput> {
+public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
 
     private final List<Ingredient> reagents;
     private final CauldronContents potion;
@@ -27,7 +26,7 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
     private final ParticleOptions particleType;
     private final boolean requiresHeat;
 
-    public DippingRecipe(List<Ingredient> reagent, CauldronContents potion, ItemStackTemplate result, ParticleOptions particleType, boolean requiresHeat) {
+    public AlchemyRecipe(List<Ingredient> reagent, CauldronContents potion, ItemStackTemplate result, ParticleOptions particleType, boolean requiresHeat) {
         this.reagents = reagent;
         this.potion = potion;
         this.result = result;
@@ -64,13 +63,13 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     @Override
-    public RecipeSerializer<DippingRecipe> getSerializer() {
-        return CauldronModRecipes.DIPPING_SERIALIZER;
+    public RecipeSerializer<AlchemyRecipe> getSerializer() {
+        return CauldronModRecipes.ALCHEMY_SERIALIZER;
     }
 
     @Override
-    public RecipeType<DippingRecipe> getType() {
-        return CauldronModRecipes.DIPPING;
+    public RecipeType<AlchemyRecipe> getType() {
+        return CauldronModRecipes.ALCHEMY;
     }
 
     @Override
@@ -102,26 +101,26 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
         return particleType;
     }
 
-        public static final MapCodec<DippingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+        public static final MapCodec<AlchemyRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 CauldronModHelpers.INGREDIENT_LIST_CODEC.fieldOf("reagent").forGetter(r->r.reagents),
                 CauldronContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
                 ItemStackTemplate.CODEC.fieldOf("result").forGetter(r->r.result),
                 ParticleTypes.CODEC.optionalFieldOf("particle_type", ParticleTypes.BUBBLE).forGetter(r->r.particleType),
                 Codec.BOOL.optionalFieldOf("requires_heat", CauldronMod.CONFIG.requiresHeat.value()).forGetter(r->r.requiresHeat)
-        ).apply(inst, DippingRecipe::new));
+        ).apply(inst, AlchemyRecipe::new));
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, DippingRecipe> STREAM_CODEC = StreamCodec.of(DippingRecipe::toNetwork, DippingRecipe::fromNetwork);
+        public static final StreamCodec<RegistryFriendlyByteBuf, AlchemyRecipe> STREAM_CODEC = StreamCodec.of(AlchemyRecipe::toNetwork, AlchemyRecipe::fromNetwork);
 
-        private static DippingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
+        private static AlchemyRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
             var reagent = CauldronModHelpers.INGREDIENT_LIST_STREAM_CODEC.decode(buf);
             var potion = CauldronContents.STREAM_CODEC.decode(buf);
             var result = ItemStackTemplate.STREAM_CODEC.decode(buf);
             var particleType = ParticleTypes.STREAM_CODEC.decode(buf);
             var requiresHeat = buf.readBoolean();
-            return new DippingRecipe(reagent, potion, result, particleType, requiresHeat);
+            return new AlchemyRecipe(reagent, potion, result, particleType, requiresHeat);
         }
 
-        private static void toNetwork(RegistryFriendlyByteBuf buf, DippingRecipe recipe) {
+        private static void toNetwork(RegistryFriendlyByteBuf buf, AlchemyRecipe recipe) {
             CauldronModHelpers.INGREDIENT_LIST_STREAM_CODEC.encode(buf, recipe.reagents);
             CauldronContents.STREAM_CODEC.encode(buf, recipe.potion);
             ItemStackTemplate.STREAM_CODEC.encode(buf, recipe.result);

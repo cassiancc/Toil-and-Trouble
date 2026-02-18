@@ -11,27 +11,30 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.List;
 
-public class CauldronDippingServerRecipe implements ReliableServerRecipe {
+public class CauldronAlchemyServerRecipe implements ReliableServerRecipe {
 
-    public static final ReliableServerRecipeType<CauldronDippingServerRecipe> TYPE = ReliableServerRecipeType.register(
+    public static final ReliableServerRecipeType<CauldronAlchemyServerRecipe> TYPE = ReliableServerRecipeType.register(
             CauldronMod.of("dipping"),
-            () -> new CauldronDippingServerRecipe(null, null, null)
+            () -> new CauldronAlchemyServerRecipe(null, null, null, false)
     );
     private List<Ingredient> reagents;
     private CauldronContents potion;
     private ItemStack result;
+	private boolean requiresHeat;
 
-    public CauldronDippingServerRecipe(List<Ingredient> reagents, CauldronContents potion, ItemStack result) {
+	public CauldronAlchemyServerRecipe(List<Ingredient> reagents, CauldronContents potion, ItemStack result, boolean requiresHeat) {
         this.reagents = reagents;
         this.potion = potion;
         this.result = result;
-    }
+		this.requiresHeat = requiresHeat;
+	}
 
     @Override
     public void writeToTag(CompoundTag tag) {
         tag.put("reagent", TagUtil.writeList(reagents, (ingredient, tag2)->TagUtil.writeIngredient(ingredient)));
         tag.store("potion", CauldronContents.CODEC, potion);
         tag.put("result", TagUtil.encodeItemStackOnServer(result));
+        tag.putBoolean("requires_heat", requiresHeat);
     }
 
     @Override
@@ -39,6 +42,7 @@ public class CauldronDippingServerRecipe implements ReliableServerRecipe {
         reagents = TagUtil.readList(tag, "reagent", TagUtil::readIngredient);
         potion = tag.read("potion", CauldronContents.CODEC).orElse(CauldronContents.EMPTY);
         result = TagUtil.decodeItemStackOnClient(tag.getCompoundOrEmpty("result"));
+        requiresHeat = tag.getBooleanOr("requires_heat", false);
     }
 
     @Override
@@ -57,4 +61,9 @@ public class CauldronDippingServerRecipe implements ReliableServerRecipe {
     public ItemStack getResult() {
         return result;
     }
+
+    public boolean requiresHeat() {
+        return requiresHeat;
+    }
+
 }

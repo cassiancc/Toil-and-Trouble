@@ -6,26 +6,29 @@ import cc.cassian.rrv.api.recipe.ReliableClientRecipe;
 import cc.cassian.rrv.api.recipe.ReliableClientRecipeType;
 import cc.cassian.rrv.common.recipe.inventory.RecipeViewMenu;
 import cc.cassian.rrv.common.recipe.inventory.SlotContent;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CauldronDippingClientRecipe implements ReliableClientRecipe {
+public class CauldronAlchemyClientRecipe implements ReliableClientRecipe {
     private final List<SlotContent> reagents = new ArrayList<>();
     private final CauldronContents potion;
     private final SlotContent result;
+    private final boolean heated;
 
-    public CauldronDippingClientRecipe(CauldronDippingServerRecipe modRecipe) {
+    public CauldronAlchemyClientRecipe(CauldronAlchemyServerRecipe modRecipe) {
         modRecipe.getReagents().forEach(reagent -> {
             reagents.add(SlotContent.of(reagent));
         });
         this.potion = modRecipe.getPotion();
         this.result = SlotContent.of(modRecipe.getResult());
+        this.heated = modRecipe.requiresHeat();
     }
 
     @Override
     public ReliableClientRecipeType getViewType() {
-        return CauldronDippingClientRecipeType.INSTANCE;
+        return CauldronAlchemyClientRecipeType.INSTANCE;
     }
 
     @Override
@@ -35,7 +38,11 @@ public class CauldronDippingClientRecipe implements ReliableClientRecipe {
             slotFillContext.bindOptionalSlot(i, reagent, RecipeViewMenu.OptionalSlotRenderer.DEFAULT);
 		}
         slotFillContext.bindOptionalSlot(9, Constants.getResultForDisplay(potion).getB(), RecipeViewMenu.OptionalSlotRenderer.DEFAULT);
-        slotFillContext.bindOptionalSlot(10, result, RecipeViewMenu.OptionalSlotRenderer.DEFAULT);
+        if (heated)
+            slotFillContext.addAdditionalStackModifier(9, (stack, tooltip)-> {
+                tooltip.add(Component.translatable("tooltip.toil_and_trouble.heated"));
+        });
+        slotFillContext.bindSlot(10, result);
     }
 
     @Override

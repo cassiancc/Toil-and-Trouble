@@ -1,11 +1,9 @@
 package cc.cassian.cauldrons.compat.rrv;
 
-//? if >1.21.10 {
-
 import cc.cassian.cauldrons.compat.rrv.brewing.CauldronBrewingServerRecipe;
 import cc.cassian.cauldrons.compat.rrv.brewing.CauldronBrewingClientRecipe;
-import cc.cassian.cauldrons.compat.rrv.dipping.CauldronDippingServerRecipe;
-import cc.cassian.cauldrons.compat.rrv.dipping.CauldronDippingClientRecipe;
+import cc.cassian.cauldrons.compat.rrv.dipping.CauldronAlchemyServerRecipe;
+import cc.cassian.cauldrons.compat.rrv.dipping.CauldronAlchemyClientRecipe;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
 import cc.cassian.cauldrons.registry.CauldronModItems;
 import cc.cassian.rrv.api.ReliableRecipeViewerPlugin;
@@ -20,10 +18,10 @@ public class CauldronModRRVPlugin implements ReliableRecipeViewerPlugin {
         // register the server recipes
         ItemView.addServerRecipeProvider(recipeList -> {
             ServerRecipeManager.INSTANCE.getRecipesForType(CauldronModRecipes.BREWING).forEach(recipe -> {
-                recipeList.add(new CauldronBrewingServerRecipe(recipe.getReagent(), recipe.getPotion(), recipe.getResultPotion()));
+                recipeList.add(new CauldronBrewingServerRecipe(recipe.getReagent(), recipe.getPotion(), recipe.getResultPotion(), recipe.requiresHeat()));
             });
-            ServerRecipeManager.INSTANCE.getRecipesForType(CauldronModRecipes.DIPPING).forEach(recipe -> {
-                recipeList.add(new CauldronDippingServerRecipe(recipe.getReagents(), recipe.getPotion(), recipe.getResultItem()));
+            ServerRecipeManager.INSTANCE.getRecipesForType(CauldronModRecipes.ALCHEMY).forEach(recipe -> {
+                recipeList.add(new CauldronAlchemyServerRecipe(recipe.getReagents(), recipe.getPotion(), recipe.getResultItem(), recipe.requiresHeat()));
             });
         });
 
@@ -31,12 +29,11 @@ public class CauldronModRRVPlugin implements ReliableRecipeViewerPlugin {
         ItemView.addClientRecipeWrapper(CauldronBrewingServerRecipe.TYPE, modRecipe -> {
 			return Collections.singletonList(new CauldronBrewingClientRecipe(modRecipe));
 		});
-        ItemView.addClientRecipeWrapper(CauldronDippingServerRecipe.TYPE, modRecipe -> {
-			return Collections.singletonList(new CauldronDippingClientRecipe(modRecipe));
+        ItemView.addClientRecipeWrapper(CauldronAlchemyServerRecipe.TYPE, modRecipe -> {
+			return Collections.singletonList(new CauldronAlchemyClientRecipe(modRecipe));
 		});
 
         // hide cauldron contents
         ItemView.excludeItem(CauldronModItems.CAULDRON_CONTENTS.get());
     }
 }
-//?}
