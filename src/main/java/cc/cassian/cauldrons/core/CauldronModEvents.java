@@ -1,5 +1,6 @@
 package cc.cassian.cauldrons.core;
 
+import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.recipe.BrewingRecipeInput;
@@ -43,7 +44,12 @@ public class CauldronModEvents {
     public static InteractionResult useBlock(Player player, Level level, InteractionHand interactionHand, BlockPos pos, Direction direction) {
         BlockState blockState = level.getBlockState(pos);
         ItemStack stack = player.getItemInHand(interactionHand);
-        if (stack.isEmpty()) return PASS_TO_EMPTY_HAND;
+        if (stack.isEmpty()) {
+            if (CauldronMod.CONFIG.client.showContentsWhenInteracting.value()) {
+                player.sendOverlayMessage(level.getBlockState(pos).getBlock().getName());
+            }
+            return PASS_TO_EMPTY_HAND;
+        }
         else if (blockState.is(Blocks.CAULDRON) && !stack.is(Items.WATER_BUCKET)) {
             var state = CauldronModBlocks.BREWING_CAULDRON.get().defaultBlockState();
             level.setBlockAndUpdate(pos, state);

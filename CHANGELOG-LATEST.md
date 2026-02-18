@@ -1,8 +1,6 @@
 ### Added
-- Port to 26.1-snapshot-7.
+- Dipping recipes now support multiple reagents.
+- Clicking on a cauldron now shows its contents.
 
 ### Fixed
-- Translucency issues with the Cauldron (fixed by vanilla in 26.1!)
-
-### Removed
-- Support for versions prior to 26.1. 26.1 is set to be the new long term support version, and future development will be focused there.
+- Errors loading recipes on 26.1.

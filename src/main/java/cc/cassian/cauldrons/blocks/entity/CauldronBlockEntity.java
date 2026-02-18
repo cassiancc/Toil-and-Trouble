@@ -253,7 +253,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         else if (contents.isPotion()) {
             return contents.toPotionContents().getName("item.minecraft.potion.effect.");
         } else {
-            return Component.literal(contents.id().toLanguageKey());
+            return Component.translatable(contents.id().toLanguageKey("cauldron"));
         }
 	}
 

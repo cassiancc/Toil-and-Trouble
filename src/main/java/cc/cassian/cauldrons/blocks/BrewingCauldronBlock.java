@@ -79,8 +79,6 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
 			} else if (CauldronMod.CONFIG.client.showContentsWhenInteracting.value()) {
                 player.sendOverlayMessage(cauldronBlockEntity.getContentsName());
             }
-            if (Platform.isDev())
-                player.sendSystemMessage(Component.literal(cauldronBlockEntity.getItems().toString()));
 		}
         return InteractionResult.PASS;
     }
