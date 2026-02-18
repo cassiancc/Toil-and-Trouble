@@ -2,8 +2,8 @@ package cc.cassian.cauldrons.compat.rrv;
 
 import cc.cassian.cauldrons.compat.rrv.brewing.CauldronBrewingServerRecipe;
 import cc.cassian.cauldrons.compat.rrv.brewing.CauldronBrewingClientRecipe;
-import cc.cassian.cauldrons.compat.rrv.dipping.CauldronAlchemyServerRecipe;
-import cc.cassian.cauldrons.compat.rrv.dipping.CauldronAlchemyClientRecipe;
+import cc.cassian.cauldrons.compat.rrv.alchemy.CauldronAlchemyServerRecipe;
+import cc.cassian.cauldrons.compat.rrv.alchemy.CauldronAlchemyClientRecipe;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
 import cc.cassian.cauldrons.registry.CauldronModItems;
 import cc.cassian.rrv.api.ReliableRecipeViewerPlugin;

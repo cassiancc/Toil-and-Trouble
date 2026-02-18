@@ -2,23 +2,18 @@ package cc.cassian.cauldrons.compat.jei;
 
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.core.CauldronContents;
-import cc.cassian.cauldrons.core.CauldronModRecipes;
-import cc.cassian.cauldrons.recipe.BrewingRecipe;
 import cc.cassian.cauldrons.registry.CauldronModItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 //? if fabric && >1.21.9
-import net.fabricmc.fabric.api.recipe.v1.sync.RecipeSynchronization;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Fluids;
 import oshi.util.tuples.Pair;
 
 import java.util.Map;
@@ -33,20 +28,20 @@ public class CauldronModJeiPlugin implements IModPlugin {
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registration) {
 		registration.addRecipeCategories(new BrewingRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
-		registration.addRecipeCategories(new DippingRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
+		registration.addRecipeCategories(new AlchemyRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
 	}
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
 		JeiRecipeHelpers modRecipes = new JeiRecipeHelpers();
 		registration.addRecipes(BrewingRecipeCategory.CATEGORY, modRecipes.getBrewingRecipes());
-		registration.addRecipes(DippingRecipeCategory.CATEGORY, modRecipes.getDippingRecipes());
+		registration.addRecipes(AlchemyRecipeCategory.CATEGORY, modRecipes.getDippingRecipes());
 	}
 
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
 		registration.addCraftingStation(BrewingRecipeCategory.CATEGORY, Blocks.CAULDRON);
-		registration.addCraftingStation(DippingRecipeCategory.CATEGORY, Blocks.CAULDRON);
+		registration.addCraftingStation(AlchemyRecipeCategory.CATEGORY, Blocks.CAULDRON);
 	}
 
 	public static final Map<Identifier, ItemStack> OVERRIDES = Map.of(

@@ -22,31 +22,23 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 
-public class DippingRecipeCategory implements IRecipeCategory<RecipeHolder<AlchemyRecipe>> {
+public class AlchemyRecipeCategory implements IRecipeCategory<RecipeHolder<AlchemyRecipe>> {
 
 	private final IDrawable icon;
 
-	public DippingRecipeCategory(IGuiHelper guiHelper) {
+	public AlchemyRecipeCategory(IGuiHelper guiHelper) {
 		this.icon = guiHelper.createDrawableItemLike(Blocks.CAULDRON);
 	}
 
-	//? if >1.21.9 {
 	public static final IRecipeType<RecipeHolder<AlchemyRecipe>> CATEGORY = IRecipeType.create(CauldronModRecipes.ALCHEMY);
 	@Override
 	public IRecipeType<RecipeHolder<AlchemyRecipe>> getRecipeType() {
 		return CATEGORY;
 	}
-	//?} else {
-	/*public static final RecipeType<RecipeHolder<DippingRecipe>> CATEGORY = RecipeType.createFromDeferredVanilla(CauldronModRecipes.DIPPING).get();
-	@Override
-	public RecipeType<RecipeHolder<DippingRecipe>> getRecipeType() {
-		return CATEGORY;
-	}
-	*///?}
 
 	@Override
 	public Component getTitle() {
-		return Component.translatable("emi.category.toil_and_trouble.dipping");
+		return Component.translatable("emi.category.toil_and_trouble.alchemy");
 	}
 
 	@Override
@@ -58,33 +50,32 @@ public class DippingRecipeCategory implements IRecipeCategory<RecipeHolder<Alche
 	public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<AlchemyRecipe> recipeHolder, IFocusGroup iFocusGroup) {
 		var recipe = recipeHolder.value();
 		// reagent
-		recipe.getReagents().forEach(reagent -> {
-			builder.addSlot(RecipeIngredientRole.INPUT, 5, 4).add(reagent).setStandardSlotBackground();
-		});
+		for (int y = 0; y < 3; y++) {
+			for (int x = 0; x < 3; x++) {
+				builder.addSlot(RecipeIngredientRole.INPUT, 1 + x * 18, 1 + y * 18).add(recipe.getReagents().get(x*y)).setStandardSlotBackground();
+			}
+		}
 		// potion item
 		var input = CauldronModJeiPlugin.getResultForDisplay(recipe.getPotion());
-		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 41, 4).add(input.getB()).setStandardSlotBackground();
+		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 61, 37).add(input.getB()).setStandardSlotBackground();
 		builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).add(input.getA());
 		// output
 		var output = recipe.getResultItem();
-		builder.addSlot(RecipeIngredientRole.OUTPUT, 78, 4).add(output).setStandardSlotBackground();
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19).add(output).setStandardSlotBackground();
 	}
 
 	@Override
 	public int getWidth() {
-		return 100;
+		return 116;
 	}
 
 	@Override
 	public int getHeight() {
-		return 25;
+		return 54;
 	}
 
 	@Override
 	public void draw(RecipeHolder<AlchemyRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-		guiGraphics.blit(
-				//? if >1.21.2
-				RenderPipelines.GUI_TEXTURED,
-				CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
+		guiGraphics.blit(RenderPipelines.GUI_TEXTURED, CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
 	}
 }

@@ -1,4 +1,4 @@
-package cc.cassian.cauldrons.compat.rrv.dipping;
+package cc.cassian.cauldrons.compat.rrv.alchemy;
 
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.core.CauldronContents;
