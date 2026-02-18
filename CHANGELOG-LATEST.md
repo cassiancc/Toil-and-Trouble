@@ -1,7 +1,7 @@
 ### Added
 - Dipping recipes now support multiple reagents.
 - Clicking on a cauldron now shows its contents.
-- Milk cauldrons, which clear all effects from players that step inside..
+- Milk cauldrons, which clear all effects from players that step inside.
 
 ### Changed
 - General cleanup for 26.1.

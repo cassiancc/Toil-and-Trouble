@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 *///?}
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -65,20 +66,31 @@ public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity
 
 
     @Override
-    public void submit(CauldronBlockEntityRenderState blockEntityRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
-        AtomicReference<Float> yo = new AtomicReference<>(0.44921875F);
-        blockEntityRenderState.items.forEach(itemStack -> {
-            int k = (int)blockEntityRenderState.blockPos.asLong();
-            poseStack.pushPose();
-            poseStack.translate(0.5F, yo.get(), 0.5F);
-            yo.updateAndGet(v -> (float) (v + .2));
-            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-            poseStack.translate(0.0, 0, 0.0F);
-            poseStack.scale(SIZE, SIZE, SIZE);
-            itemStack.submit(poseStack, submitNodeCollector, blockEntityRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
-            poseStack.popPose();
-        });
-    }
+    public void submit(CauldronBlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
+        AtomicReference<Float> yPos = new AtomicReference<>(0.44921875F);
+		List<ItemStackRenderState> items = state.items;
+		for (int i = 0; i < items.size(); i++) {
+            ItemStackRenderState itemStack = items.get(i);
+			poseStack.pushPose();
+			if (i!=0 && i<5) {
+				poseStack.translate(0.5F, 0.44921875F, 0.5F);
+                Direction direction = Direction.from2DDataValue((i + Direction.UP.get2DDataValue()) % 4);
+                float angle = -direction.toYRot();
+                poseStack.mulPose(Axis.YP.rotationDegrees(angle));
+                poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+                poseStack.translate(-0.2125F, -0.2125F, 0.0F);
+                poseStack.scale(SIZE, SIZE, SIZE);
+			} else {
+				poseStack.translate(0.5F, yPos.get(), 0.5F);
+                yPos.updateAndGet(v -> (float) (v + .2));
+                poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+                poseStack.translate(0.0, 0, 0.0F);
+                poseStack.scale(SIZE, SIZE, SIZE);
+			}
+			itemStack.submit(poseStack, submitNodeCollector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+			poseStack.popPose();
+		}
+	}
 
 
 }
