@@ -63,7 +63,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     private ParticleOptions particleType = ParticleTypes.BUBBLE;
 
     public CauldronBlockEntity(BlockPos pos, BlockState state, CauldronContents contents) {
-        super(CauldronModBlockEntityTypes.CAULDRON_BLOCK_ENTITY.get(), pos, state);
+        super(CauldronModBlockEntityTypes.CAULDRON_BLOCK_ENTITY, pos, state);
         this.contents = contents;
     }
 
@@ -79,7 +79,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     }
 
     public CauldronBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(CauldronModBlockEntityTypes.CAULDRON_BLOCK_ENTITY.get(), blockPos, blockState);
+        super(CauldronModBlockEntityTypes.CAULDRON_BLOCK_ENTITY, blockPos, blockState);
 
     }
 
@@ -201,7 +201,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         this.items.clear();
         this.items.addAll(stack);
         //level.levelEvent(LevelEvent.SOUND_BREWING_STAND_BREW, this.getBlockPos(), 0);
-        this.level.playSound(null, getBlockPos(), CauldronModSoundEvents.BREWS.get(), SoundSource.BLOCKS);
+        this.level.playSound(null, getBlockPos(), CauldronModSoundEvents.BREWS, SoundSource.BLOCKS);
         var state = this.getBlockState();
         // check for a potion quantity
         var potionQuantity = state.getOptionalValue(LayeredCauldronBlock.LEVEL).orElse(0)+ state.getOptionalValue(POTION_QUANTITY).orElse(0)+contents.amount();
@@ -324,7 +324,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
             }
             //reset to vanilla
             var newState = level.getBlockState(pos);
-            if (newState.is(CauldronModBlocks.BREWING_CAULDRON.get())) {
+            if (newState.is(CauldronModBlocks.BREWING_CAULDRON)) {
                 if (cauldronBlockEntity.items.isEmpty()) {
                     if (cauldronBlockEntity.getFillLevel().equals(0)) {
                         newState = Blocks.CAULDRON.defaultBlockState();

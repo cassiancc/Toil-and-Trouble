@@ -12,28 +12,27 @@ import java.util.function.Supplier;
 
 public class CauldronModItems {
 
-    public static final Supplier<Item> CAULDRON_CONTENTS = register(
+    public static final Item CAULDRON_CONTENTS = register(
             "cauldron_contents", CauldronContentsItem::new, new Item.Properties()
     );
 
-    public static final Supplier<Item> HONEY_CONTENTS = register(
+    public static final Item HONEY_CONTENTS = register(
             "honey", Item::new, new Item.Properties()
     );
 
-    private static Supplier<Item> register(ResourceKey<Item> resourceKey, Function<Item.Properties, Item> function, Item.Properties properties) {
-        return CommonRegistry.registerItem(resourceKey.identifier().getPath(), ()-> function.apply(properties.setId(resourceKey)
-        ));
+    private static Item register(ResourceKey<Item> resourceKey, Function<Item.Properties, Item> function, Item.Properties properties) {
+        return CommonRegistry.registerItem(resourceKey.identifier().getPath(), function.apply(properties.setId(resourceKey)));
     }
 
     private static ResourceKey<Item> registryKey(String string) {
         return ResourceKey.create(Registries.ITEM, CauldronMod.of(string));
     }
 
-    private static Supplier<Item> register(String string, Function<Item.Properties, Item> function, Item.Properties properties) {
+    private static Item register(String string, Function<Item.Properties, Item> function, Item.Properties properties) {
         return register(registryKey(string), function, properties);
     }
 
-    private static Supplier<Item> register(String string, Item.Properties properties) {
+    private static Item register(String string, Item.Properties properties) {
         return register(string, Item::new, properties);
     }
 

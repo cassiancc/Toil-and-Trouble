@@ -55,13 +55,13 @@ public class CauldronModJeiPlugin implements IModPlugin {
 			Identifier.withDefaultNamespace("powder_snow_cauldron"), new ItemStack(Blocks.POWDER_SNOW),
 			CauldronMod.of("lava"), new ItemStack(Blocks.LAVA),
 			CauldronMod.of("empty"), new ItemStack(Items.AIR),
-			CauldronMod.of("honey"), new ItemStack(CauldronModItems.HONEY_CONTENTS.get())
+			CauldronMod.of("honey"), new ItemStack(CauldronModItems.HONEY_CONTENTS)
 	);
 
 	static Pair<ItemStack, ItemStack> getResultForDisplay(CauldronContents resultPotion) {
 		if (resultPotion.potion().isPresent()) {
 			var potion = resultPotion.potion().get();
-			return new Pair<>((PotionContents.createItemStack(Items.POTION, potion)), PotionContents.createItemStack(CauldronModItems.CAULDRON_CONTENTS.get(), potion));
+			return new Pair<>((PotionContents.createItemStack(Items.POTION, potion)), PotionContents.createItemStack(CauldronModItems.CAULDRON_CONTENTS, potion));
 		} else if (OVERRIDES.containsKey(resultPotion.id())) {
 			var stack = OVERRIDES.get(resultPotion.id());
 			return new Pair<>(stack, stack);

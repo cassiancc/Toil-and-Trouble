@@ -26,9 +26,9 @@ public final class CauldronModFabricClient implements ClientModInitializer {
 	@Override
     public void onInitializeClient() {
         // This entrypoint is suitable for setting up client-specific logic, such as rendering.
-        BlockEntityRenderers.register(CauldronModBlockEntityTypes.CAULDRON_BLOCK_ENTITY.get(), CauldronRenderer::new);
+        BlockEntityRenderers.register(CauldronModBlockEntityTypes.CAULDRON_BLOCK_ENTITY, CauldronRenderer::new);
 
-		BlockColorRegistry.register(CauldronModClient::getColor, CauldronModBlocks.BREWING_CAULDRON.get());
+		BlockColorRegistry.register(CauldronModClient::getColor, CauldronModBlocks.BREWING_CAULDRON);
 
     }
 }

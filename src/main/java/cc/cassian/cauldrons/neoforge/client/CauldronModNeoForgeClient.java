@@ -38,7 +38,7 @@ public final class CauldronModNeoForgeClient {
                 return cauldronBlockEntity.getPotionColour();
             }
             return 9551193;
-        }), CauldronModBlocks.BREWING_CAULDRON.get());
+        }), CauldronModBlocks.BREWING_CAULDRON);
 
     }
 
@@ -51,7 +51,7 @@ public final class CauldronModNeoForgeClient {
 
     @SubscribeEvent
     public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(CauldronModBlockEntityTypes.CAULDRON_BLOCK_ENTITY.get(), CauldronRenderer::new);
+        event.registerBlockEntityRenderer(CauldronModBlockEntityTypes.CAULDRON_BLOCK_ENTITY, CauldronRenderer::new);
     }
 
     @SubscribeEvent

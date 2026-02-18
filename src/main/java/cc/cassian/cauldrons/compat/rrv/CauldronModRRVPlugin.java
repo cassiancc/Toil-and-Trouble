@@ -34,6 +34,6 @@ public class CauldronModRRVPlugin implements ReliableRecipeViewerPlugin {
 		});
 
         // hide cauldron contents
-        ItemView.excludeItem(CauldronModItems.CAULDRON_CONTENTS.get());
+        ItemView.excludeItem(CauldronModItems.CAULDRON_CONTENTS);
     }
 }

@@ -30,7 +30,7 @@ public abstract class BlockBehaviourMixin  {
     private void mixin(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier insideBlockEffectApplier, boolean bl, CallbackInfo ci) {
         if (!level.isClientSide() && CauldronMod.CONFIG.itemEntitiesConvertCauldrons.value() && state.is(Blocks.CAULDRON)) {
             if (entity instanceof ItemEntity itemEntity && itemEntity.tickCount>10) {
-                var newState = CauldronModBlocks.BREWING_CAULDRON.get().defaultBlockState();
+                var newState = CauldronModBlocks.BREWING_CAULDRON.defaultBlockState();
                 level.setBlockAndUpdate(pos, newState);
                 level.setBlockEntity(new CauldronBlockEntity(pos, newState));
                 CauldronModEvents.insert(itemEntity.getItem(), newState, level, pos, null, null, null);
