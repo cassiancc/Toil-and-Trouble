@@ -36,8 +36,10 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     @Override
-    public boolean matches(BrewingRecipeInput inv, Level level) {
-        return inv.ingredientAmount() == this.reagents.size() && inv.stackedContents().canCraft(this, null);
+    public boolean matches(BrewingRecipeInput input, Level level) {
+        if (!requiresHeat() || input.isHeated())
+            return input.ingredientAmount() == this.reagents.size() && input.stackedContents().canCraft(this, null);
+        return false;
     }
 
     @Override

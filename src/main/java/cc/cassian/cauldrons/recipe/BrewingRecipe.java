@@ -39,7 +39,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
 
     @Override
     public boolean matches(BrewingRecipeInput input, Level level) {
-        if (!requiresHeat || input.isHeated())
+        if (!requiresHeat() || input.isHeated())
             return reagent.test(input.getItem(0)) && potion.test(input.getContents());
         return false;
     }
