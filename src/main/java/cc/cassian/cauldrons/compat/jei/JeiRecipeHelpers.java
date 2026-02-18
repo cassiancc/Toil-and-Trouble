@@ -1,11 +1,14 @@
 package cc.cassian.cauldrons.compat.jei;
 
 import cc.cassian.cauldrons.core.CauldronModRecipes;
-import cc.cassian.cauldrons.neoforge.client.CauldronModNeoForgeClient;
+
 import cc.cassian.cauldrons.recipe.BrewingRecipe;
 import cc.cassian.cauldrons.recipe.DippingRecipe;
-//? if fabric && >1.21.2
+//? if fabric {
 import net.fabricmc.fabric.api.recipe.v1.sync.SynchronizedRecipes;
+//?} else {
+/*import cc.cassian.cauldrons.neoforge.client.CauldronModNeoForgeClient;
+*///?}
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.item.crafting.RecipeHolder;

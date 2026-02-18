@@ -5,6 +5,10 @@ import net.fabricmc.loader.api.FabricLoader;
 //? if neoforge {
 /*import cc.cassian.cauldrons.neoforge.CauldronModNeoForge;
 import cc.cassian.cauldrons.neoforge.client.CauldronModNeoForgeClient;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.fml.loading.FMLPaths;
+*///?}
 import cc.cassian.cauldrons.recipe.BrewingRecipe;
 import cc.cassian.cauldrons.recipe.BrewingRecipeInput;
 import cc.cassian.cauldrons.recipe.DippingRecipe;
@@ -13,11 +17,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.fml.loading.FMLPaths;
 import org.jspecify.annotations.Nullable;
-*///?}
 
 import java.nio.file.Path;
 import java.util.Optional;
