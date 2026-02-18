@@ -93,7 +93,7 @@ public class DippingRecipe implements Recipe<BrewingRecipeInput> {
 
     @Override
     public String group() {
-        return "";
+        return "dipping";
     }
 
     public ParticleOptions getParticleType() {
