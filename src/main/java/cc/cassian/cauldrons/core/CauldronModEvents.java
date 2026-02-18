@@ -43,7 +43,8 @@ public class CauldronModEvents {
     public static InteractionResult useBlock(Player player, Level level, InteractionHand interactionHand, BlockPos pos, Direction direction) {
         BlockState blockState = level.getBlockState(pos);
         ItemStack stack = player.getItemInHand(interactionHand);
-        if (blockState.is(Blocks.CAULDRON) && !stack.is(Items.WATER_BUCKET)) {
+        if (stack.isEmpty()) return PASS_TO_EMPTY_HAND;
+        else if (blockState.is(Blocks.CAULDRON) && !stack.is(Items.WATER_BUCKET)) {
             var state = CauldronModBlocks.BREWING_CAULDRON.get().defaultBlockState();
             level.setBlockAndUpdate(pos, state);
             return insert(player.getItemInHand(interactionHand), state, level, pos, player, interactionHand, direction);
