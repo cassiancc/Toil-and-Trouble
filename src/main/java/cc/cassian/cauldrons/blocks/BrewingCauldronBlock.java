@@ -19,6 +19,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffect;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
@@ -40,7 +41,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     public static final EnumProperty<Contents> CONTENTS = EnumProperty.create("contents", Contents.class, Contents.values());
 
     public enum Contents implements StringRepresentable {
-        EMPTY("empty"), WATER("water"), LAVA("lava"), POTION("potion"), HONEY("honey"), CHORUS_HONEY("chorus_honey");
+        EMPTY("empty"), WATER("water"), LAVA("lava"), POTION("potion"), HONEY("honey"), MILK("milk"), CHORUS_HONEY("chorus_honey");
         private final String name;
 
         Contents(final String name) {
@@ -102,8 +103,12 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                     entity.lavaHurt();
                 } else if (entity instanceof LivingEntity livingEntity && CauldronMod.CONFIG.cauldronsApplyEffects.value()) {
                     if (livingEntity.isAffectedByPotions()) {
-                        for (MobEffectInstance effect : cauldronBlockEntity.getContents().getAllEffects()) {
-                            livingEntity.addEffect(new MobEffectInstance(effect.getEffect(), 1, effect.getAmplifier(), true, true));
+                        if (cauldronBlockEntity.getContents().is("milk")) {
+                            ClearAllStatusEffectsConsumeEffect.INSTANCE.apply(level, null, livingEntity);
+                        } else {
+                            for (MobEffectInstance effect : cauldronBlockEntity.getContents().getAllEffects()) {
+                                livingEntity.addEffect(new MobEffectInstance(effect.getEffect(), 1, effect.getAmplifier(), true, true));
+                            }
                         }
                     }
                 }

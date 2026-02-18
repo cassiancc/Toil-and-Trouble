@@ -76,7 +76,7 @@ public class CauldronModEvents {
                     var recipe = insertingRecipeRecipeHolder.get().value();
                     int newFillLevel = blockState.getValue(POTION_QUANTITY) + recipe.getAmount();
                     if (newFillLevel > -1 && newFillLevel < 4) {
-                        cauldronBlockEntity.setContents(recipe.getResultPotion());
+                        cauldronBlockEntity.setContents(recipe.getResultContents());
                         if (player == null || !player.isCreative())
                             itemStack.setCount(itemStack.getCount()-1);
                         giveToPlayer(player, interactionHand, level, pos, direction, recipe.getResultItem());

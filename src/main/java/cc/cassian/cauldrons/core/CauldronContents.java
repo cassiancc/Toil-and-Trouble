@@ -58,13 +58,7 @@ public record CauldronContents(Identifier id, Optional<Holder<Potion>> potion, O
     }
 
     public CauldronContents(PotionContents potion) {
-        this(Identifier.withDefaultNamespace("potion"), potion.potion(), potion.customColor(), potion.customEffects(), 3,
-            //? if >1.21.2 {
-            potion.customName()
-            //?} else {
-            /*Optional.empty()
-            *///?}
-        );
+        this(Identifier.withDefaultNamespace("potion"), potion.potion(), potion.customColor(), potion.customEffects(), 3, potion.customName());
     }
 
     public CauldronContents(Identifier potion) {
@@ -82,7 +76,7 @@ public record CauldronContents(Identifier id, Optional<Holder<Potion>> potion, O
     }
 
     public boolean is(Holder<Potion> potion) {
-        return this.potion.isPresent() && this.potion.get().is(potion) && this.customEffects.isEmpty();
+        return this.potion.isPresent() && this.potion.get().equals(potion.value()) && this.customEffects.isEmpty();
     }
 
     public boolean is(Identifier potion) {
@@ -90,10 +84,7 @@ public record CauldronContents(Identifier id, Optional<Holder<Potion>> potion, O
     }
 
     public PotionContents toPotionContents() {
-        return new PotionContents(potion, customColor, customEffects
-        //? if >1.21.2
-        , customName
-        );
+        return new PotionContents(potion, customColor, customEffects, customName);
     }
 
     public int getColor() {
@@ -105,9 +96,7 @@ public record CauldronContents(Identifier id, Optional<Holder<Potion>> potion, O
     }
 
     public Iterable<MobEffectInstance> getAllEffects() {
-        return this.potion.map(potionHolder -> this.customEffects.isEmpty()
-                ? ((Potion) ((Holder) potionHolder).value()).getEffects()
-                : Iterables.concat(((Potion) ((Holder) potionHolder).value()).getEffects(), this.customEffects)).orElse(this.customEffects);
+        return this.potion.map(potionHolder -> this.customEffects.isEmpty() ? potionHolder.value().getEffects() : Iterables.concat(potionHolder.value().getEffects(), this.customEffects)).orElse(this.customEffects);
     }
 
     public boolean test(CauldronContents testedContents) {

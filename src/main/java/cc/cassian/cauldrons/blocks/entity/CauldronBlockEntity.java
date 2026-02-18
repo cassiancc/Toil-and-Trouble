@@ -349,6 +349,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         if (getContents().is(Potions.WATER)) return Contents.WATER;
         else if (getContents().potion().isPresent()) return Contents.POTION;
         else if (getContents().is("honey")) return Contents.HONEY;
+        else if (getContents().is("milk")) return Contents.MILK;
         else if (getContents().is(Identifier.fromNamespaceAndPath("chorus_honey", "chorus_honey"))) return Contents.CHORUS_HONEY;
         else if (getContents().is("lava")) return Contents.LAVA;
         else if (getContents().is(Identifier.withDefaultNamespace("air"))) return Contents.EMPTY;

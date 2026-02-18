@@ -5,8 +5,6 @@ import cc.cassian.cauldrons.core.CauldronModRecipes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
@@ -19,15 +17,15 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
     private final ItemStackTemplate reagent;
     private final CauldronContents potion;
     private final ItemStackTemplate resultItem;
-    private final CauldronContents resultPotion;
+    private final CauldronContents resultContents;
     private final boolean addPotionComponents;
     private final int amount;
 
-    public InsertingRecipe(ItemStackTemplate reagent, CauldronContents currentPotion, ItemStackTemplate resultItem, CauldronContents resultPotion, boolean addPotionComponents, int amount) {
+    public InsertingRecipe(ItemStackTemplate reagent, CauldronContents currentPotion, ItemStackTemplate resultItem, CauldronContents resultContents, boolean addPotionComponents, int amount) {
         this.reagent = reagent;
         this.potion = currentPotion;
         this.resultItem = resultItem;
-        this.resultPotion = resultPotion;
+        this.resultContents = resultContents;
         this.addPotionComponents = addPotionComponents;
         this.amount = amount;
     }
@@ -93,15 +91,15 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
         return "";
     }
 
-    public CauldronContents getResultPotion() {
-        return this.resultPotion;
+    public CauldronContents getResultContents() {
+        return this.resultContents;
     }
 
     public static final MapCodec<InsertingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             ItemStackTemplate.CODEC.fieldOf("item").forGetter(r->r.reagent),
             CauldronContents.CODEC.fieldOf("contents").forGetter(r->r.potion),
             ItemStackTemplate.CODEC.fieldOf("result_item").forGetter(r->r.resultItem),
-            CauldronContents.CODEC.fieldOf("result_contents").forGetter(r->r.resultPotion),
+            CauldronContents.CODEC.fieldOf("result_contents").forGetter(r->r.resultContents),
             Codec.BOOL.optionalFieldOf("add_potion_components", false).forGetter(r->r.addPotionComponents),
             Codec.INT.optionalFieldOf("amount", 0).forGetter(r->r.amount)
 
@@ -123,7 +121,7 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
         ItemStackTemplate.STREAM_CODEC.encode(buf, recipe.reagent);
         CauldronContents.STREAM_CODEC.encode(buf, recipe.potion);
         ItemStackTemplate.STREAM_CODEC.encode(buf, recipe.resultItem);
-        CauldronContents.STREAM_CODEC.encode(buf, recipe.resultPotion);
+        CauldronContents.STREAM_CODEC.encode(buf, recipe.resultContents);
         buf.writeBoolean(recipe.addPotionComponents);
         buf.writeInt(recipe.amount);
     }
