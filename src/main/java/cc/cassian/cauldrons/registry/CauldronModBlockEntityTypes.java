@@ -16,8 +16,8 @@ public class CauldronModBlockEntityTypes {
                     FabricBlockEntityTypeBuilder.create(CauldronBlockEntity::new,
                             CauldronModBlocks.BREWING_CAULDRON.get()).build()
                     //?} else {
-                    /*BlockEntityType.Builder.of(CauldronBlockEntity::new,
-                            CauldronModBlocks.BREWING_CAULDRON.get()).build(null)
+                    /*new BlockEntityType<>(CauldronBlockEntity::new,
+                            CauldronModBlocks.BREWING_CAULDRON.get())
                     *///?}
             );
 

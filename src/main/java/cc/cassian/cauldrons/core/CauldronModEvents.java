@@ -1,6 +1,7 @@
 package cc.cassian.cauldrons.core;
 
 import cc.cassian.cauldrons.CauldronMod;
+import cc.cassian.cauldrons.Platform;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.recipe.BrewingRecipeInput;
@@ -10,9 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-//? if <1.21.4 {
-/*import net.minecraft.world.ItemInteractionResult;
-*///?}
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -33,13 +31,7 @@ import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.setFillLevel;
 import static net.minecraft.world.level.block.Block.popResourceFromFace;
 
 public class CauldronModEvents {
-    public static InteractionResult PASS_TO_EMPTY_HAND =
-    //? if <1.21.4 {
-    /*InteractionResult.PASS
-    *///?} else {
-     InteractionResult.TRY_WITH_EMPTY_HAND
-     //?}
-    ;
+    public static InteractionResult PASS_TO_EMPTY_HAND = InteractionResult.TRY_WITH_EMPTY_HAND;
 
     public static InteractionResult useBlock(Player player, Level level, InteractionHand interactionHand, BlockPos pos, Direction direction) {
         BlockState blockState = level.getBlockState(pos);
@@ -79,8 +71,7 @@ public class CauldronModEvents {
         }
         if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
             if (!itemStack.isEmpty()) {
-                var recipeAccess = level.recipeAccess().getSynchronizedRecipes();
-                Optional<RecipeHolder<InsertingRecipe>> insertingRecipeRecipeHolder = recipeAccess.getFirstMatch(CauldronModRecipes.INSERTING, new BrewingRecipeInput(Collections.singletonList(itemStack), cauldronBlockEntity.getContents(), false), level);
+                Optional<RecipeHolder<InsertingRecipe>> insertingRecipeRecipeHolder = Platform.getFirstRecipe(CauldronModRecipes.INSERTING, new BrewingRecipeInput(Collections.singletonList(itemStack), cauldronBlockEntity.getContents(), false), level);
                 if (insertingRecipeRecipeHolder.isPresent()) {
                     var recipe = insertingRecipeRecipeHolder.get().value();
                     int newFillLevel = blockState.getValue(POTION_QUANTITY) + recipe.getAmount();

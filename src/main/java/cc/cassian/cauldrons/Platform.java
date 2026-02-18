@@ -2,10 +2,25 @@ package cc.cassian.cauldrons;
 
 //? if fabric
 import net.fabricmc.loader.api.FabricLoader;
-//? if neoforge
-/*import net.neoforged.fml.loading.FMLPaths;*/
+//? if neoforge {
+/*import cc.cassian.cauldrons.neoforge.CauldronModNeoForge;
+import cc.cassian.cauldrons.neoforge.client.CauldronModNeoForgeClient;
+import cc.cassian.cauldrons.recipe.BrewingRecipe;
+import cc.cassian.cauldrons.recipe.BrewingRecipeInput;
+import cc.cassian.cauldrons.recipe.DippingRecipe;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.fml.loading.FMLPaths;
+import org.jspecify.annotations.Nullable;
+*///?}
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 public class Platform {
     public static Path getConfigDir() {
@@ -17,10 +32,26 @@ public class Platform {
     }
 
 	public static boolean isModLoaded(String mod) {
+		//? fabric
 		return FabricLoader.getInstance().isModLoaded(mod);
+		//? neoforge
+		//return ModList.get().isLoaded(mod);
 	}
 
 	public static boolean isDev() {
+		//? fabric
 		return FabricLoader.getInstance().isDevelopmentEnvironment();
+		//? neoforge
+		//return !FMLEnvironment.isProduction();
+	}
+
+	public static <T extends Recipe<BrewingRecipeInput>> Optional<RecipeHolder<T>> getFirstRecipe(RecipeType<T> brewing, BrewingRecipeInput input, Level level) {
+		if (level instanceof ServerLevel serverLevel)
+			return serverLevel.recipeAccess().getRecipeFor(brewing, input, level);
+		//? fabric
+		return level.recipeAccess().getSynchronizedRecipes().getFirstMatch(brewing, input, level);
+		//? neoforge {
+		/*return CauldronModNeoForgeClient.map.getRecipesFor(brewing, input, level).findFirst();
+		*///?}
 	}
 }

@@ -12,6 +12,7 @@ import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
 @Mod(CauldronMod.MOD_ID)
@@ -35,6 +36,11 @@ public final class CauldronModNeoForge {
         } else if (event.getRegistryKey().equals(Registries.RECIPE_TYPE)) {
             CauldronModRecipes.touch();
         }
+    }
+
+    @SubscribeEvent
+    public static void register(OnDatapackSyncEvent event) {
+        event.sendRecipes(CauldronModRecipes.BREWING, CauldronModRecipes.DIPPING, CauldronModRecipes.INSERTING);
     }
 }
 

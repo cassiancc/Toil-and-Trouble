@@ -56,49 +56,62 @@ neoForge {
 
 
 repositories {
-    mavenLocal()
-    maven("https://maven.shedaniel.me/") {
+    maven {
         name = "shedaniel (Cloth Config)"
+        url = uri("https://maven.shedaniel.me/")
+        content {
+            includeGroupAndSubgroups("me.shedaniel")
+        }
     }
-    maven("https://maven.terraformersmc.com/releases/") {
+    maven {
         name = "Terraformers (Mod Menu)"
+        url = uri("https://maven.terraformersmc.com/releases/")
+        content {
+            includeGroupAndSubgroups("com.terraformersmc")
+        }
     }
-    maven("https://repo.sleeping.town/") {
-        name = "Sisby Maven"
-    }
-    maven("https://maven.parchmentmc.org") {
-        name = "Parchment Mappings"
-    }
-    maven("https://maven.parchmentmc.org") {
-        name = "Parchment Mappings"
-    }
-    maven("https://maven.isxander.dev/releases") {
-        name = "Xander Maven"
-    }
-    maven("https://maven.architectury.dev") {
-        name = "REI Maven"
-    }
-    maven("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/") {
-        name = "Fuzs Mod Resources"
-    }
-    maven("https://api.modrinth.com/maven") {
+    maven {
         name = "Modrinth"
+        url = uri("https://api.modrinth.com/maven")
+        content {
+            includeGroupAndSubgroups("maven.modrinth")
+        }
     }
-    maven("https://maven.blamejared.com/") {
-        // location of the maven that hosts JEI files since January 2023
-        name = "Jared's maven"
-    }
-    maven("https://modmaven.dev/") {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "JEI"
-    }
-    maven ( "https://maven2.bai.lol" ) {
+    maven {
         name = "WTHIT"
+        url = uri("https://maven2.bai.lol")
+        content {
+            includeGroupAndSubgroups("mcp.mobius.waila")
+            includeGroupAndSubgroups("lol.bai")
+        }
+    }
+    maven {
+        name = "Sisby Maven"
+        url = uri("https://repo.sleeping.town/")
+        content {
+            includeGroupAndSubgroups("folk.sisby")
+        }
+    }
+    maven {
+        name = "Xander Maven"
+        url = uri("https://maven.isxander.dev/releases")
+        content {
+            includeGroupAndSubgroups("dev.isxander")
+            includeGroupAndSubgroups("org.quiltmc.parsers")
+        }
+    }
+    maven {
+        name = "Cassian's Maven"
+        url = uri("https://maven.cassian.cc")
+        content {
+            includeGroupAndSubgroups("cc.cassian")
+        }
     }
     maven {
         name = "Kotlin for Forge"
         setUrl("https://thedarkcolour.github.io/KotlinForForge/")
     }
+    mavenCentral()
 }
 
 dependencies {
@@ -108,7 +121,7 @@ dependencies {
 //    "additionalRuntimeClasspath"("folk.sisby:kaleido-config:${property("deps.kaleido")}")
 
     // mcqoy
-    implementation("maven.modrinth:mcqoy:yHGo6VsD")
+//    implementation("maven.modrinth:mcqoy:yHGo6VsD")
 
     // Cloth Config
     if (hasProperty("deps.yacl")) {
@@ -123,31 +136,24 @@ dependencies {
         compileOnly("maven.modrinth:jade:${property("deps.jade")}")
         runtimeOnly("maven.modrinth:jade:${property("deps.jade")}")
     } else {
-        compileOnly("maven.modrinth:jade:19.3.2+neoforge")
+        compileOnly("maven.modrinth:jade:21.0.1+neoforge")
     }
     if (hasProperty("deps.badpackets_version")) {
         compileOnly("mcp.mobius.waila:wthit-api:neo-${property("deps.wthit_version")}")
         runtimeOnly("mcp.mobius.waila:wthit:neo-${property("deps.wthit_version")}")
         runtimeOnly("lol.bai:badpackets:neo-${property("deps.badpackets_version")}")
     } else {
-        compileOnly("mcp.mobius.waila:wthit-api:neo-17.2.0")
+        compileOnly("mcp.mobius.waila:wthit-api:neo-18.2.1")
     }
     // Development QOL
-    runtimeOnly("cc.cassian.item-descriptions:item-descriptions-neoforge:${property("deps.item_descriptions")}")   {
-        isTransitive = false
-    }
+//    runtimeOnly("cc.cassian.item-descriptions:item-descriptions-neoforge:${property("deps.item_descriptions")}")   {
+//        isTransitive = false
+//    }
 
     // Recipe Viewers
-    if (hasProperty("deps.eiv")) {
-        compileOnly("maven.modrinth:eiv:${property("deps.eiv")}-neoforge")
-        runtimeOnly("maven.modrinth:eiv:${property("deps.eiv")}-neoforge")
-    }
-    if (hasProperty("deps.emi")) {
-        compileOnly("dev.emi:emi-neoforge:${property("deps.emi")}:api")
-        runtimeOnly("dev.emi:emi-neoforge:${property("deps.emi")}")
-    }
-    //    compileOnly("mezz.jei:jei-${property("deps.minecraft")}-neoforge:${property("deps.jei")}")
-
+    compileOnly("maven.modrinth:jei:${property("deps.jei")}-neoforge")
+    compileOnly("cc.cassian.rrv:reliable-recipe-viewer-neoforge:${property("deps.rrv")}")
+    runtimeOnly("cc.cassian.rrv:reliable-recipe-viewer-neoforge:${property("deps.rrv")}")
 }
 
 stonecutter {
@@ -176,10 +182,10 @@ tasks {
 
 java {
     withSourcesJar()
-    val javaCompat = if (stonecutter.eval(stonecutter.current.version, ">=1.20.5")) {
-        JavaVersion.VERSION_21
+    val javaCompat = if (stonecutter.eval(stonecutter.current.version, ">26")) {
+        JavaVersion.VERSION_25
     } else {
-        JavaVersion.VERSION_17
+        JavaVersion.VERSION_21
     }
     sourceCompatibility = javaCompat
     targetCompatibility = javaCompat

@@ -1,6 +1,7 @@
 package cc.cassian.cauldrons.blocks.entity;
 
 import cc.cassian.cauldrons.CauldronMod;
+import cc.cassian.cauldrons.Platform;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.core.CauldronModEvents;
@@ -159,14 +160,13 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 
     public void brew(boolean cauldronHeated) {
         var input = new BrewingRecipeInput(items, contents, cauldronHeated);
-        if (level == null) return;
-		var recipeAccess = level.recipeAccess().getSynchronizedRecipes();
-		Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = recipeAccess.getFirstMatch(CauldronModRecipes.BREWING, input, level);
+        if (level == null) return;;
+		Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = Platform.getFirstRecipe(CauldronModRecipes.BREWING, input, level);
 		if (brewingRecipe.isPresent()) {
 			this.contents = brewingRecipe.get().value().getResultPotion();
 			updateAfterBrewing(ItemStack.EMPTY, this.contents, brewingRecipe.get().value().getParticleType());
 		}
-		Optional<RecipeHolder<DippingRecipe>> dippingRecipe = recipeAccess.getFirstMatch(CauldronModRecipes.DIPPING, input, level);
+		Optional<RecipeHolder<DippingRecipe>> dippingRecipe = Platform.getFirstRecipe(CauldronModRecipes.DIPPING, input, level);
 		if (dippingRecipe.isPresent()) {
 			updateAfterBrewing(dippingRecipe.get().value().getResultItem(), this.contents, dippingRecipe.get().value().getParticleType());
 			setFillLevel(0);
