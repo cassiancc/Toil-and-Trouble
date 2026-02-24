@@ -5,44 +5,43 @@ import cc.cassian.cauldrons.core.CauldronModRecipes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
 
-    private final ItemStack reagent;
+    private final ItemStackTemplate reagent;
     private final CauldronContents potion;
-    private final ItemStack resultItem;
-    private final CauldronContents resultPotion;
+    private final ItemStackTemplate resultItem;
+    private final CauldronContents resultContents;
     private final boolean addPotionComponents;
     private final int amount;
 
-    public InsertingRecipe(ItemStack reagent, CauldronContents currentPotion, ItemStack resultItem, CauldronContents resultPotion, boolean addPotionComponents, int amount) {
+    public InsertingRecipe(ItemStackTemplate reagent, CauldronContents currentPotion, ItemStackTemplate resultItem, CauldronContents resultContents, boolean addPotionComponents, int amount) {
         this.reagent = reagent;
         this.potion = currentPotion;
         this.resultItem = resultItem;
-        this.resultPotion = resultPotion;
+        this.resultContents = resultContents;
         this.addPotionComponents = addPotionComponents;
         this.amount = amount;
     }
 
     @Override
     public boolean matches(BrewingRecipeInput input, Level level) {
-        return ItemStack.isSameItemSameComponents(reagent, input.getItem(0)) && potion.test(input.getContents());
+        return ItemStack.isSameItemSameComponents(reagent.create(), input.getItem(0)) && potion.test(input.getContents());
     }
 
     @Override
-    public ItemStack assemble(BrewingRecipeInput input, HolderLookup.Provider registries) {
-        return this.resultItem.copy();
+    public ItemStack assemble(BrewingRecipeInput input) {
+        return this.resultItem.create();
     }
 
     public ItemStack getReagent() {
-        return reagent;
+        return reagent.create().copy();
     }
 
     public CauldronContents getPotion() {
@@ -54,20 +53,19 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     public ItemStack getResultItem() {
-        return resultItem.copy();
+        return resultItem.create();
     }
 
     @Override
     public RecipeSerializer<InsertingRecipe> getSerializer() {
-        return CauldronModRecipes.INSERTION_SERIALIZER.get();
+        return CauldronModRecipes.INSERTION_SERIALIZER;
     }
 
     @Override
     public RecipeType<InsertingRecipe> getType() {
-        return CauldronModRecipes.INSERTING.get();
+        return CauldronModRecipes.INSERTING;
     }
 
-    //? if >1.21.2 {
     @Override
     public PlacementInfo placementInfo() {
         return PlacementInfo.NOT_PLACEABLE;
@@ -77,67 +75,54 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
     public RecipeBookCategory recipeBookCategory() {
         return null;
     }
-    //?} else {
-    /*@Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return getResultItem();
-    }
-    *///?}
 
     @Override
     public boolean isSpecial() {
         return true;
     }
 
-    public CauldronContents getResultPotion() {
-        return this.resultPotion;
+    @Override
+    public boolean showNotification() {
+        return false;
     }
 
-    public static class Serializer implements RecipeSerializer<InsertingRecipe> {
-        public static final MapCodec<InsertingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-                ItemStack.CODEC.fieldOf("item").forGetter(r->r.reagent),
-                CauldronContents.CODEC.fieldOf("contents").forGetter(r->r.potion),
-                ItemStack.CODEC.fieldOf("result_item").forGetter(r->r.resultItem),
-                CauldronContents.CODEC.fieldOf("result_contents").forGetter(r->r.resultPotion),
-                Codec.BOOL.optionalFieldOf("add_potion_components", false).forGetter(r->r.addPotionComponents),
-                Codec.INT.optionalFieldOf("amount", 0).forGetter(r->r.amount)
+    @Override
+    public String group() {
+        return "";
+    }
 
-        ).apply(inst, InsertingRecipe::new));
+    public CauldronContents getResultContents() {
+        return this.resultContents;
+    }
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, InsertingRecipe> STREAM_CODEC = StreamCodec.of(InsertingRecipe.Serializer::toNetwork, InsertingRecipe.Serializer::fromNetwork);
+    public static final MapCodec<InsertingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+            ItemStackTemplate.CODEC.fieldOf("item").forGetter(r->r.reagent),
+            CauldronContents.CODEC.fieldOf("contents").forGetter(r->r.potion),
+            ItemStackTemplate.CODEC.fieldOf("result_item").forGetter(r->r.resultItem),
+            CauldronContents.CODEC.fieldOf("result_contents").forGetter(r->r.resultContents),
+            Codec.BOOL.optionalFieldOf("add_potion_components", false).forGetter(r->r.addPotionComponents),
+            Codec.INT.optionalFieldOf("amount", 0).forGetter(r->r.amount)
 
-        private static InsertingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
-            var reagent = ItemStack.STREAM_CODEC.decode(buf);
-            var potion = CauldronContents.STREAM_CODEC.decode(buf);
-            var result = ItemStack.STREAM_CODEC.decode(buf);
-            var resultPotion = CauldronContents.STREAM_CODEC.decode(buf);
-            var addPotionComponents = buf.readBoolean();
-            var amount = buf.readInt();
-            return new InsertingRecipe(reagent, potion, result, resultPotion, addPotionComponents, amount);
-        }
+    ).apply(inst, InsertingRecipe::new));
 
-        private static void toNetwork(RegistryFriendlyByteBuf buf, InsertingRecipe recipe) {
-            ItemStack.STREAM_CODEC.encode(buf, recipe.reagent);
-            CauldronContents.STREAM_CODEC.encode(buf, recipe.potion);
-            ItemStack.STREAM_CODEC.encode(buf, recipe.resultItem);
-            CauldronContents.STREAM_CODEC.encode(buf, recipe.resultPotion);
-            buf.writeBoolean(recipe.addPotionComponents);
-            buf.writeInt(recipe.amount);
-        }
+    public static final StreamCodec<RegistryFriendlyByteBuf, InsertingRecipe> STREAM_CODEC = StreamCodec.of(InsertingRecipe::toNetwork, InsertingRecipe::fromNetwork);
 
-        @Override
-        public MapCodec<InsertingRecipe> codec() {
-            return CODEC;
-        }
+    private static InsertingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
+        var reagent = ItemStackTemplate.STREAM_CODEC.decode(buf);
+        var potion = CauldronContents.STREAM_CODEC.decode(buf);
+        var result = ItemStackTemplate.STREAM_CODEC.decode(buf);
+        var resultPotion = CauldronContents.STREAM_CODEC.decode(buf);
+        var addPotionComponents = buf.readBoolean();
+        var amount = buf.readInt();
+        return new InsertingRecipe(reagent, potion, result, resultPotion, addPotionComponents, amount);
+    }
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, InsertingRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
+    private static void toNetwork(RegistryFriendlyByteBuf buf, InsertingRecipe recipe) {
+        ItemStackTemplate.STREAM_CODEC.encode(buf, recipe.reagent);
+        CauldronContents.STREAM_CODEC.encode(buf, recipe.potion);
+        ItemStackTemplate.STREAM_CODEC.encode(buf, recipe.resultItem);
+        CauldronContents.STREAM_CODEC.encode(buf, recipe.resultContents);
+        buf.writeBoolean(recipe.addPotionComponents);
+        buf.writeInt(recipe.amount);
     }
 }

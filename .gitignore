@@ -48,3 +48,4 @@ bin/
 
 ### Jetbrains ###
 .idea/
+/src/main/resources/data/toil_and_trouble/recipe/test

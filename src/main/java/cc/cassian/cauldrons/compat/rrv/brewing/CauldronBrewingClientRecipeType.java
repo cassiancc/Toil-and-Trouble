@@ -1,5 +1,5 @@
 package cc.cassian.cauldrons.compat.rrv.brewing;
-//? if >1.21.11 {
+//? if >1.21.7 {
 
 /*import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.rrv.api.recipe.ReliableClientRecipeType;
@@ -12,9 +12,9 @@ import net.minecraft.world.item.Items;
 import java.util.Collections;
 import java.util.List;
 
-public class CauldronBrewingViewType implements ReliableClientRecipeType {
+public class CauldronBrewingClientRecipeType implements ReliableClientRecipeType {
 
-    public static final CauldronBrewingViewType INSTANCE = new CauldronBrewingViewType();
+    public static final CauldronBrewingClientRecipeType INSTANCE = new CauldronBrewingClientRecipeType();
 
     @Override
     public Component getDisplayName() {

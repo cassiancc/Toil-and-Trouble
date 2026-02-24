@@ -10,17 +10,14 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 public class CauldronModBlockEntityTypes {
-    public static final Supplier<BlockEntityType<CauldronBlockEntity>> CAULDRON_BLOCK_ENTITY =
-            CommonRegistry.registerBlockEntity("cauldron_block_entity", ()->
+    public static final BlockEntityType<CauldronBlockEntity> CAULDRON_BLOCK_ENTITY =
+            CommonRegistry.registerBlockEntity("cauldron_block_entity",
                     //? if fabric {
                     FabricBlockEntityTypeBuilder.create(CauldronBlockEntity::new,
-                            CauldronModBlocks.BREWING_CAULDRON.get()).build()
-                    //?} else if >1.21.2 {
-                    /*new BlockEntityType<>(CauldronBlockEntity::new,Set.of(
-                            CauldronModBlocks.BREWING_CAULDRON.get()))
-                    *///?} else {
-                    /*BlockEntityType.Builder.of(CauldronBlockEntity::new,
-                            CauldronModBlocks.BREWING_CAULDRON.get()).build(null)
+                            CauldronModBlocks.BREWING_CAULDRON).build()
+                    //?} else {
+                    /*new BlockEntityType<>(CauldronBlockEntity::new,
+                            CauldronModBlocks.BREWING_CAULDRON)
                     *///?}
             );
 

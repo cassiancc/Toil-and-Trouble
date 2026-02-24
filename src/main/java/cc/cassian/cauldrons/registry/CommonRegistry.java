@@ -24,43 +24,44 @@ public class CommonRegistry {
         return () -> object;
     }
 
-    public static <T> Supplier<DataComponentType<T>> registerComponentType(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
-        return register(name, () -> (builderOperator.apply(DataComponentType.builder())).build(), BuiltInRegistries.DATA_COMPONENT_TYPE);
+    public static <R, T extends R> T register(String name, T object, Registry<R> reg) {
+		Registry.register(reg, CauldronMod.of(name), object);
+        return object;
     }
 
-    public static <B extends Item> Supplier<B> registerItem(String name, Supplier<B> supplier) {
+    public static <B extends Item> B registerItem(String name, B supplier) {
         return register(name, supplier, BuiltInRegistries.ITEM);
     }
 
-    public static <B extends Block> Supplier<B> registerBlock(String name, Supplier<B> supplier) {
+    public static <B extends Block> B registerBlock(String name, B supplier) {
         return register(name, supplier, BuiltInRegistries.BLOCK);
     }
 
-    public static <T extends EntityType<?>> Supplier<T> registerEntity(String name, Supplier<T> supplier) {
+    public static <T extends EntityType<?>> T registerEntity(String name, T supplier) {
         return register(name, supplier, BuiltInRegistries.ENTITY_TYPE);
     }
 
-    public static Supplier<SoundEvent> registerSoundEvent(String name, Supplier<SoundEvent> supplier) {
+    public static SoundEvent registerSoundEvent(String name, SoundEvent supplier) {
         return register(name, supplier, BuiltInRegistries.SOUND_EVENT);
     }
 
-    public static Supplier<SoundEvent> registerSoundEvent(String name) {
-        return registerSoundEvent(name, ()->SoundEvent.createVariableRangeEvent(CauldronMod.of(name)));
+    public static SoundEvent registerSoundEvent(String name) {
+        return registerSoundEvent(name, SoundEvent.createVariableRangeEvent(CauldronMod.of(name)));
     }
 
     public static Holder<MobEffect> registerMobEffect(String name, Supplier<MobEffect> supplier) {
         return Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, CauldronMod.of(name), supplier.get());
     }
 
-    public static <B extends RecipeSerializer<?>> Supplier<B> registerRecipeSerializer(String name, Supplier<B> supplier) {
-        return register(name, supplier, BuiltInRegistries.RECIPE_SERIALIZER);
+    public static <B extends RecipeSerializer<?>> B registerRecipeSerializer(String name, Supplier<B> supplier) {
+        return register(name, supplier, BuiltInRegistries.RECIPE_SERIALIZER).get();
     }
 
-    public static <B extends RecipeType<?>> Supplier<B> registerRecipe(String name, Supplier<B> supplier) {
-        return register(name, supplier, BuiltInRegistries.RECIPE_TYPE);
+    public static <B extends RecipeType<?>> B registerRecipe(String name, Supplier<B> supplier) {
+        return register(name, supplier, BuiltInRegistries.RECIPE_TYPE).get();
     }
 
-    public static <B extends BlockEntityType<?>> Supplier<B> registerBlockEntity(String name, Supplier<B> supplier) {
+    public static <B extends BlockEntityType<?>> B registerBlockEntity(String name, B supplier) {
         return register(name, supplier, BuiltInRegistries.BLOCK_ENTITY_TYPE);
     }
 }

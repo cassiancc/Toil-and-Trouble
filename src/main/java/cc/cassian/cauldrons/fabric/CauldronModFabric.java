@@ -3,14 +3,13 @@ package cc.cassian.cauldrons.fabric;
 //? if fabric {
 
 import cc.cassian.cauldrons.CauldronMod;
-import cc.cassian.cauldrons.Platform;
-import cc.cassian.cauldrons.compat.jei.CauldronModJeiPlugin;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
 import cc.cassian.cauldrons.registry.CauldronModBlockEntityTypes;
 import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import cc.cassian.cauldrons.registry.CauldronModItems;
 import cc.cassian.cauldrons.registry.CauldronModSoundEvents;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.recipe.v1.sync.RecipeSynchronization;
 
 public final class CauldronModFabric implements ModInitializer {
     @Override
@@ -26,11 +25,10 @@ public final class CauldronModFabric implements ModInitializer {
         CauldronModBlockEntityTypes.touch();
         CauldronModSoundEvents.touch();
         CauldronModRecipes.touch();
-        //? if >1.21.9 {
-		if (Platform.isModLoaded("jei")) {
-			CauldronModJeiPlugin.syncRecipes();
-		}
-		//?}
+
+		RecipeSynchronization.synchronizeRecipeSerializer(CauldronModRecipes.BREWING_SERIALIZER);
+		RecipeSynchronization.synchronizeRecipeSerializer(CauldronModRecipes.INSERTION_SERIALIZER);
+		RecipeSynchronization.synchronizeRecipeSerializer(CauldronModRecipes.ALCHEMY_SERIALIZER);
     }
 }
 

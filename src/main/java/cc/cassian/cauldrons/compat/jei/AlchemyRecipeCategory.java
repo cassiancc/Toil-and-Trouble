@@ -2,14 +2,13 @@ package cc.cassian.cauldrons.compat.jei;
 
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
-import cc.cassian.cauldrons.recipe.BrewingRecipe;
+import cc.cassian.cauldrons.recipe.AlchemyRecipe;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-
 import mezz.jei.api.recipe.category.IRecipeCategory;
 //? if >1.21.2 {
 import mezz.jei.api.recipe.types.IRecipeType;
@@ -23,23 +22,23 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 
-public class BrewingRecipeCategory implements IRecipeCategory<RecipeHolder<BrewingRecipe>> {
+public class AlchemyRecipeCategory implements IRecipeCategory<RecipeHolder<AlchemyRecipe>> {
+
 	private final IDrawable icon;
 
-	public BrewingRecipeCategory(IGuiHelper guiHelper) {
+	public AlchemyRecipeCategory(IGuiHelper guiHelper) {
 		this.icon = guiHelper.createDrawableItemLike(Blocks.CAULDRON);
 	}
 
-	public static final IRecipeType<RecipeHolder<BrewingRecipe>> CATEGORY = IRecipeType.create(CauldronModRecipes.BREWING);
-
+	public static final IRecipeType<RecipeHolder<AlchemyRecipe>> CATEGORY = IRecipeType.create(CauldronModRecipes.ALCHEMY);
 	@Override
-	public IRecipeType<RecipeHolder<BrewingRecipe>> getRecipeType() {
+	public IRecipeType<RecipeHolder<AlchemyRecipe>> getRecipeType() {
 		return CATEGORY;
 	}
 
 	@Override
 	public Component getTitle() {
-		return Component.translatable("emi.category.toil_and_trouble.brewing");
+		return Component.translatable("emi.category.toil_and_trouble.alchemy");
 	}
 
 	@Override
@@ -48,36 +47,35 @@ public class BrewingRecipeCategory implements IRecipeCategory<RecipeHolder<Brewi
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<BrewingRecipe> recipeHolder, IFocusGroup iFocusGroup) {
+	public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<AlchemyRecipe> recipeHolder, IFocusGroup iFocusGroup) {
 		var recipe = recipeHolder.value();
 		// reagent
-		builder.addSlot(RecipeIngredientRole.INPUT, 5, 4).add(recipe.getReagent()).setStandardSlotBackground();
+		for (int y = 0; y < 3; y++) {
+			for (int x = 0; x < 3; x++) {
+				builder.addSlot(RecipeIngredientRole.INPUT, 1 + x * 18, 1 + y * 18).add(recipe.getReagents().get(x*y)).setStandardSlotBackground();
+			}
+		}
 		// potion item
 		var input = CauldronModJeiPlugin.getResultForDisplay(recipe.getPotion());
-		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 41, 4).add(input.getB()).setStandardSlotBackground();
+		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 61, 37).add(input.getB()).setStandardSlotBackground();
 		builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).add(input.getA());
 		// output
-		var output = CauldronModJeiPlugin.getResultForDisplay(recipe.getResultPotion());
-		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 78, 4).add(output.getB()).setStandardSlotBackground();
-		builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).add(output.getA());
+		var output = recipe.getResultItem();
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19).add(output).setStandardSlotBackground();
 	}
 
 	@Override
 	public int getWidth() {
-		return 100;
+		return 116;
 	}
 
 	@Override
 	public int getHeight() {
-		return 25;
+		return 54;
 	}
 
 	@Override
-	public void draw(RecipeHolder<BrewingRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-		guiGraphics.blit(
-				//? if >1.21.2
-				RenderPipelines.GUI_TEXTURED,
-				CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
+	public void draw(RecipeHolder<AlchemyRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+		guiGraphics.blit(RenderPipelines.GUI_TEXTURED, CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
 	}
-
 }

@@ -1,24 +1,38 @@
 package cc.cassian.cauldrons.recipe;
 
 import cc.cassian.cauldrons.core.CauldronContents;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
 
+import java.util.List;
+
 public class BrewingRecipeInput implements RecipeInput {
 
-    private final ItemStack reagent;
+    private final List<ItemStack> items;
     private final CauldronContents contents;
+    private final StackedItemContents stackedContents = new StackedItemContents();
     private final boolean isHeated;
+    private final int ingredientCount;
 
-    public BrewingRecipeInput(ItemStack reagent, CauldronContents contents, boolean isHeated) {
-        this.reagent = reagent;
+    public BrewingRecipeInput(List<ItemStack> items, CauldronContents contents, boolean isHeated) {
+        this.items = items;
         this.contents = contents;
         this.isHeated = isHeated;
+        int ingredientCount = 0;
+        for (ItemStack item : items) {
+            if (!item.isEmpty()) {
+                ingredientCount++;
+                this.stackedContents.accountStack(item, 1);
+            }
+        }
+        this.ingredientCount = ingredientCount;
     }
 
     @Override
     public ItemStack getItem(int index) {
-        return reagent;
+        return items.get(index);
     }
 
     public CauldronContents getContents() {
@@ -27,10 +41,22 @@ public class BrewingRecipeInput implements RecipeInput {
 
     @Override
     public int size() {
-        return 2;
+        return items.size();
     }
 
     public boolean isHeated() {
         return isHeated;
     }
+
+    public StackedItemContents stackedContents() {
+        return this.stackedContents;
+    }
+
+    public List<ItemStack> items() {
+        return this.items;
+    }
+
+	public int ingredientAmount() {
+		return ingredientCount;
+	}
 }

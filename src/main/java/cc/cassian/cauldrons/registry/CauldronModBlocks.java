@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 public class CauldronModBlocks {
 
-    public static final Supplier<Block> BREWING_CAULDRON = register(
+    public static final Block BREWING_CAULDRON = register(
             "cauldron", BrewingCauldronBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON).lightLevel(properties->{
                 if (properties.getValue(BrewingCauldronBlock.CONTENTS) == BrewingCauldronBlock.Contents.LAVA) {
                     return 15;
@@ -21,30 +21,21 @@ public class CauldronModBlocks {
             })
     );
 
-    private static Supplier<Block> register(ResourceKey<Block> resourceKey, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties) {
+    private static Block register(ResourceKey<Block> resourceKey, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties) {
         // register block
         // return
-        return CommonRegistry.registerBlock(resourceKey
-                //? if neoforge {
-                /*.location()
-                *///?} else {
-                .identifier()
-                //?}
-                .getPath(), ()-> function.apply(properties
-                //? if >1.21.2
-                .setId(resourceKey)
-        ));
+        return CommonRegistry.registerBlock(resourceKey.identifier().getPath(), function.apply(properties.setId(resourceKey)));
     }
 
     private static ResourceKey<Block> registryKey(String string) {
         return ResourceKey.create(Registries.BLOCK, CauldronMod.of(string));
     }
 
-    private static Supplier<Block> register(String string, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties) {
+    private static Block register(String string, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties) {
         return register(registryKey(string), function, properties);
     }
 
-    private static Supplier<Block> register(String string, BlockBehaviour.Properties properties) {
+    private static Block register(String string, BlockBehaviour.Properties properties) {
         return register(string, Block::new, properties);
     }
 

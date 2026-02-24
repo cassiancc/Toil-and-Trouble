@@ -84,6 +84,18 @@
     "contents=lava,potion_quantity=3": {
       "model": "toil_and_trouble:block/lava_cauldron_full"
     },
+    "contents=milk,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "contents=milk,potion_quantity=1": {
+      "model": "toil_and_trouble:block/milk_cauldron_level1"
+    },
+    "contents=milk,potion_quantity=2": {
+      "model": "toil_and_trouble:block/milk_cauldron_level2"
+    },
+    "contents=milk,potion_quantity=3": {
+      "model": "toil_and_trouble:block/milk_cauldron_full"
+    },
     "contents=chorus_honey,potion_quantity=0": {
       "model": "minecraft:block/cauldron"
     },
