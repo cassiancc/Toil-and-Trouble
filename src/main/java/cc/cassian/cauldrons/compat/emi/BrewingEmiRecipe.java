@@ -3,7 +3,7 @@ package cc.cassian.cauldrons.compat.emi;
 //? if <1.21.2 {
 
 
-/*import cc.cassian.cauldrons.recipe.BrewingRecipe;
+import cc.cassian.cauldrons.recipe.BrewingRecipe;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -51,4 +51,4 @@ public class BrewingEmiRecipe extends BasicEmiRecipe {
         widgetHolder.addSlot(resultForDisplay, 81, 0).recipeContext(this);
     }
 }
-*///?}
+//?}

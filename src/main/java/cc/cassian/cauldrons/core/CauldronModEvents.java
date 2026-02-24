@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -31,14 +32,14 @@ import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.setFillLevel;
 import static net.minecraft.world.level.block.Block.popResourceFromFace;
 
 public class CauldronModEvents {
-    public static InteractionResult PASS_TO_EMPTY_HAND = InteractionResult.TRY_WITH_EMPTY_HAND;
+    public static ItemInteractionResult PASS_TO_EMPTY_HAND = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 
     public static ItemInteractionResult useBlock(Player player, Level level, InteractionHand interactionHand, BlockPos pos, Direction direction) {
         BlockState blockState = level.getBlockState(pos);
         ItemStack stack = player.getItemInHand(interactionHand);
         if (stack.isEmpty()) {
             if (CauldronMod.CONFIG.client.showContentsWhenInteracting.value()) {
-                player.sendOverlayMessage(level.getBlockState(pos).getBlock().getName());
+                player.displayClientMessage(level.getBlockState(pos).getBlock().getName(), true);
             }
             return PASS_TO_EMPTY_HAND;
         }
@@ -81,7 +82,7 @@ public class CauldronModEvents {
                             itemStack.setCount(itemStack.getCount()-1);
                         giveToPlayer(player, interactionHand, level, pos, direction, recipe.getResultItem());
                         setFillLevel(blockState, level, pos, newFillLevel);
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     }
                 }
                 return tryHardcodedRecipe(itemStack, blockState, cauldronBlockEntity, level, pos, player, interactionHand, direction);
@@ -109,7 +110,7 @@ public class CauldronModEvents {
             stack.setCount(tippedCount);
             setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
             giveToPlayer(player, interactionHand, level, pos, direction, stack);
-            return InteractionResult.CONSUME;
+            return ItemInteractionResult.CONSUME;
         } else if (itemStack.is(Items.GLASS_BOTTLE) && cauldronBlockEntity.getContents().isPotion() && cauldronBlockEntity.getFillLevel()>=1) {
             var fillLevel = 1;
             if (itemStack.getCount()==2 && cauldronBlockEntity.getFillLevel()==2) {
@@ -127,7 +128,7 @@ public class CauldronModEvents {
             stack.setCount(fillLevel);
             setFillLevel(blockState, level, pos, cauldronBlockEntity.getFillLevel()-fillLevel);
             giveToPlayer(player, interactionHand, level, pos, direction, stack);
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         } else {
             Pair<ItemInteractionResult, ItemStack> insert = cauldronBlockEntity.insert(itemStack.copyWithCount(1));
             if (!(insert.getA() == PASS_TO_EMPTY_HAND)) {

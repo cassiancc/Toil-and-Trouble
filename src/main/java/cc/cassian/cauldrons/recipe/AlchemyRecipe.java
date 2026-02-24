@@ -7,12 +7,12 @@ import cc.cassian.cauldrons.core.CauldronModRecipes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
@@ -22,11 +22,11 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
 
     private final List<Ingredient> reagents;
     private final CauldronContents potion;
-    private final ItemStackTemplate result;
+    private final ItemStack result;
     private final ParticleOptions particleType;
     private final boolean requiresHeat;
 
-    public AlchemyRecipe(List<Ingredient> reagent, CauldronContents potion, ItemStackTemplate result, ParticleOptions particleType, boolean requiresHeat) {
+    public AlchemyRecipe(List<Ingredient> reagent, CauldronContents potion, ItemStack result, ParticleOptions particleType, boolean requiresHeat) {
         this.reagents = reagent;
         this.potion = potion;
         this.result = result;
@@ -42,8 +42,18 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     @Override
-    public ItemStack assemble(BrewingRecipeInput input) {
-        return this.result.create();
+    public ItemStack assemble(BrewingRecipeInput input, HolderLookup.Provider provider) {
+        return this.result.copy();
+    }
+
+    @Override
+    public boolean canCraftInDimensions(int width, int height) {
+        return true;
+    }
+
+    @Override
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
+        return result;
     }
 
     public boolean requiresHeat() {
@@ -59,7 +69,7 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     public ItemStack getResultItem() {
-        return result.create();
+        return result.copy();
     }
 
     @Override
@@ -73,16 +83,6 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     @Override
-    public PlacementInfo placementInfo() {
-        return PlacementInfo.create(this.reagents);
-    }
-
-    @Override
-    public RecipeBookCategory recipeBookCategory() {
-        return null;
-    }
-
-    @Override
     public boolean isSpecial() {
         return true;
     }
@@ -92,11 +92,6 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
         return false;
     }
 
-    @Override
-    public String group() {
-        return "dipping";
-    }
-
     public ParticleOptions getParticleType() {
         return particleType;
     }
@@ -104,7 +99,7 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
         public static final MapCodec<AlchemyRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 CauldronModHelpers.INGREDIENT_LIST_CODEC.fieldOf("reagent").forGetter(r->r.reagents),
                 CauldronContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
-                ItemStackTemplate.CODEC.fieldOf("result").forGetter(r->r.result),
+                ItemStack.CODEC.fieldOf("result").forGetter(r->r.result),
                 ParticleTypes.CODEC.optionalFieldOf("particle_type", ParticleTypes.BUBBLE).forGetter(r->r.particleType),
                 Codec.BOOL.optionalFieldOf("requires_heat", CauldronMod.CONFIG.requiresHeat.value()).forGetter(r->r.requiresHeat)
         ).apply(inst, AlchemyRecipe::new));
@@ -114,7 +109,7 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
         private static AlchemyRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
             var reagent = CauldronModHelpers.INGREDIENT_LIST_STREAM_CODEC.decode(buf);
             var potion = CauldronContents.STREAM_CODEC.decode(buf);
-            var result = ItemStackTemplate.STREAM_CODEC.decode(buf);
+            var result = ItemStack.STREAM_CODEC.decode(buf);
             var particleType = ParticleTypes.STREAM_CODEC.decode(buf);
             var requiresHeat = buf.readBoolean();
             return new AlchemyRecipe(reagent, potion, result, particleType, requiresHeat);
@@ -123,7 +118,7 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
         private static void toNetwork(RegistryFriendlyByteBuf buf, AlchemyRecipe recipe) {
             CauldronModHelpers.INGREDIENT_LIST_STREAM_CODEC.encode(buf, recipe.reagents);
             CauldronContents.STREAM_CODEC.encode(buf, recipe.potion);
-            ItemStackTemplate.STREAM_CODEC.encode(buf, recipe.result);
+            ItemStack.STREAM_CODEC.encode(buf, recipe.result);
             ParticleTypes.STREAM_CODEC.encode(buf, recipe.particleType);
             buf.writeBoolean(recipe.requiresHeat);
         }

@@ -1,7 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 plugins {
-    id("net.fabricmc.fabric-loom")
+    id("fabric-loom")
     id("dev.kikugie.postprocess.jsonlang")
     id("me.modmuss50.mod-publish-plugin")
     id("maven-publish")
@@ -49,6 +49,7 @@ repositories {
         url = uri("https://maven.terraformersmc.com/releases/")
         content {
             includeGroupAndSubgroups("com.terraformersmc")
+            includeGroupAndSubgroups("dev.emi")
         }
     }
     maven {
@@ -118,24 +119,34 @@ repositories {
             includeGroupAndSubgroups("mezz.jei")
         }
     }
+    maven {
+        name = "Parchment Mappings"
+        url = uri("https://maven.parchmentmc.org")
+        content {
+            includeGroupAndSubgroups("org.parchmentmc")
+        }
+    }
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:${property("deps.minecraft")}")
-    implementation("net.fabricmc:fabric-loader:${property("deps.fabric-loader")}")
-    implementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric-api")}")
+    mappings(loom.layered {
+        officialMojangMappings()
+        if (hasProperty("deps.parchment"))
+            parchment("org.parchmentmc.data:parchment-${property("deps.parchment")}@zip")
+    })
+    modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric-loader")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric-api")}")
 
     implementation("folk.sisby:kaleido-config:${property("deps.kaleido")}")
     include("folk.sisby:kaleido-config:${property("deps.kaleido")}")
-    implementation("com.terraformersmc:modmenu:${property("deps.modmenu")}")
-    compileOnly("maven.modrinth:jade:${property("deps.jade")}")
-    compileOnly("mcp.mobius.waila:wthit-api:neo-${property("deps.wthit_version")}")
-    compileOnly("mezz.jei:jei-26.1-snapshot-4-fabric:${property("deps.jei")}")
-    compileOnly("cc.cassian.rrv:reliable-recipe-viewer-fabric:${property("deps.rrv")}") {
-        isTransitive = false
-    }
-    runtimeOnly("cc.cassian.rrv:reliable-recipe-viewer-fabric:${property("deps.rrv")}") {
-        isTransitive = false
+    modImplementation("com.terraformersmc:modmenu:${property("deps.modmenu")}")
+    modCompileOnly("maven.modrinth:jade:${property("deps.jade")}")
+    modCompileOnly("mcp.mobius.waila:wthit-api:fabric-${property("deps.wthit_version")}")
+    modCompileOnly("dev.emi:emi-fabric:${property("deps.emi")}:api")
+    modLocalRuntime("dev.emi:emi-fabric:${property("deps.emi")}")
+    modCompileOnly("maven.modrinth:jei:${property("deps.jei")}-fabric") {
+        isTransitive = false;
     }
 
 }
@@ -148,7 +159,7 @@ configurations.all {
 
 stonecutter {
     replacements.string {
-        direction = eval(current.version, ">1.21")
+        direction = eval(current.version, ">1.21.10")
         replace("ResourceLocation", "Identifier")
     }
 }

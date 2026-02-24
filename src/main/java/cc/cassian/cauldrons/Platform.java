@@ -43,12 +43,6 @@ public class Platform {
 	}
 
 	public static <T extends Recipe<BrewingRecipeInput>> Optional<RecipeHolder<T>> getFirstRecipe(RecipeType<T> brewing, BrewingRecipeInput input, Level level) {
-		if (level instanceof ServerLevel serverLevel)
-			return serverLevel.recipeAccess().getRecipeFor(brewing, input, level);
-		//? fabric
-		return level.recipeAccess().getSynchronizedRecipes().getFirstMatch(brewing, input, level);
-		//? neoforge {
-		/*return CauldronModNeoForgeClient.map.getRecipesFor(brewing, input, level).findFirst();
-		*///?}
+		return level.getRecipeManager().getRecipeFor(brewing, input, level);
 	}
 }

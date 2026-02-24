@@ -1,7 +1,7 @@
 package cc.cassian.cauldrons.core;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -19,7 +19,7 @@ public class CauldronModTags {
     }
 
     public static TagKey<Block> blockTagKey(String namespace, String id) {
-        return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(namespace, id));
+        return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(namespace, id));
     }
 
     public static TagKey<Item> itemTagKey(String id) {
@@ -27,6 +27,6 @@ public class CauldronModTags {
     }
 
     public static TagKey<Item> itemTagKey(String namespace, String id) {
-        return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(namespace, id));
+        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(namespace, id));
     }
 }

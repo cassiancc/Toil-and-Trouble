@@ -8,8 +8,9 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 //? if fabric && >1.21.9
+//import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -21,7 +22,7 @@ import java.util.Map;
 public class CauldronModJeiPlugin implements IModPlugin {
 
 	@Override
-	public Identifier getPluginUid() {
+	public ResourceLocation getPluginUid() {
 		return CauldronMod.of("plugin");
 	}
 
@@ -40,14 +41,13 @@ public class CauldronModJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-		registration.addCraftingStation(BrewingRecipeCategory.CATEGORY, Blocks.CAULDRON);
-		registration.addCraftingStation(AlchemyRecipeCategory.CATEGORY, Blocks.CAULDRON);
+		registration.addRecipeCatalyst(Blocks.CAULDRON, BrewingRecipeCategory.CATEGORY, AlchemyRecipeCategory.CATEGORY);
 	}
 
-	public static final Map<Identifier, ItemStack> OVERRIDES = Map.of(
-			Identifier.withDefaultNamespace("lava_cauldron"), new ItemStack(Blocks.LAVA),
-			Identifier.withDefaultNamespace("water_cauldron"), new ItemStack(Blocks.WATER),
-			Identifier.withDefaultNamespace("powder_snow_cauldron"), new ItemStack(Blocks.POWDER_SNOW),
+	public static final Map<ResourceLocation, ItemStack> OVERRIDES = Map.of(
+			ResourceLocation.withDefaultNamespace("lava_cauldron"), new ItemStack(Blocks.LAVA),
+			ResourceLocation.withDefaultNamespace("water_cauldron"), new ItemStack(Blocks.WATER),
+			ResourceLocation.withDefaultNamespace("powder_snow_cauldron"), new ItemStack(Blocks.POWDER_SNOW),
 			CauldronMod.of("lava"), new ItemStack(Blocks.LAVA),
 			CauldronMod.of("empty"), new ItemStack(Items.AIR),
 			CauldronMod.of("honey"), new ItemStack(CauldronModItems.HONEY_CONTENTS)
@@ -61,7 +61,7 @@ public class CauldronModJeiPlugin implements IModPlugin {
 			var stack = OVERRIDES.get(resultPotion.id());
 			return new Pair<>(stack, stack);
 		} else {
-			var stack = new ItemStack(BuiltInRegistries.BLOCK.getValue(resultPotion.id()));
+			var stack = new ItemStack(BuiltInRegistries.BLOCK.get(resultPotion.id()));
 			return new Pair<>(stack, stack);
 		}
 	}

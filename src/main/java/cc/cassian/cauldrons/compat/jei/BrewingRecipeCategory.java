@@ -11,12 +11,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 
 import mezz.jei.api.recipe.category.IRecipeCategory;
-//? if >1.21.2 {
-import mezz.jei.api.recipe.types.IRecipeType;
-import net.minecraft.client.renderer.RenderPipelines;
-//?} else {
-/*import mezz.jei.api.recipe.RecipeType;
-*///?}
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -30,10 +25,10 @@ public class BrewingRecipeCategory implements IRecipeCategory<RecipeHolder<Brewi
 		this.icon = guiHelper.createDrawableItemLike(Blocks.CAULDRON);
 	}
 
-	public static final IRecipeType<RecipeHolder<BrewingRecipe>> CATEGORY = IRecipeType.create(CauldronModRecipes.BREWING);
+	public static final RecipeType<RecipeHolder<BrewingRecipe>> CATEGORY = RecipeType.createFromVanilla(CauldronModRecipes.BREWING);
 
 	@Override
-	public IRecipeType<RecipeHolder<BrewingRecipe>> getRecipeType() {
+	public RecipeType<RecipeHolder<BrewingRecipe>> getRecipeType() {
 		return CATEGORY;
 	}
 
@@ -51,15 +46,15 @@ public class BrewingRecipeCategory implements IRecipeCategory<RecipeHolder<Brewi
 	public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<BrewingRecipe> recipeHolder, IFocusGroup iFocusGroup) {
 		var recipe = recipeHolder.value();
 		// reagent
-		builder.addSlot(RecipeIngredientRole.INPUT, 5, 4).add(recipe.getReagent()).setStandardSlotBackground();
+		builder.addSlot(RecipeIngredientRole.INPUT, 5, 4).addIngredients(recipe.getReagent()).setStandardSlotBackground();
 		// potion item
 		var input = CauldronModJeiPlugin.getResultForDisplay(recipe.getPotion());
-		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 41, 4).add(input.getB()).setStandardSlotBackground();
-		builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).add(input.getA());
+		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 41, 4).addItemStack(input.getB()).setStandardSlotBackground();
+		builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStack(input.getA());
 		// output
 		var output = CauldronModJeiPlugin.getResultForDisplay(recipe.getResultPotion());
-		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 78, 4).add(output.getB()).setStandardSlotBackground();
-		builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).add(output.getA());
+		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 78, 4).addItemStack(output.getB()).setStandardSlotBackground();
+		builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(output.getA());
 	}
 
 	@Override
@@ -76,7 +71,7 @@ public class BrewingRecipeCategory implements IRecipeCategory<RecipeHolder<Brewi
 	public void draw(RecipeHolder<BrewingRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
 		guiGraphics.blit(
 				//? if >1.21.2
-				RenderPipelines.GUI_TEXTURED,
+				//RenderPipelines.GUI_TEXTURED,
 				CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
 	}
 

@@ -13,7 +13,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 //? if >1.21.4
-import net.minecraft.world.entity.InsideBlockEffectApplier;
+//import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -39,7 +39,7 @@ public abstract class LayeredCauldronBlockMixin extends AbstractCauldronBlock {
     }
 
     @Inject(method = "entityInside", at = @At(value = "RETURN"))
-    private void mixin(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier insideBlockEffectApplier, boolean bl, CallbackInfo ci) {
+    private void mixin(BlockState state, Level level, BlockPos pos, Entity entity, CallbackInfo ci) {
         if (!level.isClientSide() && CauldronMod.CONFIG.itemEntitiesConvertCauldrons.value() && state.is(Blocks.WATER_CAULDRON)) {
             if (entity instanceof ItemEntity itemEntity && itemEntity.tickCount>10) {
                 var newState =  CauldronModBlocks.BREWING_CAULDRON.defaultBlockState().setValue(BrewingCauldronBlock.POTION_QUANTITY, state.getValue(LayeredCauldronBlock.LEVEL));

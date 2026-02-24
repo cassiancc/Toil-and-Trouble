@@ -2,6 +2,7 @@ package cc.cassian.cauldrons.core;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -19,7 +20,7 @@ public class CauldronModHelpers {
     /**
 	 * A variation of the ingredient list codec that also accepts a single item - useful for backwards compatibility.
 	 */
-    public static Codec<List<Ingredient>> INGREDIENT_LIST_CODEC = Ingredient.CODEC.listOf(1, 9).withAlternative(Ingredient.CODEC, (ingredient -> List.of(ingredient)));
+    public static Codec<List<Ingredient>> INGREDIENT_LIST_CODEC = Codec.withAlternative(Ingredient.CODEC.listOf(1, 9),Ingredient.CODEC, (List::of));
     public static StreamCodec<RegistryFriendlyByteBuf, List<Ingredient>> INGREDIENT_LIST_STREAM_CODEC = Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list());
 
     public static boolean canInteract(Level level, BlockPos pos, Entity entity) {
@@ -27,6 +28,6 @@ public class CauldronModHelpers {
     }
 
     public static boolean hasShiftDown() {
-        return Minecraft.getInstance().hasShiftDown();
+        return Screen.hasShiftDown();
     }
 }

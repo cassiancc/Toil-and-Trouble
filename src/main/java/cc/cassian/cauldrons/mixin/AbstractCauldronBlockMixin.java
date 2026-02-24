@@ -21,8 +21,7 @@ public class AbstractCauldronBlockMixin {
     @Inject(method = "useItemOn", at = @At(value = "RETURN"), cancellable = true)
     private void mixin(ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult, CallbackInfoReturnable<ItemInteractionResult> cir) {
         if (
-            cir.getReturnValue().equals(InteractionResult.TRY_WITH_EMPTY_HAND) ||
-            cir.getReturnValue().equals(InteractionResult.PASS)) {
+            cir.getReturnValue().equals(ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION)) {
                 cir.setReturnValue(CauldronModEvents.useBlock(player, level, interactionHand, blockPos, blockHitResult.getDirection()));
         }
     }

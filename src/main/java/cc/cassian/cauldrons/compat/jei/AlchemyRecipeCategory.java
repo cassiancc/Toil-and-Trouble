@@ -10,12 +10,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-//? if >1.21.2 {
-import mezz.jei.api.recipe.types.IRecipeType;
-import net.minecraft.client.renderer.RenderPipelines;
-//?} else {
-/*import mezz.jei.api.recipe.RecipeType;
-*///?}
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -30,9 +25,9 @@ public class AlchemyRecipeCategory implements IRecipeCategory<RecipeHolder<Alche
 		this.icon = guiHelper.createDrawableItemLike(Blocks.CAULDRON);
 	}
 
-	public static final IRecipeType<RecipeHolder<AlchemyRecipe>> CATEGORY = IRecipeType.create(CauldronModRecipes.ALCHEMY);
+	public static final RecipeType<RecipeHolder<AlchemyRecipe>> CATEGORY = RecipeType.createFromVanilla(CauldronModRecipes.ALCHEMY);
 	@Override
-	public IRecipeType<RecipeHolder<AlchemyRecipe>> getRecipeType() {
+	public RecipeType<RecipeHolder<AlchemyRecipe>> getRecipeType() {
 		return CATEGORY;
 	}
 
@@ -52,16 +47,16 @@ public class AlchemyRecipeCategory implements IRecipeCategory<RecipeHolder<Alche
 		// reagent
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
-				builder.addSlot(RecipeIngredientRole.INPUT, 1 + x * 18, 1 + y * 18).add(recipe.getReagents().get(x*y)).setStandardSlotBackground();
+				builder.addSlot(RecipeIngredientRole.INPUT, 1 + x * 18, 1 + y * 18).addIngredients(recipe.getReagents().get(x*y)).setStandardSlotBackground();
 			}
 		}
 		// potion item
 		var input = CauldronModJeiPlugin.getResultForDisplay(recipe.getPotion());
-		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 61, 37).add(input.getB()).setStandardSlotBackground();
-		builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).add(input.getA());
+		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 61, 37).addItemStack(input.getB()).setStandardSlotBackground();
+		builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStack(input.getA());
 		// output
 		var output = recipe.getResultItem();
-		builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19).add(output).setStandardSlotBackground();
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19).addItemStack(output).setStandardSlotBackground();
 	}
 
 	@Override
@@ -76,6 +71,6 @@ public class AlchemyRecipeCategory implements IRecipeCategory<RecipeHolder<Alche
 
 	@Override
 	public void draw(RecipeHolder<AlchemyRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-		guiGraphics.blit(RenderPipelines.GUI_TEXTURED, CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
+		guiGraphics.blit(CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
 	}
 }

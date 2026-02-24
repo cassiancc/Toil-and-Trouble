@@ -9,7 +9,6 @@ import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import cc.cassian.cauldrons.registry.CauldronModItems;
 import cc.cassian.cauldrons.registry.CauldronModSoundEvents;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.recipe.v1.sync.RecipeSynchronization;
 
 public final class CauldronModFabric implements ModInitializer {
     @Override
@@ -26,10 +25,7 @@ public final class CauldronModFabric implements ModInitializer {
         CauldronModSoundEvents.touch();
         CauldronModRecipes.touch();
 
-		RecipeSynchronization.synchronizeRecipeSerializer(CauldronModRecipes.BREWING_SERIALIZER);
-		RecipeSynchronization.synchronizeRecipeSerializer(CauldronModRecipes.INSERTION_SERIALIZER);
-		RecipeSynchronization.synchronizeRecipeSerializer(CauldronModRecipes.ALCHEMY_SERIALIZER);
-    }
+	 }
 }
 
 //?}

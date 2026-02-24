@@ -2,7 +2,6 @@ package cc.cassian.cauldrons.recipe;
 
 import cc.cassian.cauldrons.core.CauldronContents;
 import net.minecraft.world.entity.player.StackedContents;
-import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
 
@@ -12,7 +11,7 @@ public class BrewingRecipeInput implements RecipeInput {
 
     private final List<ItemStack> items;
     private final CauldronContents contents;
-    private final StackedItemContents stackedContents = new StackedItemContents();
+    private final StackedContents stackedContents = new StackedContents();
     private final boolean isHeated;
     private final int ingredientCount;
 
@@ -48,7 +47,7 @@ public class BrewingRecipeInput implements RecipeInput {
         return isHeated;
     }
 
-    public StackedItemContents stackedContents() {
+    public StackedContents stackedContents() {
         return this.stackedContents;
     }
 

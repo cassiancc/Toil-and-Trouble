@@ -1,7 +1,7 @@
 package cc.cassian.cauldrons;
 
 import cc.cassian.cauldrons.config.ModConfig;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,8 +10,8 @@ public class CauldronMod {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final ModConfig CONFIG = ModConfig.createToml(Platform.getConfigDir(), "", MOD_ID, ModConfig.class);
 
-	public static Identifier of(String name) {
-		return Identifier.fromNamespaceAndPath(MOD_ID, name);
+	public static ResourceLocation of(String name) {
+		return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
 	}
 
 

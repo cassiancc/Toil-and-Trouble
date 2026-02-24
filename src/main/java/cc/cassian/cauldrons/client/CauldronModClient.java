@@ -6,13 +6,15 @@ import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.core.CauldronModHelpers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.text.WordUtils;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,12 @@ public class CauldronModClient {
 		if (view.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
 			return cauldronBlockEntity.getPotionColour();
 		}
+		return 9551193;
+	}
+
+	public static int getColor(ItemStack stack, int i) {
+		if (stack.has(DataComponents.POTION_CONTENTS))
+			return stack.get(DataComponents.POTION_CONTENTS).getColor();
 		return 9551193;
 	}
 }

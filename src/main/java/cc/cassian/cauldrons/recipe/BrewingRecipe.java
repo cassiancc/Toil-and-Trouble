@@ -13,7 +13,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -45,6 +45,20 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     @Override
+    public ItemStack assemble(BrewingRecipeInput input, HolderLookup.Provider registries) {
+        return assemble(input);
+    }
+
+    @Override
+    public boolean canCraftInDimensions(int width, int height) {
+        return false;
+    }
+
+    @Override
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
+        return getResultItem().copy();
+    }
+
     public ItemStack assemble(BrewingRecipeInput input) {
         return getResultItem();
     }
@@ -61,7 +75,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         return potion;
     }
 
-    public Identifier getContentsId() {
+    public ResourceLocation getContentsId() {
         return potion.id();
     }
 
@@ -69,7 +83,7 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
         if (result.potion().isPresent()) {
             return CauldronContents.createItemStack(Items.POTION, result);
         } else {
-            return BuiltInRegistries.BLOCK.getValue(result.id()).asItem().getDefaultInstance();
+            return BuiltInRegistries.BLOCK.get(result.id()).asItem().getDefaultInstance();
         }
     }
 
@@ -88,16 +102,6 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     @Override
-    public PlacementInfo placementInfo() {
-        return PlacementInfo.NOT_PLACEABLE;
-    }
-
-    @Override
-    public RecipeBookCategory recipeBookCategory() {
-        return null;
-    }
-
-    @Override
     public boolean isSpecial() {
         return true;
     }
@@ -105,11 +109,6 @@ public class BrewingRecipe implements Recipe<BrewingRecipeInput> {
     @Override
     public boolean showNotification() {
         return false;
-    }
-
-    @Override
-    public String group() {
-        return "";
     }
 
     public ParticleOptions getParticleType() {

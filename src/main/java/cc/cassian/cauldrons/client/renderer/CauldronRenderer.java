@@ -4,73 +4,45 @@ import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 //? if >1.21.9 {
-import net.minecraft.client.renderer.SubmitNodeCollector;
+/*import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.item.ItemModelResolver;
-//?} else {
-/*import net.minecraft.client.renderer.MultiBufferSource;
+*///?} else {
 import net.minecraft.client.renderer.entity.ItemRenderer;
-*///?}
-import net.minecraft.client.renderer.texture.OverlayTexture;
+//?}
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity, CauldronBlockEntityRenderState> {
+public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity> {
     private static final float SIZE = 0.375F;
-    private final ItemModelResolver itemRenderer;
+    private final ItemRenderer itemRenderer;
 
     public CauldronRenderer(BlockEntityRendererProvider.Context context) {
-        this.itemRenderer = context.itemModelResolver();
+        this.itemRenderer = context.getItemRenderer();
     }
 
-    @Override
-    public CauldronBlockEntityRenderState createRenderState() {
-        return new CauldronBlockEntityRenderState();
-    }
+	@Override
+	public void render(CauldronBlockEntity cauldronBlockEntity, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
+		int k = (int)cauldronBlockEntity.getBlockPos().asLong();
 
+		List<ItemStack> items = cauldronBlockEntity.getItems();
+		submit(cauldronBlockEntity, poseStack, items, packedLight, packedOverlay, bufferSource, k);
+	}
 
-    @Override
-    public void extractRenderState(
-            CauldronBlockEntity cauldronBlockEntity,
-            CauldronBlockEntityRenderState cauldronBlockEntityRenderState,
-            float f,
-            Vec3 vec3,
-            ModelFeatureRenderer.CrumblingOverlay crumblingOverlay
-    ) {
-        BlockEntityRenderer.super.extractRenderState(cauldronBlockEntity, cauldronBlockEntityRenderState, f, vec3, crumblingOverlay);
-
-
-        int k = (int)cauldronBlockEntity.getBlockPos().asLong();
-
-        List<ItemStack> items = cauldronBlockEntity.getItems();
-        cauldronBlockEntityRenderState.items.clear();
-        if (!items.isEmpty()) {
-            items.forEach(itemStack -> {
-                ItemStackRenderState itemStackRenderState = new ItemStackRenderState();
-                this.itemRenderer.updateForTopItem(itemStackRenderState, itemStack, ItemDisplayContext.FIXED, cauldronBlockEntity.getLevel(), null, k);
-                cauldronBlockEntityRenderState.items.add(itemStackRenderState);
-            });
-		}
-
-    }
-
-
-    @Override
-    public void submit(CauldronBlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
+    public void submit(CauldronBlockEntity blockEntity, PoseStack poseStack, List<ItemStack> items, int packedLight, int packedOverlay, MultiBufferSource bufferSource, int k) {
         AtomicReference<Float> yPos = new AtomicReference<>(0.44921875F);
-		List<ItemStackRenderState> items = state.items;
 		for (int i = 0; i < items.size(); i++) {
-            ItemStackRenderState itemStack = items.get(i);
+            ItemStack itemStack = items.get(i);
 			poseStack.pushPose();
 			if (i==0) {
 				poseStack.translate(0.5F, yPos.get(), 0.5F);
@@ -94,7 +66,7 @@ public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity
 				poseStack.translate(-0.1125F, -0.1125F, 0.0F);
 			}
 			poseStack.scale(SIZE, SIZE, SIZE);
-			itemStack.submit(poseStack, submitNodeCollector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+			this.itemRenderer.renderStatic(itemStack, ItemDisplayContext.FIXED, packedLight, packedOverlay, poseStack, bufferSource, blockEntity.getLevel(), k);
 			poseStack.popPose();
 		}
 	}

@@ -5,23 +5,24 @@ import cc.cassian.cauldrons.core.CauldronModRecipes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
 
-    private final ItemStackTemplate reagent;
+    private final ItemStack reagent;
     private final CauldronContents potion;
-    private final ItemStackTemplate resultItem;
+    private final ItemStack resultItem;
     private final CauldronContents resultContents;
     private final boolean addPotionComponents;
     private final int amount;
 
-    public InsertingRecipe(ItemStackTemplate reagent, CauldronContents currentPotion, ItemStackTemplate resultItem, CauldronContents resultContents, boolean addPotionComponents, int amount) {
+    public InsertingRecipe(ItemStack reagent, CauldronContents currentPotion, ItemStack resultItem, CauldronContents resultContents, boolean addPotionComponents, int amount) {
         this.reagent = reagent;
         this.potion = currentPotion;
         this.resultItem = resultItem;
@@ -32,16 +33,26 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
 
     @Override
     public boolean matches(BrewingRecipeInput input, Level level) {
-        return ItemStack.isSameItemSameComponents(reagent.create(), input.getItem(0)) && potion.test(input.getContents());
+        return ItemStack.isSameItemSameComponents(reagent.copy(), input.getItem(0)) && potion.test(input.getContents());
     }
 
     @Override
-    public ItemStack assemble(BrewingRecipeInput input) {
-        return this.resultItem.create();
+    public ItemStack assemble(BrewingRecipeInput input, HolderLookup.Provider provider) {
+        return this.resultItem.copy();
+    }
+
+    @Override
+    public boolean canCraftInDimensions(int width, int height) {
+        return true;
+    }
+
+    @Override
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
+        return getResultItem();
     }
 
     public ItemStack getReagent() {
-        return reagent.create().copy();
+        return reagent.copy();
     }
 
     public CauldronContents getPotion() {
@@ -53,7 +64,7 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     public ItemStack getResultItem() {
-        return resultItem.create();
+        return resultItem.copy();
     }
 
     @Override
@@ -67,16 +78,6 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     @Override
-    public PlacementInfo placementInfo() {
-        return PlacementInfo.NOT_PLACEABLE;
-    }
-
-    @Override
-    public RecipeBookCategory recipeBookCategory() {
-        return null;
-    }
-
-    @Override
     public boolean isSpecial() {
         return true;
     }
@@ -86,19 +87,14 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
         return false;
     }
 
-    @Override
-    public String group() {
-        return "";
-    }
-
     public CauldronContents getResultContents() {
         return this.resultContents;
     }
 
     public static final MapCodec<InsertingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-            ItemStackTemplate.CODEC.fieldOf("item").forGetter(r->r.reagent),
+            ItemStack.CODEC.fieldOf("item").forGetter(r->r.reagent),
             CauldronContents.CODEC.fieldOf("contents").forGetter(r->r.potion),
-            ItemStackTemplate.CODEC.fieldOf("result_item").forGetter(r->r.resultItem),
+            ItemStack.CODEC.fieldOf("result_item").forGetter(r->r.resultItem),
             CauldronContents.CODEC.fieldOf("result_contents").forGetter(r->r.resultContents),
             Codec.BOOL.optionalFieldOf("add_potion_components", false).forGetter(r->r.addPotionComponents),
             Codec.INT.optionalFieldOf("amount", 0).forGetter(r->r.amount)
@@ -108,9 +104,9 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
     public static final StreamCodec<RegistryFriendlyByteBuf, InsertingRecipe> STREAM_CODEC = StreamCodec.of(InsertingRecipe::toNetwork, InsertingRecipe::fromNetwork);
 
     private static InsertingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
-        var reagent = ItemStackTemplate.STREAM_CODEC.decode(buf);
+        var reagent = ItemStack.STREAM_CODEC.decode(buf);
         var potion = CauldronContents.STREAM_CODEC.decode(buf);
-        var result = ItemStackTemplate.STREAM_CODEC.decode(buf);
+        var result = ItemStack.STREAM_CODEC.decode(buf);
         var resultPotion = CauldronContents.STREAM_CODEC.decode(buf);
         var addPotionComponents = buf.readBoolean();
         var amount = buf.readInt();
@@ -118,9 +114,9 @@ public class InsertingRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     private static void toNetwork(RegistryFriendlyByteBuf buf, InsertingRecipe recipe) {
-        ItemStackTemplate.STREAM_CODEC.encode(buf, recipe.reagent);
+        ItemStack.STREAM_CODEC.encode(buf, recipe.reagent);
         CauldronContents.STREAM_CODEC.encode(buf, recipe.potion);
-        ItemStackTemplate.STREAM_CODEC.encode(buf, recipe.resultItem);
+        ItemStack.STREAM_CODEC.encode(buf, recipe.resultItem);
         CauldronContents.STREAM_CODEC.encode(buf, recipe.resultContents);
         buf.writeBoolean(recipe.addPotionComponents);
         buf.writeInt(recipe.amount);

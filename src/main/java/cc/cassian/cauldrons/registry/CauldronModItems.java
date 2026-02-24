@@ -21,7 +21,7 @@ public class CauldronModItems {
     );
 
     private static Item register(ResourceKey<Item> resourceKey, Function<Item.Properties, Item> function, Item.Properties properties) {
-        return CommonRegistry.registerItem(resourceKey.identifier().getPath(), function.apply(properties.setId(resourceKey)));
+        return CommonRegistry.registerItem(resourceKey.location().getPath(), function.apply(properties));
     }
 
     private static ResourceKey<Item> registryKey(String string) {

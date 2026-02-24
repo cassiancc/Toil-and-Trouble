@@ -17,12 +17,12 @@ import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.PowerParticleOption;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
@@ -41,8 +41,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
@@ -85,36 +83,37 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     }
 
     @Override
-    public void loadAdditional(ValueInput tag) {
-        super.loadAdditional(tag);
-        Optional<List<ItemStack>> inventory = tag.read("cauldron.inventory", ItemStack.CODEC.listOf());
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
+        List<ItemStack> inventory = ItemStack.CODEC.listOf().decode(provider.createSerializationContext(NbtOps.INSTANCE), tag.get("cauldron.inventory")).result().get().getFirst();
         items.clear();
-		inventory.ifPresent(items::addAll);
-        progress = tag.getIntOr("cauldron.progress", 0);
-        maxProgress = tag.getIntOr("cauldron.max_progress", 0);
-        contents = tag.read("cauldron.potion", CauldronContents.CODEC).orElse(CauldronContents.EMPTY);
-        splashing = tag.getBooleanOr("cauldron.splashing", false);
-        lingering = tag.getBooleanOr("cauldron.lingering", false);
-        bubbleTimer = tag.getIntOr("cauldron.bubble_timer", 0);
-        particleType = tag.read("cauldron.particle_type", ParticleTypes.CODEC).orElse(ParticleTypes.BUBBLE);
+		items.addAll(inventory);
+        progress = tag.getInt("cauldron.progress");
+        maxProgress = tag.getInt("cauldron.max_progress");
+        contents = CauldronContents.CODEC.decode(NbtOps.INSTANCE, tag.get("cauldron.potion")).result().get().getFirst();
+        splashing = tag.getBoolean("cauldron.splashing");
+        lingering = tag.getBoolean("cauldron.lingering");
+        bubbleTimer = tag.getInt("cauldron.bubble_timer");
+        if (tag.contains("cauldron.particle_type"))
+            particleType = ParticleTypes.CODEC.decode(NbtOps.INSTANCE, tag.get("cauldron.particle_type")).result().get().getFirst();
     }
 
     @Override
-    public void saveAdditional(ValueOutput tag) {
+    public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         if (!items.isEmpty()) {
             items.removeIf(ItemStack::isEmpty);
-            tag.store("cauldron.inventory", ItemStack.CODEC.listOf(), items);
+            tag.put("cauldron.inventory", ItemStack.CODEC.listOf().encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), items).result().get());
         } else {
-            tag.store("cauldron.inventory", ItemStack.CODEC.listOf(), List.of());
+            tag.put("cauldron.inventory", ItemStack.CODEC.listOf().encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), List.of()).result().get());
         }
         tag.putInt("cauldron.progress", progress);
         tag.putInt("cauldron.max_progress", maxProgress);
-        tag.store("cauldron.potion", CauldronContents.CODEC, contents);
+        tag.put("cauldron.potion", CauldronContents.CODEC.encodeStart(NbtOps.INSTANCE, contents).result().get());
         tag.putBoolean("cauldron.splashing", splashing);
         tag.putBoolean("cauldron.lingering", lingering);
         tag.putInt("cauldron.bubble_timer", bubbleTimer);
-        tag.store("cauldron.particle_type", ParticleTypes.CODEC, particleType);
-        super.saveAdditional(tag);
+        tag.put("cauldron.particle_type", ParticleTypes.CODEC.encodeStart(NbtOps.INSTANCE, particleType).result().get());
+        super.saveAdditional(tag, provider);
     }
 
     @Deprecated
@@ -152,7 +151,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 				}
 				progress = 0;
 			}
-			return new Pair<>(InteractionResult.SUCCESS, ItemStack.EMPTY);
+			return new Pair<>(ItemInteractionResult.SUCCESS, ItemStack.EMPTY);
         }
         return new Pair<>(CauldronModEvents.PASS_TO_EMPTY_HAND, ItemStack.EMPTY);
     }
@@ -179,7 +178,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 			else if (items.getFirst().is(CauldronModTags.CREATES_LINGERING_POTIONS) && this.contents.isPotion()) {
 				this.splashing = false;
 				this.lingering = true;
-				updateAfterBrewing(ItemStack.EMPTY, this.contents, PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1));
+				updateAfterBrewing(ItemStack.EMPTY, this.contents, ParticleTypes.DRAGON_BREATH);
 			}
 			else if (CauldronMod.CONFIG.useBrewingStandRecipes.value()) {
 				var potionBrewing = this.level.potionBrewing();
@@ -250,7 +249,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
             return Component.literal(contents.customName().get());
         }
         else if (contents.isPotion()) {
-            return contents.toPotionContents().getName("item.minecraft.potion.effect.");
+            return Component.literal(Potion.getName(contents.potion(), "item.minecraft.potion.effect."));
         } else {
             return Component.translatable(contents.id().toLanguageKey("cauldron"));
         }
@@ -351,9 +350,9 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
         else if (getContents().potion().isPresent()) return Contents.POTION;
         else if (getContents().is("honey")) return Contents.HONEY;
         else if (getContents().is("milk")) return Contents.MILK;
-        else if (getContents().is(Identifier.fromNamespaceAndPath("chorus_honey", "chorus_honey"))) return Contents.CHORUS_HONEY;
+        else if (getContents().is(ResourceLocation.fromNamespaceAndPath("chorus_honey", "chorus_honey"))) return Contents.CHORUS_HONEY;
         else if (getContents().is("lava")) return Contents.LAVA;
-        else if (getContents().is(Identifier.withDefaultNamespace("air"))) return Contents.EMPTY;
+        else if (getContents().is(ResourceLocation.withDefaultNamespace("air"))) return Contents.EMPTY;
         return Contents.POTION;
     }
 
