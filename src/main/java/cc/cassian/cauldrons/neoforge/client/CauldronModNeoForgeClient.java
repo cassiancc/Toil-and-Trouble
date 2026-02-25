@@ -4,6 +4,7 @@ package cc.cassian.cauldrons.neoforge.client;
 
 /*import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
+import cc.cassian.cauldrons.client.CauldronModClient;
 import cc.cassian.cauldrons.client.renderer.CauldronRenderer;
 import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
@@ -14,21 +15,17 @@ import cc.cassian.cauldrons.registry.CauldronModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
 //? if <1.21.5 {
-/^import net.minecraft.util.FastColor;
-^///?}
-import net.minecraft.world.item.crafting.RecipeMap;
+import net.minecraft.util.FastColor;
+//?}
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RecipesReceivedEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 
 @EventBusSubscriber(modid = CauldronMod.MOD_ID, value = Dist.CLIENT)
 public final class CauldronModNeoForgeClient {
-
-    public static RecipeMap map;
 
     @SubscribeEvent
     public static void registerColorHandlers(RegisterColorHandlersEvent.Block event) {
@@ -43,20 +40,15 @@ public final class CauldronModNeoForgeClient {
     }
 
     //? if <1.21.5 {
-    /^@SubscribeEvent
+    @SubscribeEvent
     public static void registerColorHandlers(RegisterColorHandlersEvent.Item event) {
-        event.register(((stack, tintIndex) -> FastColor.ARGB32.opaque(stack.get(DataComponents.POTION_CONTENTS).getColor())), CauldronModItems.CAULDRON_CONTENTS.get());
+        event.register(CauldronModClient::getColor, CauldronModItems.CAULDRON_CONTENTS);
     }
-    ^///?}
+    //?}
 
     @SubscribeEvent
     public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(CauldronModBlockEntityTypes.CAULDRON_BLOCK_ENTITY, CauldronRenderer::new);
-    }
-
-    @SubscribeEvent
-    public static void register(RecipesReceivedEvent event) {
-        CauldronModNeoForgeClient.map = event.getRecipeMap();
     }
 }
 *///?}

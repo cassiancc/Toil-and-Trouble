@@ -37,11 +37,6 @@ public final class CauldronModNeoForge {
             CauldronModRecipes.touch();
         }
     }
-
-    @SubscribeEvent
-    public static void register(OnDatapackSyncEvent event) {
-        event.sendRecipes(CauldronModRecipes.BREWING, CauldronModRecipes.ALCHEMY, CauldronModRecipes.INSERTING);
-    }
 }
 
 *///?}

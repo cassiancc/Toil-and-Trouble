@@ -39,7 +39,7 @@ public class Platform {
 		//? fabric
 		return FabricLoader.getInstance().isDevelopmentEnvironment();
 		//? neoforge
-		//return !FMLEnvironment.isProduction();
+		//return !FMLEnvironment.production;
 	}
 
 	public static <T extends Recipe<BrewingRecipeInput>> Optional<RecipeHolder<T>> getFirstRecipe(RecipeType<T> brewing, BrewingRecipeInput input, Level level) {

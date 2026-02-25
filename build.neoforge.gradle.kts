@@ -127,7 +127,7 @@ dependencies {
     // Kaleido
     implementation("folk.sisby:kaleido-config:${property("deps.kaleido")}")
     jarJar("folk.sisby:kaleido-config:${property("deps.kaleido")}")
-//    "additionalRuntimeClasspath"("folk.sisby:kaleido-config:${property("deps.kaleido")}")
+    "additionalRuntimeClasspath"("folk.sisby:kaleido-config:${property("deps.kaleido")}")
 
     // mcqoy
 //    implementation("maven.modrinth:mcqoy:yHGo6VsD")
@@ -152,7 +152,7 @@ dependencies {
         runtimeOnly("mcp.mobius.waila:wthit:neo-${property("deps.wthit_version")}")
         runtimeOnly("lol.bai:badpackets:neo-${property("deps.badpackets_version")}")
     } else {
-        compileOnly("mcp.mobius.waila:wthit-api:neo-18.2.1")
+        compileOnly("mcp.mobius.waila:wthit-api:neo-12.10.1")
     }
     // Development QOL
 //    runtimeOnly("cc.cassian.item-descriptions:item-descriptions-neoforge:${property("deps.item_descriptions")}")   {
@@ -162,9 +162,10 @@ dependencies {
     // Recipe Viewers
     if (hasProperty("deps.emi")) {
         compileOnly("dev.emi:emi-neoforge:${property("deps.emi")}:api")
-        runtimeOnly("dev.emi:emi-neoforge:${property("deps.emi")}")
+//        runtimeOnly("dev.emi:emi-neoforge:${property("deps.emi")}")
     }
     compileOnly("mezz.jei:jei-${property("deps.minecraft")}-neoforge:${property("deps.jei")}")
+    runtimeOnly("mezz.jei:jei-${property("deps.minecraft")}-neoforge:${property("deps.jei")}")
 
 }
 

@@ -12,13 +12,8 @@ import java.util.function.Supplier;
 public class CauldronModBlockEntityTypes {
     public static final BlockEntityType<CauldronBlockEntity> CAULDRON_BLOCK_ENTITY =
             CommonRegistry.registerBlockEntity("cauldron_block_entity",
-                    //? if fabric {
-                    FabricBlockEntityTypeBuilder.create(CauldronBlockEntity::new,
-                            CauldronModBlocks.BREWING_CAULDRON).build()
-                    //?} else {
-                    /*new BlockEntityType<>(CauldronBlockEntity::new,
-                            CauldronModBlocks.BREWING_CAULDRON)
-                    *///?}
+                    BlockEntityType.Builder.of(CauldronBlockEntity::new,
+                            CauldronModBlocks.BREWING_CAULDRON).build(null)
             );
 
     public static void touch() {
