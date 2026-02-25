@@ -4,6 +4,7 @@ import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.registry.CauldronModItems;
 import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -19,6 +20,9 @@ import oshi.util.tuples.Pair;
 
 import java.util.Map;
 
+import static cc.cassian.cauldrons.compat.jei.Constants.OVERRIDES;
+
+@JeiPlugin
 public class CauldronModJeiPlugin implements IModPlugin {
 
 	@Override
@@ -44,14 +48,7 @@ public class CauldronModJeiPlugin implements IModPlugin {
 		registration.addRecipeCatalyst(Blocks.CAULDRON, BrewingRecipeCategory.CATEGORY, AlchemyRecipeCategory.CATEGORY);
 	}
 
-	public static final Map<ResourceLocation, ItemStack> OVERRIDES = Map.of(
-			ResourceLocation.withDefaultNamespace("lava_cauldron"), new ItemStack(Blocks.LAVA),
-			ResourceLocation.withDefaultNamespace("water_cauldron"), new ItemStack(Blocks.WATER),
-			ResourceLocation.withDefaultNamespace("powder_snow_cauldron"), new ItemStack(Blocks.POWDER_SNOW),
-			CauldronMod.of("lava"), new ItemStack(Blocks.LAVA),
-			CauldronMod.of("empty"), new ItemStack(Items.AIR),
-			CauldronMod.of("honey"), new ItemStack(CauldronModItems.HONEY_CONTENTS)
-	);
+
 
 	static Pair<ItemStack, ItemStack> getResultForDisplay(CauldronContents resultPotion) {
 		if (resultPotion.potion().isPresent()) {

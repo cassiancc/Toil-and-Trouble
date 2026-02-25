@@ -3,7 +3,9 @@ package cc.cassian.cauldrons.compat.jei;
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
 import cc.cassian.cauldrons.recipe.AlchemyRecipe;
+import com.google.gson.JsonArray;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -13,9 +15,13 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class AlchemyRecipeCategory implements IRecipeCategory<RecipeHolder<AlchemyRecipe>> {
 
@@ -45,9 +51,14 @@ public class AlchemyRecipeCategory implements IRecipeCategory<RecipeHolder<Alche
 	public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<AlchemyRecipe> recipeHolder, IFocusGroup iFocusGroup) {
 		var recipe = recipeHolder.value();
 		// reagent
+		int i = 0;
+		List<Ingredient> reagents = recipe.getReagents();
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
-				builder.addSlot(RecipeIngredientRole.INPUT, 1 + x * 18, 1 + y * 18).addIngredients(recipe.getReagents().get(x*y)).setStandardSlotBackground();
+				IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, 1 + x * 18, 1 + y * 18).setStandardSlotBackground();
+				if (i < reagents.size()) {
+					slot.addIngredients(reagents.get(i++));
+				}
 			}
 		}
 		// potion item
