@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 //?} else {
 /*import mezz.jei.api.recipe.RecipeType;
 *///?}
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -85,8 +85,8 @@ public class AlchemyRecipeCategory implements IRecipeCategory<RecipeHolder<Alche
 		return 54;
 	}
 
-	@Override
-	public void draw(RecipeHolder<AlchemyRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-		guiGraphics.blit(RenderPipelines.GUI_TEXTURED, CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
-	}
+//	@Override
+//	public void draw(RecipeHolder<AlchemyRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
+//		guiGraphics.blit(RenderPipelines.GUI_TEXTURED, CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
+//	}
 }

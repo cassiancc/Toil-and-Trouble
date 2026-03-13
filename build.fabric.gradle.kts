@@ -97,13 +97,6 @@ repositories {
         }
     }
     maven {
-        name = "Fuzs Mod Resources"
-        url = uri("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
-        content {
-            includeGroupAndSubgroups("fuzs")
-        }
-    }
-    maven {
         name = "Cassian's Maven"
         url = uri("https://maven.cassian.cc")
         content {
@@ -118,6 +111,8 @@ repositories {
             includeGroupAndSubgroups("mezz.jei")
         }
     }
+    mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
@@ -127,7 +122,7 @@ dependencies {
 
     implementation("folk.sisby:kaleido-config:${property("deps.kaleido")}")
     include("folk.sisby:kaleido-config:${property("deps.kaleido")}")
-    implementation("com.terraformersmc:modmenu:${property("deps.modmenu")}")
+    compileOnly("com.terraformersmc:modmenu:${property("deps.modmenu")}")
     compileOnly("maven.modrinth:jade:${property("deps.jade")}")
     compileOnly("mcp.mobius.waila:wthit-api:neo-${property("deps.wthit_version")}")
     compileOnly("mezz.jei:jei-26.1-snapshot-4-fabric:${property("deps.jei")}")

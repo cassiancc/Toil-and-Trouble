@@ -17,7 +17,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 //?} else {
 /*import mezz.jei.api.recipe.RecipeType;
 *///?}
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Blocks;
@@ -72,12 +72,9 @@ public class BrewingRecipeCategory implements IRecipeCategory<RecipeHolder<Brewi
 		return 25;
 	}
 
-	@Override
-	public void draw(RecipeHolder<BrewingRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-		guiGraphics.blit(
-				//? if >1.21.2
-				RenderPipelines.GUI_TEXTURED,
-				CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
-	}
+//	@Override
+//	public void draw(RecipeHolder<BrewingRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
+//		guiGraphics.blit( RenderPipelines.GUI_TEXTURED, CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
+//	}
 
 }
