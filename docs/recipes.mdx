@@ -78,12 +78,12 @@ Toil and Trouble also allows arbitrary blocks to be created from a successful br
 }
 ```
 
-## Dipping
+## Alchemy
 
-Cauldron Dipping recipes use the following format:
+Cauldron Alchemy recipes use the following format:
 
 <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="NBT Compound/JSON Object" />: The root object.\
-├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: Which recipe to use, in this case `toil_and_trouble:dipping`.\
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: Which recipe to use, in this case `toil_and_trouble:alchemy`.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **reagent**: An ingredient that is consumed by the brew.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/boolean" title="Boolean" /> **requires_heat**: Optional, defaults to config: Whether heat is required to complete this recipe.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Cauldron Contents" /> **potion**: A [Cauldron Contents](cauldron-contents) data component that is consumed by the brew.\
@@ -99,7 +99,7 @@ An example recipe is below, which crafts an Cooked Cod with the custom name Awkw
 
 ```json
 {
-  "type": "toil_and_trouble:dipping",
+  "type": "toil_and_trouble:alchemy",
   "reagent": "#minecraft:fishes",
   "potion": "minecraft:awkward",
   "result": {
