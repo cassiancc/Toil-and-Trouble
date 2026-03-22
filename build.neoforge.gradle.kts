@@ -176,6 +176,7 @@ dependencies {
     compileOnly("mezz.jei:jei-${property("deps.minecraft")}-neoforge:${property("deps.jei")}")
     runtimeOnly("mezz.jei:jei-${property("deps.minecraft")}-neoforge:${property("deps.jei")}")
 
+    implementation("org.jspecify:jspecify:1.0.0")
 }
 
 stonecutter {

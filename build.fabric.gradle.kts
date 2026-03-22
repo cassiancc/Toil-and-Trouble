@@ -141,6 +141,7 @@ dependencies {
     modCompileOnly("maven.modrinth:jei:${property("deps.jei")}-fabric") {
         isTransitive = false;
     }
+    implementation("org.jspecify:jspecify:1.0.0")
 
 }
 

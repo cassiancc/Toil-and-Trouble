@@ -7,6 +7,7 @@ import cc.cassian.cauldrons.core.CauldronModRecipes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -45,8 +46,18 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     @Override
-    public ItemStack assemble(@Nullable BrewingRecipeInput input) {
-        ItemStack itemStack = this.result.create();
+    public boolean canCraftInDimensions(int width, int height) {
+        return true;
+    }
+
+    @Override
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
+        return getResultItem();
+    }
+
+    @Override
+    public ItemStack assemble(@Nullable BrewingRecipeInput input, HolderLookup.Provider registries) {
+        ItemStack itemStack = this.result.copy();
         DataComponentPatch originalComponents = itemStack.getComponentsPatch();
         if (input != null && copyComponents) {
             DataComponentPatch copiedComponents = input.getItem(0).getComponentsPatch();
@@ -69,7 +80,7 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     public ItemStack getResultItem() {
-        return assemble(null);
+        return assemble(null, null);
     }
 
     @Override
@@ -83,17 +94,6 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
     }
 
     @Override
-    public PlacementInfo placementInfo() {
-        return PlacementInfo.create(this.reagents);
-    }
-
-    @SuppressWarnings("all")
-    @Override
-    public RecipeBookCategory recipeBookCategory() {
-        return null;
-    }
-
-    @Override
     public boolean isSpecial() {
         return true;
     }
@@ -101,11 +101,6 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
     @Override
     public boolean showNotification() {
         return false;
-    }
-
-    @Override
-    public String group() {
-        return "alchemy";
     }
 
     public ParticleOptions getParticleType() {

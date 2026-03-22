@@ -6,6 +6,7 @@ import cc.cassian.cauldrons.recipe.BrewingRecipe;
 import cc.cassian.cauldrons.recipe.InsertingRecipe;
 import cc.cassian.cauldrons.registry.CommonRegistry;
 import com.mojang.serialization.MapCodec;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.crafting.Recipe;
