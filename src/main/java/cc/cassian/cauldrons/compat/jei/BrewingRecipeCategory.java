@@ -69,10 +69,7 @@ public class BrewingRecipeCategory implements IRecipeCategory<RecipeHolder<Brewi
 
 	@Override
 	public void draw(RecipeHolder<BrewingRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-		guiGraphics.blit(
-				//? if >1.21.2
-				//RenderPipelines.GUI_TEXTURED,
-				CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
+		guiGraphics.blit(CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
 	}
 
 }

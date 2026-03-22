@@ -1,0 +1,10 @@
+{
+  "type": "toil_and_trouble:alchemy",
+  "reagent": [
+    "minecraft:dirt"
+  ],
+  "potion": "minecraft:water",
+  "result": {
+    "id": "minecraft:mud"
+  }
+}

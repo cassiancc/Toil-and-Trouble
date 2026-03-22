@@ -49,7 +49,6 @@ public class CauldronModJeiPlugin implements IModPlugin {
 	}
 
 
-
 	static Pair<ItemStack, ItemStack> getResultForDisplay(CauldronContents resultPotion) {
 		if (resultPotion.potion().isPresent()) {
 			var potion = resultPotion.potion().get();

@@ -11,6 +11,8 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 
+import java.util.List;
+
 public final class CauldronModFabricClient implements ClientModInitializer {
 
 	@Override

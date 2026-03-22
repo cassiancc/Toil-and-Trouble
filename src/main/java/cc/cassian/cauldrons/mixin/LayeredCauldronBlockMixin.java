@@ -34,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LayeredCauldronBlock.class)
 public abstract class LayeredCauldronBlockMixin extends AbstractCauldronBlock {
-    public LayeredCauldronBlockMixin(Properties properties, CauldronInteraction.InteractionMap interactions) {
+    public LayeredCauldronBlockMixin(Properties properties, CauldronInteraction.Dispatcher interactions) {
         super(properties, interactions);
     }
 

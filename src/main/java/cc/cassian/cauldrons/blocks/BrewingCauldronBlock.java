@@ -1,14 +1,12 @@
 package cc.cassian.cauldrons.blocks;
 
 import cc.cassian.cauldrons.CauldronMod;
-import cc.cassian.cauldrons.Platform;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.core.CauldronModEvents;
 import cc.cassian.cauldrons.core.CauldronModHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -31,10 +29,8 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.Nullable;
-
-import static net.minecraft.world.InteractionResult.SUCCESS_NO_ITEM_USED;
-import static org.apache.commons.compress.java.util.jar.Pack200.Packer.PASS;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     public static final IntegerProperty POTION_QUANTITY = IntegerProperty.create("potion_quantity", 0, 3);
@@ -133,8 +129,8 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
         setFillLevel(state, level, pos, i);
     }
 
-    public static void setFillLevel(BlockState state, Level level, BlockPos pos, int i) {
-        if (i > 3 || i < -1) return;
+    public static void setFillLevel(BlockState state, @Nullable Level level, BlockPos pos, int i) {
+        if (i > 3 || i < -1 || level == null) return;
         BlockState blockState = state.setValue(POTION_QUANTITY, i);
         level.setBlockAndUpdate(pos, blockState);
     }

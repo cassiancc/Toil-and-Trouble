@@ -42,12 +42,14 @@ import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import oshi.util.tuples.Pair;
 
 import java.util.*;
 
 import static cc.cassian.cauldrons.blocks.BrewingCauldronBlock.*;
 
+@NullMarked
 public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer {
 
     protected CauldronContents contents = CauldronContents.EMPTY;
@@ -118,7 +120,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 
     @Deprecated
     public Pair<ItemInteractionResult, ItemStack> insert(ItemStack itemStack) {
-        var potionQuantity = getFillLevel();
+        int potionQuantity = getFillLevel();
         // fill with potion
         if (itemStack.has(DataComponents.POTION_CONTENTS) && (contents.isPotion() || contents == CauldronContents.EMPTY) && potionQuantity < 3 && !itemStack.is(CauldronModTags.CANNOT_FILL_CAULDRON)) {
             PotionContents insertedPotion = itemStack.get(DataComponents.POTION_CONTENTS);
@@ -158,7 +160,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 
     public void brew(boolean cauldronHeated) {
         var input = new BrewingRecipeInput(items, contents, cauldronHeated);
-        if (level == null) return;;
+        if (level == null) return;
 		Optional<RecipeHolder<BrewingRecipe>> brewingRecipe = Platform.getFirstRecipe(CauldronModRecipes.BREWING, input, level);
 		if (brewingRecipe.isPresent()) {
 			this.contents = brewingRecipe.get().value().getResultPotion();
@@ -200,6 +202,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     private void updateAfterBrewing(List<ItemStack> stack, CauldronContents contents, ParticleOptions particleType) {
         this.items.clear();
         this.items.addAll(stack);
+        if (level == null) return;
         //level.levelEvent(LevelEvent.SOUND_BREWING_STAND_BREW, this.getBlockPos(), 0);
         this.level.playSound(null, getBlockPos(), CauldronModSoundEvents.BREWS, SoundSource.BLOCKS);
         var state = this.getBlockState();
@@ -228,8 +231,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     }
 
     public Integer getFillLevel() {
-        Integer value = this.getBlockState().getValue(POTION_QUANTITY);
-        return value;
+		return this.getBlockState().getValue(POTION_QUANTITY);
     }
 
     public void setFillLevel(int value) {

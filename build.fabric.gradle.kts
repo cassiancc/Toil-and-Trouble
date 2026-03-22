@@ -98,13 +98,6 @@ repositories {
         }
     }
     maven {
-        name = "Fuzs Mod Resources"
-        url = uri("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
-        content {
-            includeGroupAndSubgroups("fuzs")
-        }
-    }
-    maven {
         name = "Cassian's Maven"
         url = uri("https://maven.cassian.cc")
         content {
