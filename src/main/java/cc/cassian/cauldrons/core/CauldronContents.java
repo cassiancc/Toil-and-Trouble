@@ -76,7 +76,7 @@ public record CauldronContents(Identifier id, Optional<Holder<Potion>> potion, O
     }
 
     public boolean is(Holder<Potion> potion) {
-        return this.potion.isPresent() && this.potion.get().equals(potion.value()) && this.customEffects.isEmpty();
+        return this.potion.isPresent() && this.potion.get().equals(potion) && this.customEffects.isEmpty();
     }
 
     public boolean is(Identifier potion) {
