@@ -16,6 +16,7 @@ public class Constants {
 			Identifier.withDefaultNamespace("powder_snow_cauldron"), new ItemStack(Blocks.POWDER_SNOW),
 			CauldronMod.of("lava"), new ItemStack(Blocks.LAVA),
 			CauldronMod.of("empty"), new ItemStack(Items.AIR),
-			CauldronMod.of("honey"), new ItemStack(CauldronModItems.HONEY_CONTENTS)
+			CauldronMod.of("honey"), new ItemStack(CauldronModItems.HONEY_CONTENTS),
+			CauldronMod.of("milk"), new ItemStack(CauldronModItems.MILK_CONTENTS)
 	);
 }
