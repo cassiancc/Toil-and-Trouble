@@ -123,6 +123,7 @@ dependencies {
     implementation("folk.sisby:kaleido-config:${property("deps.kaleido")}")
     include("folk.sisby:kaleido-config:${property("deps.kaleido")}")
     compileOnly("com.terraformersmc:modmenu:${property("deps.modmenu")}")
+    localRuntime("com.terraformersmc:modmenu:${property("deps.modmenu")}")
     compileOnly("maven.modrinth:jade:${property("deps.jade")}")
     compileOnly("mcp.mobius.waila:wthit-api:neo-${property("deps.wthit_version")}")
     compileOnly("mezz.jei:jei-26.1-snapshot-4-fabric:${property("deps.jei")}")

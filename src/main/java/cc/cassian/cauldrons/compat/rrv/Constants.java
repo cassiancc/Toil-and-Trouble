@@ -7,6 +7,7 @@ import cc.cassian.rrv.common.extra.FluidStack;
 import cc.cassian.rrv.common.recipe.inventory.SlotContent;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -22,7 +23,9 @@ public class Constants {
 			Identifier.withDefaultNamespace("water_cauldron"), SlotContent.of(new FluidStack(Fluids.WATER)),
 			Identifier.withDefaultNamespace("powder_snow_cauldron"), SlotContent.of(Ingredient.of(Blocks.POWDER_SNOW)),
 			CauldronMod.of("lava"), SlotContent.of(new FluidStack(Fluids.LAVA)),
-			CauldronMod.of("empty"), SlotContent.of(Items.AIR)
+			CauldronMod.of("empty"), SlotContent.of(Items.AIR),
+			CauldronMod.of("milk"), SlotContent.of(CauldronModItems.MILK_CONTENTS)
+
 	);
 
 	public static Pair<SlotContent, SlotContent> getResultForDisplay(CauldronContents resultPotion) {
