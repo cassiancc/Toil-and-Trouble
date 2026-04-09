@@ -17,7 +17,7 @@ rrv="cc.cassian.cauldrons.compat.rrv.CauldronModRRVPlugin"
 [[dependencies.toil_and_trouble]]
 modId = "neoforge"
 type = "required"
-versionRange = "[26,26.2)"
+versionRange = "[1.21.1)"
 ordering = "NONE"
 side = "BOTH"
 
