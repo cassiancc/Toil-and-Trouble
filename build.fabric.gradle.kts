@@ -126,7 +126,7 @@ dependencies {
     localRuntime("com.terraformersmc:modmenu:${property("deps.modmenu")}")
     compileOnly("maven.modrinth:jade:${property("deps.jade")}")
     compileOnly("mcp.mobius.waila:wthit-api:neo-${property("deps.wthit_version")}")
-    compileOnly("mezz.jei:jei-26.1-snapshot-4-fabric:${property("deps.jei")}")
+    compileOnly("mezz.jei:jei-26.1.1-fabric:${property("deps.jei")}")
     compileOnly("cc.cassian.rrv:reliable-recipe-viewer-fabric:${property("deps.rrv")}") {
         isTransitive = false
     }

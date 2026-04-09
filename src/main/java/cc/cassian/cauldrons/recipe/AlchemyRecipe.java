@@ -23,25 +23,27 @@ import java.util.List;
 public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
 
     private final List<Ingredient> reagents;
-    private final CauldronContents potion;
+    private final CauldronContents contents;
     private final ItemStackTemplate result;
     private final ParticleOptions particleType;
     private final boolean requiresHeat;
     private final boolean copyComponents;
+    private final boolean placeAsBlock;
 
-    public AlchemyRecipe(List<Ingredient> reagent, CauldronContents potion, ItemStackTemplate result, ParticleOptions particleType, boolean requiresHeat, boolean copyComponents) {
+    public AlchemyRecipe(List<Ingredient> reagent, CauldronContents contents, ItemStackTemplate result, ParticleOptions particleType, boolean requiresHeat, boolean copyComponents, boolean placeAsBlock) {
         this.reagents = reagent;
-        this.potion = potion;
+        this.contents = contents;
         this.result = result;
         this.particleType = particleType;
         this.requiresHeat = requiresHeat;
         this.copyComponents = copyComponents;
+        this.placeAsBlock = placeAsBlock;
     }
 
     @Override
     public boolean matches(BrewingRecipeInput input, Level level) {
         if (!requiresHeat() || input.isHeated())
-            return input.ingredientAmount() == this.reagents.size() && input.stackedContents().canCraft(this, null);
+            return input.ingredientAmount() == this.reagents.size() && input.stackedContents().canCraft(this, null) && contents.test(input.getContents());
         return false;
     }
 
@@ -65,8 +67,12 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
         return reagents;
     }
 
-    public CauldronContents getPotion() {
-        return potion;
+    public CauldronContents getContents() {
+        return contents;
+    }
+
+    public boolean tryPlaceAsBlock() {
+        return placeAsBlock;
     }
 
     public ItemStack getResultItem() {
@@ -115,11 +121,12 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
 
         public static final MapCodec<AlchemyRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 CauldronModHelpers.INGREDIENT_LIST_CODEC.fieldOf("reagent").forGetter(r->r.reagents),
-                CauldronContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
+                CauldronContents.CODEC.fieldOf("potion").forGetter(r->r.contents),
                 ItemStackTemplate.CODEC.fieldOf("result").forGetter(r->r.result),
                 ParticleTypes.CODEC.optionalFieldOf("particle_type", ParticleTypes.BUBBLE).forGetter(r->r.particleType),
                 Codec.BOOL.optionalFieldOf("requires_heat", CauldronMod.CONFIG.requiresHeat.value()).forGetter(r->r.requiresHeat),
-                Codec.BOOL.optionalFieldOf("copy_components", false).forGetter(r->r.copyComponents)
+                Codec.BOOL.optionalFieldOf("copy_components", false).forGetter(r->r.copyComponents),
+                Codec.BOOL.optionalFieldOf("place_as_block", false).forGetter(r->r.placeAsBlock)
         ).apply(inst, AlchemyRecipe::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, AlchemyRecipe> STREAM_CODEC = StreamCodec.of(AlchemyRecipe::toNetwork, AlchemyRecipe::fromNetwork);
@@ -131,15 +138,18 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
             var particleType = ParticleTypes.STREAM_CODEC.decode(buf);
             var requiresHeat = buf.readBoolean();
             var copyComponents = buf.readBoolean();
-            return new AlchemyRecipe(reagent, potion, result, particleType, requiresHeat, copyComponents);
+            var placeAsBlock = buf.readBoolean();
+            return new AlchemyRecipe(reagent, potion, result, particleType, requiresHeat, copyComponents, placeAsBlock);
         }
 
         private static void toNetwork(RegistryFriendlyByteBuf buf, AlchemyRecipe recipe) {
             CauldronModHelpers.INGREDIENT_LIST_STREAM_CODEC.encode(buf, recipe.reagents);
-            CauldronContents.STREAM_CODEC.encode(buf, recipe.potion);
+            CauldronContents.STREAM_CODEC.encode(buf, recipe.contents);
             ItemStackTemplate.STREAM_CODEC.encode(buf, recipe.result);
             ParticleTypes.STREAM_CODEC.encode(buf, recipe.particleType);
             buf.writeBoolean(recipe.requiresHeat);
             buf.writeBoolean(recipe.copyComponents);
+            buf.writeBoolean(recipe.placeAsBlock);
         }
+
 }

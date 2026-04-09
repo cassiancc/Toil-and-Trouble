@@ -19,10 +19,10 @@ public class CauldronModRRVPlugin implements ReliableRecipeViewerPlugin {
         // register the server recipes
         ItemView.addServerRecipeProvider(recipeList -> {
             ServerRecipeManager.INSTANCE.getRecipesForType(CauldronModRecipes.BREWING).forEach(recipe -> {
-                recipeList.add(new CauldronBrewingServerRecipe(SlotContent.of(recipe.getReagent()), recipe.getPotion(), recipe.getResultPotion(), recipe.requiresHeat()));
+                recipeList.add(new CauldronBrewingServerRecipe(SlotContent.of(recipe.getReagent()), recipe.getContents(), recipe.getResultPotion(), recipe.requiresHeat()));
             });
             ServerRecipeManager.INSTANCE.getRecipesForType(CauldronModRecipes.ALCHEMY).forEach(recipe -> {
-                recipeList.add(new CauldronAlchemyServerRecipe(recipe.getReagents().stream().map(SlotContent::of).toList(), recipe.getPotion(), SlotContent.of(recipe.getResultItem()), recipe.requiresHeat()));
+                recipeList.add(new CauldronAlchemyServerRecipe(recipe.getReagents().stream().map(SlotContent::of).toList(), recipe.getContents(), SlotContent.of(recipe.getResultItem()), recipe.requiresHeat()));
             });
         });
 

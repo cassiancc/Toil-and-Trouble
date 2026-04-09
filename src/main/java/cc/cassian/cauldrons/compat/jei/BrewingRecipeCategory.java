@@ -9,15 +9,10 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-
 import mezz.jei.api.recipe.category.IRecipeCategory;
-//? if >1.21.2 {
 import mezz.jei.api.recipe.types.IRecipeType;
-import net.minecraft.client.renderer.RenderPipelines;
-//?} else {
-/*import mezz.jei.api.recipe.RecipeType;
-*///?}
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Blocks;
@@ -53,7 +48,7 @@ public class BrewingRecipeCategory implements IRecipeCategory<RecipeHolder<Brewi
 		// reagent
 		builder.addSlot(RecipeIngredientRole.INPUT, 5, 4).add(recipe.getReagent()).setStandardSlotBackground();
 		// potion item
-		var input = CauldronModJeiPlugin.getResultForDisplay(recipe.getPotion());
+		var input = CauldronModJeiPlugin.getResultForDisplay(recipe.getContents());
 		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 41, 4).add(input.getB()).setStandardSlotBackground();
 		builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).add(input.getA());
 		// output
@@ -72,9 +67,9 @@ public class BrewingRecipeCategory implements IRecipeCategory<RecipeHolder<Brewi
 		return 25;
 	}
 
-//	@Override
-//	public void draw(RecipeHolder<BrewingRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
-//		guiGraphics.blit( RenderPipelines.GUI_TEXTURED, CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
-//	}
+	@Override
+	public void draw(RecipeHolder<BrewingRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
+		guiGraphics.blit( RenderPipelines.GUI_TEXTURED, CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
+	}
 
 }

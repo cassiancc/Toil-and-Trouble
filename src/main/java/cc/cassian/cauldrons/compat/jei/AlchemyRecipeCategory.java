@@ -3,7 +3,6 @@ package cc.cassian.cauldrons.compat.jei;
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.core.CauldronModRecipes;
 import cc.cassian.cauldrons.recipe.AlchemyRecipe;
-import com.google.gson.JsonArray;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -12,15 +11,10 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-//? if >1.21.2 {
 import mezz.jei.api.recipe.types.IRecipeType;
-import net.minecraft.client.renderer.RenderPipelines;
-//?} else {
-/*import mezz.jei.api.recipe.RecipeType;
-*///?}
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Blocks;
@@ -67,7 +61,7 @@ public class AlchemyRecipeCategory implements IRecipeCategory<RecipeHolder<Alche
 			}
 		}
 		// potion item
-		var input = CauldronModJeiPlugin.getResultForDisplay(recipe.getPotion());
+		var input = CauldronModJeiPlugin.getResultForDisplay(recipe.getContents());
 		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 61, 37).add(input.getB()).setStandardSlotBackground();
 		builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).add(input.getA());
 		// output
@@ -85,8 +79,8 @@ public class AlchemyRecipeCategory implements IRecipeCategory<RecipeHolder<Alche
 		return 54;
 	}
 
-//	@Override
-//	public void draw(RecipeHolder<AlchemyRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
-//		guiGraphics.blit(RenderPipelines.GUI_TEXTURED, CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
-//	}
+	@Override
+	public void draw(RecipeHolder<AlchemyRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
+		guiGraphics.blit(RenderPipelines.GUI_TEXTURED, CauldronMod.of("textures/gui/jei.png"), 0, 0, 0, 0, 100, 25, 100, 25);
+	}
 }

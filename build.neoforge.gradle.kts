@@ -160,7 +160,7 @@ dependencies {
 //    }
 
     // Recipe Viewers
-    compileOnly("mezz.jei:jei-26.1-snapshot-4-neoforge:${property("deps.jei")}")
+    compileOnly("mezz.jei:jei-26.1.1-neoforge:${property("deps.jei")}")
     compileOnly("cc.cassian.rrv:reliable-recipe-viewer-neoforge:${property("deps.rrv")}")
     runtimeOnly("cc.cassian.rrv:reliable-recipe-viewer-neoforge:${property("deps.rrv")}")
 }
