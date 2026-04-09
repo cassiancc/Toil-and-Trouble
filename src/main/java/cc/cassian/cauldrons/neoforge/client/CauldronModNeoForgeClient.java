@@ -30,8 +30,8 @@ import java.util.List;
 public final class CauldronModNeoForgeClient {
 
     @SubscribeEvent
-    public static void registerColorHandlers(RegisterColorHandlersEvent.BlockTintSources event) {
-        event.register(List.of(CauldronModClient.getColor()), CauldronModBlocks.BREWING_CAULDRON);
+    public static void registerColorHandlers(RegisterColorHandlersEvent.Block event) {
+        event.register(CauldronModClient::getColor, CauldronModBlocks.BREWING_CAULDRON);
 
     }
 
