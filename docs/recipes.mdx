@@ -15,6 +15,7 @@ Cauldron Brewing recipes use the following format:
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Cauldron Contents" /> **result**: A [Cauldron Contents](cauldron-contents) data component that will end up as the Cauldron Contents.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **particle_type**: Optional: A particle type displayed after a successful brew, see [Particle Format](https://minecraft.wiki/w/Particle_format).\
 |	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: A [particle type](https://minecraft.wiki/w/Particles_(Java_Edition)).
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/boolean" title="Boolean" /> **type**: Whether to place the id set in `result` as a block.\
 
 
 An example recipe is below, which crafts an Awkward Potion from the `toil_and_trouble:creates_awkward_potions` item tag (which contains Nether Wart) and the Water Bottle potion.
@@ -61,8 +62,9 @@ Toil and Trouble also supports a variety of vanilla non-potion fluids and "fluid
 - Water ("toil_and_trouble:water")
 - Lava ("toil_and_trouble:lava")
 - Honey ("toil_and_trouble:honey")
+- Milk ("toil_and_trouble:milk")
 
-Toil and Trouble also allows arbitrary blocks to be created from a successful brew. For example, to replace the Cauldron with a Lava Cauldron, set the `id` field to `minecraft:lava_cauldron`.
+Toil and Trouble also allows arbitrary blocks to be created from a successful brew. For example, to replace the Cauldron with a Lava Cauldron, set the `id` field to `minecraft:lava_cauldron`, and set `place_as_block` to true.
 
 ```json
 {
@@ -80,7 +82,8 @@ Toil and Trouble also allows arbitrary blocks to be created from a successful br
   "requires_heat": true,
   "particle_type": {
     "type": "flame"
-  }
+  },
+  "place_as_block": true
 }
 ```
 
@@ -99,6 +102,7 @@ Cauldron Alchemy recipes use the following format:
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **result**: An item stack that will end up in an empty Cauldron.\
 |	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **id**: An [item id](https://minecraft.wiki/w/Java_Edition_data_values#Items).\
 |	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **components**: Optional. Additional information about the item. See [item components](https://minecraft.wiki/w/Data_component_format). \
+├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/boolean" title="Boolean" /> **place_as_block**: Optional, defaults to false: Whether to place the id set in `result` as a block.\
 ├── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/object" title="Object" /> **particle_type**: Optional: A particle type displayed after a successful brew, see [Particle Format](https://minecraft.wiki/w/Particle_format).\
 |	└── <Asset width={16} height={16} location="toil_and_trouble:nbtsheet/string" title="String" /> **type**: A [particle type](https://minecraft.wiki/w/Particles_(Java_Edition)).
 
@@ -120,6 +124,26 @@ An example recipe is below, which crafts an Cooked Cod with the custom name Awkw
       "minecraft:item_name": "\"Awkward Fish\""
     }
   },
+  "place_as_block": false,
+  "particle_type": {
+    "type": "minecraft:angry_villager"
+  }
+}
+```
+
+This recipe uses the `place_as_block` property to place an arbitrary blockstate.
+
+```json
+{
+  "type": "toil_and_trouble:alchemy",
+  "reagent": "minecraft:bamboo",
+  "result": {
+    "id": "minecraft:bamboo_slab",
+    "components": {
+      "minecraft:block_state": {"type":"top"}
+    }
+  },
+  "place_as_block": true,
   "particle_type": {
     "type": "minecraft:angry_villager"
   }

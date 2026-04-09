@@ -132,7 +132,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     public static void setFillLevel(BlockState state, @Nullable Level level, BlockPos pos, int i) {
         if (i > 3 || i < -1 || level == null) return;
         BlockState blockState = state.setValue(POTION_QUANTITY, i);
-        level.setBlockAndUpdate(pos, blockState);
+        CauldronModHelpers.setBlockAndUpdate(level, pos, blockState);
     }
 
     @Override
@@ -141,11 +141,11 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
             if (state.getValue(POTION_QUANTITY) == 0) {
                 if (precipitation == Biome.Precipitation.RAIN) {
                     BlockState blockState = Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 1);
-                    level.setBlockAndUpdate(pos, blockState);
+                    CauldronModHelpers.setBlockAndUpdate(level, pos, blockState);
                     level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(blockState));
                 } else if (precipitation == Biome.Precipitation.SNOW) {
                     BlockState blockState = Blocks.POWDER_SNOW_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 1);
-                    level.setBlockAndUpdate(pos, blockState);
+                    CauldronModHelpers.setBlockAndUpdate(level, pos, blockState);
                     level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(blockState));
                 }
             } else if (precipitation == Biome.Precipitation.RAIN && level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity && cauldronBlockEntity.isPotionWater()) {

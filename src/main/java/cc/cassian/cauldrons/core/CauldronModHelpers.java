@@ -1,18 +1,28 @@
 package cc.cassian.cauldrons.core;
 
+import cc.cassian.cauldrons.CauldronMod;
 import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -29,5 +39,28 @@ public class CauldronModHelpers {
 
     public static boolean hasShiftDown() {
         return Screen.hasShiftDown();
+    }
+
+    public static @Nullable BlockState toBlock(ItemStack resultItem) {
+        if (resultItem.getItem() instanceof BlockItem blockItem) {
+            var blockstate = blockItem.getBlock().defaultBlockState();
+            if (resultItem.has(DataComponents.BLOCK_STATE)) {
+                BlockItemStateProperties blockItemStateProperties = resultItem.get(DataComponents.BLOCK_STATE);
+                assert blockItemStateProperties != null;
+                return blockItemStateProperties.apply(blockstate);
+            }
+            return blockstate;
+        }
+        return null;
+    }
+
+    public static @Nullable BlockState toBlock(Identifier id) {
+        var potentialBlock = BuiltInRegistries.BLOCK.getOptional(id);
+        return potentialBlock.map(Block::defaultBlockState).orElse(null);
+    }
+
+    public static void setBlockAndUpdate(Level level, BlockPos pos, BlockState blockState) {
+//        CauldronMod.LOGGER.debug((level instanceof ServerLevel ? "server" : "client") + " and " + blockState);
+        level.setBlockAndUpdate(pos, blockState);
     }
 }

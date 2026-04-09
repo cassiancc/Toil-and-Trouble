@@ -4,6 +4,7 @@ import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.core.CauldronModEvents;
+import cc.cassian.cauldrons.core.CauldronModHelpers;
 import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.cauldron.CauldronInteraction;
@@ -31,7 +32,7 @@ public abstract class BlockBehaviourMixin  {
         if (!level.isClientSide() && CauldronMod.CONFIG.itemEntitiesConvertCauldrons.value() && state.is(Blocks.CAULDRON)) {
             if (entity instanceof ItemEntity itemEntity && itemEntity.tickCount>10) {
                 var newState = CauldronModBlocks.BREWING_CAULDRON.defaultBlockState();
-                level.setBlockAndUpdate(pos, newState);
+                CauldronModHelpers.setBlockAndUpdate(level, pos, newState);
                 level.setBlockEntity(new CauldronBlockEntity(pos, newState));
                 CauldronModEvents.insert(itemEntity.getItem(), newState, level, pos, null, null, null);
             }
