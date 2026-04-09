@@ -10,7 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -54,7 +54,7 @@ public class CauldronModHelpers {
         return null;
     }
 
-    public static @Nullable BlockState toBlock(Identifier id) {
+    public static @Nullable BlockState toBlock(ResourceLocation id) {
         var potentialBlock = BuiltInRegistries.BLOCK.getOptional(id);
         return potentialBlock.map(Block::defaultBlockState).orElse(null);
     }

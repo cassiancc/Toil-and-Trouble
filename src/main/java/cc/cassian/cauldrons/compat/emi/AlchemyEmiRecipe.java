@@ -30,7 +30,7 @@ public class AlchemyEmiRecipe extends BasicEmiRecipe {
             inputs.add(EmiIngredient.of(reagent));
         }
         // potion item
-        var input = CauldronModEmiPlugin.getResultForDisplay(recipe.value().getPotion());
+        var input = CauldronModEmiPlugin.getResultForDisplay(recipe.value().getContents());
         inputs.add(EmiIngredient.of(input.getA().getEmiStacks()));
         potionForDisplay = input.getB();
         // output

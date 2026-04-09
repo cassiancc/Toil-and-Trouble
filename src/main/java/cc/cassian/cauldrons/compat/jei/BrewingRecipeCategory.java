@@ -47,7 +47,7 @@ public class BrewingRecipeCategory implements IRecipeCategory<RecipeHolder<Brewi
 		// reagent
 		builder.addSlot(RecipeIngredientRole.INPUT, 5, 4).addIngredients(recipe.getReagent()).setStandardSlotBackground();
 		// potion item
-		var input = CauldronModJeiPlugin.getResultForDisplay(recipe.getPotion());
+		var input = CauldronModJeiPlugin.getResultForDisplay(recipe.getContents());
 		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 41, 4).addItemStack(input.getB()).setStandardSlotBackground();
 		builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStack(input.getA());
 		// output

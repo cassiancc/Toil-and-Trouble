@@ -1,7 +1,9 @@
 {
   "type": "toil_and_trouble:alchemy",
   "reagent": [
-    "minecraft:dirt"
+    {
+      "item": "minecraft:dirt"
+    }
   ],
   "potion": "minecraft:water",
   "result": {

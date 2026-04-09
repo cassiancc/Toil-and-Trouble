@@ -137,7 +137,7 @@ dependencies {
     modCompileOnly("maven.modrinth:jade:${property("deps.jade")}")
     modCompileOnly("mcp.mobius.waila:wthit-api:fabric-${property("deps.wthit_version")}")
     modCompileOnly("dev.emi:emi-fabric:${property("deps.emi")}:api")
-    modLocalRuntime("dev.emi:emi-fabric:${property("deps.emi")}")
+//    modLocalRuntime("dev.emi:emi-fabric:${property("deps.emi")}")
     modCompileOnly("maven.modrinth:jei:${property("deps.jei")}-fabric") {
         isTransitive = false;
     }

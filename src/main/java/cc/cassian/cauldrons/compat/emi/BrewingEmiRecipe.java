@@ -28,7 +28,7 @@ public class BrewingEmiRecipe extends BasicEmiRecipe {
         // reagent
         inputs.add(EmiIngredient.of(recipe.getReagent()));
         // potion item
-        var input = CauldronModEmiPlugin.getResultForDisplay(recipe.getPotion());
+        var input = CauldronModEmiPlugin.getResultForDisplay(recipe.getContents());
         inputs.add(EmiIngredient.of(input.getA().getEmiStacks()));
         potionForDisplay = input.getB();
         // output

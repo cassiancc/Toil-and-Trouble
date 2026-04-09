@@ -60,7 +60,7 @@ public class AlchemyRecipeCategory implements IRecipeCategory<RecipeHolder<Alche
 			}
 		}
 		// potion item
-		var input = CauldronModJeiPlugin.getResultForDisplay(recipe.getPotion());
+		var input = CauldronModJeiPlugin.getResultForDisplay(recipe.getContents());
 		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 61, 37).addItemStack(input.getB()).setStandardSlotBackground();
 		builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStack(input.getA());
 		// output

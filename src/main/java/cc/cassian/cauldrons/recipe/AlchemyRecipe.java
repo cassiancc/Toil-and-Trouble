@@ -115,7 +115,7 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
 
         public static final MapCodec<AlchemyRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 CauldronModHelpers.INGREDIENT_LIST_CODEC.fieldOf("reagent").forGetter(r->r.reagents),
-                CauldronContents.CODEC.fieldOf("potion").forGetter(r->r.potion),
+                CauldronContents.CODEC.fieldOf("potion").forGetter(r->r.contents),
                 ItemStack.CODEC.fieldOf("result").forGetter(r->r.result),
                 ParticleTypes.CODEC.optionalFieldOf("particle_type", ParticleTypes.BUBBLE).forGetter(r->r.particleType),
                 Codec.BOOL.optionalFieldOf("requires_heat", CauldronMod.CONFIG.requiresHeat.value()).forGetter(r->r.requiresHeat),
@@ -138,7 +138,7 @@ public class AlchemyRecipe implements Recipe<BrewingRecipeInput> {
 
         private static void toNetwork(RegistryFriendlyByteBuf buf, AlchemyRecipe recipe) {
             CauldronModHelpers.INGREDIENT_LIST_STREAM_CODEC.encode(buf, recipe.reagents);
-            CauldronContents.STREAM_CODEC.encode(buf, recipe.potion);
+            CauldronContents.STREAM_CODEC.encode(buf, recipe.contents);
             ItemStack.STREAM_CODEC.encode(buf, recipe.result);
             ParticleTypes.STREAM_CODEC.encode(buf, recipe.particleType);
             buf.writeBoolean(recipe.requiresHeat);
