@@ -7,6 +7,7 @@ import cc.cassian.rrv.api.recipe.ReliableClientRecipeType;
 import cc.cassian.rrv.common.recipe.inventory.RecipeViewMenu;
 import cc.cassian.rrv.common.recipe.inventory.SlotContent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,14 +17,14 @@ public class CauldronAlchemyClientRecipe implements ReliableClientRecipe {
     private final CauldronContents potion;
     private final SlotContent result;
     private final boolean heated;
+    private final Identifier id;
 
-    public CauldronAlchemyClientRecipe(CauldronAlchemyServerRecipe modRecipe) {
-        modRecipe.getReagents().forEach(reagent -> {
-            reagents.add(SlotContent.of(reagent));
-        });
-        this.potion = modRecipe.getPotion();
-        this.result = SlotContent.of(modRecipe.getResult());
-        this.heated = modRecipe.requiresHeat();
+    public CauldronAlchemyClientRecipe(Identifier identifier, List<SlotContent> list, CauldronContents contents, SlotContent result, boolean heated) {
+		this.id = identifier;
+        reagents.addAll(list);
+        this.potion = contents;
+        this.result = result;
+        this.heated = heated;
     }
 
     @Override
@@ -56,4 +57,9 @@ public class CauldronAlchemyClientRecipe implements ReliableClientRecipe {
     public List<SlotContent> getResults() {
         return List.of(result);
     }
+
+	@Override
+	public Identifier getId() {
+		return id;
+	}
 }

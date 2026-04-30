@@ -24,8 +24,9 @@ public class Constants {
 			Identifier.withDefaultNamespace("powder_snow_cauldron"), SlotContent.of(Ingredient.of(Blocks.POWDER_SNOW)),
 			CauldronMod.of("lava"), SlotContent.of(new FluidStack(Fluids.LAVA)),
 			CauldronMod.of("empty"), SlotContent.of(Items.AIR),
-			CauldronMod.of("milk"), SlotContent.of(CauldronModItems.MILK_CONTENTS)
-
+			CauldronMod.of("milk"), SlotContent.of(CauldronModItems.MILK_CONTENTS),
+			CauldronMod.of("honey"), SlotContent.of(CauldronModItems.HONEY_CONTENTS),
+			CauldronMod.of("slime"), SlotContent.of(CauldronModItems.SLIME_CONTENTS)
 	);
 
 	public static Pair<SlotContent, SlotContent> getResultForDisplay(CauldronContents resultPotion) {

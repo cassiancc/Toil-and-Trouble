@@ -20,6 +20,10 @@ public class CauldronModItems {
             "honey", Item::new, new Item.Properties()
     );
 
+    public static final Item SLIME_CONTENTS = register(
+            "slime", Item::new, new Item.Properties()
+    );
+
     public static final Item MILK_CONTENTS = register(
             "milk", Item::new, new Item.Properties()
     );

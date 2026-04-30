@@ -1,0 +1,15 @@
+{
+  "type": "toil_and_trouble:brewing",
+  "reagent": "minecraft:slime_ball",
+  "potion": {
+    "id": "toil_and_trouble:slime"
+  },
+  "result": {
+    "id": "toil_and_trouble:slime",
+    "amount": 1
+  },
+  "requires_heat": true,
+  "particle_type": {
+    "type": "item_slime"
+  }
+}

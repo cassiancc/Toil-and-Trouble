@@ -1,16 +1,25 @@
 package cc.cassian.cauldrons.blocks;
 
 import cc.cassian.cauldrons.CauldronMod;
+import cc.cassian.cauldrons.Platform;
 import cc.cassian.cauldrons.blocks.entity.CauldronBlockEntity;
 import cc.cassian.cauldrons.core.CauldronContents;
 import cc.cassian.cauldrons.core.CauldronModEvents;
 import cc.cassian.cauldrons.core.CauldronModHelpers;
+import cc.cassian.cauldrons.registry.CauldronModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,7 +50,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     public static final EnumProperty<Contents> CONTENTS = EnumProperty.create("contents", Contents.class, Contents.values());
 
     public enum Contents implements StringRepresentable {
-        EMPTY("empty"), WATER("water"), LAVA("lava"), POTION("potion"), HONEY("honey"), MILK("milk"), CHORUS_HONEY("chorus_honey");
+        EMPTY("empty"), WATER("water"), LAVA("lava"), POTION("potion"), HONEY("honey"), SLIME("slime"), MILK("milk"), CHORUS_HONEY("chorus_honey");
         private final String name;
 
         Contents(final String name) {
@@ -80,6 +89,10 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
 			} else if (CauldronMod.CONFIG.client.showContentsWhenInteracting.value()) {
                 player.sendOverlayMessage(cauldronBlockEntity.getContentsName());
             }
+            //reset to vanilla
+			if (cauldronBlockEntity.getItems().isEmpty() && cauldronBlockEntity.getContents().equals(CauldronContents.EMPTY) && blockState.getOptionalValue(POTION_QUANTITY).orElse(0).equals(0)) {
+				level.setBlockAndUpdate(pos, Blocks.CAULDRON.defaultBlockState());
+			}
 		}
         return InteractionResult.PASS;
     }
@@ -105,7 +118,13 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                     if (livingEntity.isAffectedByPotions()) {
                         if (cauldronBlockEntity.getContents().is("milk")) {
                             ClearAllStatusEffectsConsumeEffect.INSTANCE.apply(level, null, livingEntity);
-                        } else {
+                        }
+                        else if (cauldronBlockEntity.getContents().is("slime")) {
+                            Holder<MobEffect> effect = Platform.isModLoaded("slime_time") ? BuiltInRegistries.MOB_EFFECT.getOrThrow(ResourceKey.create(Registries.MOB_EFFECT, Identifier.fromNamespaceAndPath("slime_time", "slime_time"))) : MobEffects.OOZING;
+                            livingEntity.addEffect(new MobEffectInstance(effect, 1, 1, true, true));
+                        }
+
+                        else {
                             for (MobEffectInstance effect : cauldronBlockEntity.getContents().getAllEffects()) {
                                 livingEntity.addEffect(new MobEffectInstance(effect.getEffect(), 1, effect.getAmplifier(), true, true));
                             }
@@ -177,19 +196,6 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(POTION_QUANTITY, BREWING, HEATED, CONTENTS);
     }
-
-    //FIXME
-//    @Override
-//    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
-//        if (level.getBlockEntity(pos) instanceof CauldronBlockEntity cauldronBlockEntity) {
-//            if (level instanceof ServerLevel) {
-//                cauldronBlockEntity.getItem().forEach(itemStack -> {
-//                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), itemStack);
-//                });
-//            }
-//            level.updateNeighbourForOutputSignal(pos, this);
-//        }
-//    }
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {

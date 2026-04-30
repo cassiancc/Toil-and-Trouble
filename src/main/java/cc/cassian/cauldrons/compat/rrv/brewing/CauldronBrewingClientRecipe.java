@@ -8,6 +8,7 @@ import cc.cassian.rrv.api.recipe.ReliableClientRecipeType;
 import cc.cassian.rrv.common.recipe.inventory.RecipeViewMenu;
 import cc.cassian.rrv.common.recipe.inventory.SlotContent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
 import java.util.List;
 
@@ -16,16 +17,18 @@ public class CauldronBrewingClientRecipe implements ReliableClientRecipe {
     private final CauldronContents potion;
     private final CauldronContents result;
     private final boolean heated;
+    private final Identifier id;
 
-    public CauldronBrewingClientRecipe(CauldronBrewingServerRecipe modRecipe) {
-        this.reagent = SlotContent.of(modRecipe.getReagent());
-        this.potion = modRecipe.getPotion();
-        this.result = modRecipe.getResult();
-        this.heated = modRecipe.isHeated();
+    public CauldronBrewingClientRecipe(Identifier id, SlotContent reagent, CauldronContents potion, CauldronContents resultPotion, boolean heated) {
+        this.id = id;
+        this.reagent = reagent;
+        this.potion = potion;
+        this.result = resultPotion;
+        this.heated = heated;
     }
 
     @Override
-    public ReliableClientRecipeType getViewType() {
+    public ReliableClientRecipeType getType() {
         return CauldronBrewingClientRecipeType.INSTANCE;
     }
 
@@ -53,4 +56,9 @@ public class CauldronBrewingClientRecipe implements ReliableClientRecipe {
     public List<SlotContent> getResults() {
         return List.of(Constants.getResultForDisplay(result).getA());
     }
+
+	@Override
+	public Identifier getId() {
+		return id;
+	}
 }

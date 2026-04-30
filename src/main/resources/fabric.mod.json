@@ -25,7 +25,7 @@
     "jade": [
         "cc.cassian.cauldrons.compat.jade.CauldronModJadePlugin"
     ],
-    "rrv": [
+    "rrv_client": [
       "cc.cassian.cauldrons.compat.rrv.CauldronModRRVPlugin"
     ],
     "jei_mod_plugin": [
@@ -40,5 +40,8 @@
     "minecraft": "${minecraft}",
     "java": ">=21",
     "fabric-api": "*"
+  },
+  "breaks": {
+    "rrv": "<8.0.0"
   }
 }
