@@ -29,18 +29,6 @@ public class CommonRegistry {
         return object;
     }
 
-    public static <B extends Item> B registerItem(String name, B supplier) {
-        return register(name, supplier, BuiltInRegistries.ITEM);
-    }
-
-    public static <B extends Block> B registerBlock(String name, B supplier) {
-        return register(name, supplier, BuiltInRegistries.BLOCK);
-    }
-
-    public static <T extends EntityType<?>> T registerEntity(String name, T supplier) {
-        return register(name, supplier, BuiltInRegistries.ENTITY_TYPE);
-    }
-
     public static SoundEvent registerSoundEvent(String name, SoundEvent supplier) {
         return register(name, supplier, BuiltInRegistries.SOUND_EVENT);
     }
@@ -49,19 +37,11 @@ public class CommonRegistry {
         return registerSoundEvent(name, SoundEvent.createVariableRangeEvent(CauldronMod.of(name)));
     }
 
-    public static Holder<MobEffect> registerMobEffect(String name, Supplier<MobEffect> supplier) {
-        return Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, CauldronMod.of(name), supplier.get());
-    }
-
     public static <B extends RecipeSerializer<?>> B registerRecipeSerializer(String name, Supplier<B> supplier) {
         return register(name, supplier, BuiltInRegistries.RECIPE_SERIALIZER).get();
     }
 
     public static <B extends RecipeType<?>> B registerRecipe(String name, Supplier<B> supplier) {
         return register(name, supplier, BuiltInRegistries.RECIPE_TYPE).get();
-    }
-
-    public static <B extends BlockEntityType<?>> B registerBlockEntity(String name, B supplier) {
-        return register(name, supplier, BuiltInRegistries.BLOCK_ENTITY_TYPE);
     }
 }

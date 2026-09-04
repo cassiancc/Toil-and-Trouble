@@ -13,6 +13,7 @@ public class CauldronModTags {
     public static final TagKey<Item> CREATES_SPLASH_POTIONS = itemTagKey("creates_splash_potions");
     public static final TagKey<Item> CREATES_LINGERING_POTIONS = itemTagKey("creates_lingering_potions");
     public static final TagKey<Block> HEATS_CAULDRONS = blockTagKey("heats_cauldrons");
+    public static final TagKey<Item> CLEANS_CAULDRONS = itemTagKey("cleans_cauldrons");
 
     public static TagKey<Block> blockTagKey(String id) {
         return blockTagKey(MOD_ID, id);

@@ -1,6 +1,9 @@
 package cc.cassian.cauldrons;
 
 import cc.cassian.cauldrons.config.ModConfig;
+import cc.cassian.mru.Platform;
+import cc.cassian.mru.util.CommonRegistry;
+import cc.cassian.mru.util.RegistryUtils;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +11,8 @@ import org.slf4j.LoggerFactory;
 public class CauldronMod {
 	public static final String MOD_ID = "toil_and_trouble";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static final ModConfig CONFIG = ModConfig.createToml(Platform.getConfigDir(), "", MOD_ID, ModConfig.class);
+	public static final ModConfig CONFIG = ModConfig.createToml(Platform.INSTANCE.configPath(), "", MOD_ID, ModConfig.class);
+	public static final CommonRegistry REGISTRAR = RegistryUtils.registrar(MOD_ID);
 
 	public static Identifier of(String name) {
 		return Identifier.fromNamespaceAndPath(MOD_ID, name);

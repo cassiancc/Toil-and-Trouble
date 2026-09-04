@@ -1,5 +1,10 @@
 ### Added
-- Slime cauldrons.
+- Slime cauldrons, made by melting Slime and featuring compatibility with Slime Time.
+- Sponges can now be used to clean the contents of Cauldrons.
+
+### Changed
+- Toil and Trouble now depends on MRU to simplify long-term maintenance.
 
 ### Fixed
 - Crash when loading a cauldron with an incorrect recipe.
+- Filling cauldron not updating visually.

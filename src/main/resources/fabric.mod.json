@@ -39,7 +39,8 @@
     "fabricloader": ">=0.16.14",
     "minecraft": "${minecraft}",
     "java": ">=21",
-    "fabric-api": "*"
+    "fabric-api": "*",
+    "mru": ">1.0.30"
   },
   "breaks": {
     "rrv": "<8.0.0"

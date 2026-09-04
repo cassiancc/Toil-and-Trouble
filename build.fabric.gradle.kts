@@ -133,6 +133,7 @@ dependencies {
     runtimeOnly("cc.cassian.rrv:reliable-recipe-viewer-fabric:${property("deps.rrv")}") {
         isTransitive = false
     }
+    implementation("cc.cassian.mru:mru-fabric:${property("deps.mru")}+${property("deps.minecraft")}")
 
 }
 

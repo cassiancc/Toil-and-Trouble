@@ -32,7 +32,7 @@ public abstract class BlockBehaviourMixin  {
         if (!level.isClientSide() && CauldronMod.CONFIG.itemEntitiesConvertCauldrons.value() && state.is(Blocks.CAULDRON)) {
             if (entity instanceof ItemEntity itemEntity && itemEntity.tickCount>10) {
                 var newState = CauldronModBlocks.BREWING_CAULDRON.defaultBlockState();
-                CauldronModHelpers.setBlockAndUpdate(level, pos, newState);
+                CauldronModHelpers.setBlockAndUpdate(level, pos, newState, "item entity in cauldron");
                 level.setBlockEntity(new CauldronBlockEntity(pos, newState));
                 CauldronModEvents.insert(itemEntity.getItem(), newState, level, pos, null, null, null);
             }
