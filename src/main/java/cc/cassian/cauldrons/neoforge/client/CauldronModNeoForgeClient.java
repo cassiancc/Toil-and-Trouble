@@ -37,7 +37,7 @@ public final class CauldronModNeoForgeClient {
 
     @SubscribeEvent
     public static void registerColorHandlers(RegisterColorHandlersEvent.Item event) {
-        event.register(CauldronModClient::getColor, CauldronModItems.CAULDRON_CONTENTS.get());
+        event.register(CauldronModClient::getColor, CauldronModItems.CAULDRON_CONTENTS);
     }
 
     @SubscribeEvent

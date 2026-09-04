@@ -16,12 +16,6 @@ import java.util.Optional;
 public class Platform {
 
 	public static <T extends Recipe<R>, R extends RecipeInput> Optional<RecipeHolder<T>> getFirstRecipe(RecipeType<T> brewing, R input, Level level) {
-		if (level instanceof ServerLevel serverLevel)
-			return serverLevel.recipeAccess().getRecipeFor(brewing, input, level);
-		//? fabric
-		return level.recipeAccess().getSynchronizedRecipes().getFirstMatch(brewing, input, level);
-		//? neoforge {
-		/*return CauldronModNeoForgeClient.map.getRecipesFor(brewing, input, level).findFirst();
-		*///?}
+		return level.getRecipeManager().getRecipeFor(brewing, input, level);
 	}
 }

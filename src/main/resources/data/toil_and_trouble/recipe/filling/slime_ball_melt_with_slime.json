@@ -1,6 +1,8 @@
 {
   "type": "toil_and_trouble:brewing",
-  "reagent": "minecraft:slime_ball",
+  "reagent": {
+    "item": "minecraft:slime_ball"
+  },
   "potion": {
     "id": "toil_and_trouble:slime"
   },

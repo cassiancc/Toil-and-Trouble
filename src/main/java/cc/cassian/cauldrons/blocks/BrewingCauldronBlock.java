@@ -11,7 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
@@ -26,7 +26,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffect;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
@@ -58,9 +57,9 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
             else if (contents1.is("honey")) return ContentsProperty.HONEY;
             else if (contents1.is("slime")) return ContentsProperty.SLIME;
             else if (contents1.is("milk")) return ContentsProperty.MILK;
-            else if (contents1.is(Identifier.fromNamespaceAndPath("chorus_honey", "chorus_honey"))) return ContentsProperty.CHORUS_HONEY;
+            else if (contents1.is(ResourceLocation.fromNamespaceAndPath("chorus_honey", "chorus_honey"))) return ContentsProperty.CHORUS_HONEY;
             else if (contents1.is("lava")) return ContentsProperty.LAVA;
-            else if (contents1.is(Identifier.withDefaultNamespace("air"))) return ContentsProperty.EMPTY;
+            else if (contents1.is(ResourceLocation.withDefaultNamespace("air"))) return ContentsProperty.EMPTY;
             return ContentsProperty.POTION;
         }
 
@@ -134,7 +133,7 @@ public class BrewingCauldronBlock extends CauldronBlock implements EntityBlock {
                             livingEntity.removeAllEffects();
                         }
                         else if (cauldronBlockEntity.getContents().is("slime")) {
-                            Holder<MobEffect> effect = Platform.INSTANCE.isLoaded("slime_time") ? BuiltInRegistries.MOB_EFFECT.getOrThrow(ResourceKey.create(Registries.MOB_EFFECT, Identifier.fromNamespaceAndPath("slime_time", "slime_time"))) : MobEffects.OOZING;
+                            Holder<MobEffect> effect = Platform.INSTANCE.isLoaded("slime_time") ? BuiltInRegistries.MOB_EFFECT.getHolderOrThrow(ResourceKey.create(Registries.MOB_EFFECT, ResourceLocation.fromNamespaceAndPath("slime_time", "slime_time"))) : MobEffects.OOZING;
                             livingEntity.addEffect(new MobEffectInstance(effect, 1, 1, true, true));
                         }
 
