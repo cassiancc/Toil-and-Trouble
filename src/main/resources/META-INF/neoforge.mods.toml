@@ -28,5 +28,12 @@ versionRange = "${minecraft}"
 ordering = "NONE"
 side = "BOTH"
 
+[[dependencies.toil_and_trouble]]
+modId = "mru"
+type = "required"
+versionRange = "[1.0.30,]"
+ordering = "NONE"
+side = "BOTH"
+
 [[mixins]]
 config = "toil_and_trouble.mixins.json"

@@ -1,13 +1,13 @@
 package cc.cassian.cauldrons.core;
 
 import cc.cassian.cauldrons.CauldronMod;
+import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
 import com.google.common.collect.Iterables;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -113,4 +113,8 @@ public record CauldronContents(ResourceLocation id, Optional<Holder<Potion>> pot
     public boolean is(String name) {
         return this.is(CauldronMod.of(name));
     }
+
+	public BrewingCauldronBlock.ContentsProperty asBlockstate() {
+		return BrewingCauldronBlock.ContentsProperty.toBlockStateProperty(this);
+	}
 }

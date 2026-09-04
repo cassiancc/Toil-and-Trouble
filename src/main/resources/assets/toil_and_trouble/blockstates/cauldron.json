@@ -96,6 +96,18 @@
     "contents=milk,potion_quantity=3": {
       "model": "toil_and_trouble:block/milk_cauldron_full"
     },
+    "contents=slime,potion_quantity=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "contents=slime,potion_quantity=1": {
+      "model": "toil_and_trouble:block/slime_cauldron_level1"
+    },
+    "contents=slime,potion_quantity=2": {
+      "model": "toil_and_trouble:block/slime_cauldron_level2"
+    },
+    "contents=slime,potion_quantity=3": {
+      "model": "toil_and_trouble:block/slime_cauldron_full"
+    },
     "contents=chorus_honey,potion_quantity=0": {
       "model": "minecraft:block/cauldron"
     },

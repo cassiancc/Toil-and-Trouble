@@ -31,13 +31,13 @@ public final class CauldronModNeoForgeClient {
 
     @SubscribeEvent
     public static void registerColorHandlers(RegisterColorHandlersEvent.Block event) {
-        event.register(CauldronModClient::getColor, CauldronModBlocks.BREWING_CAULDRON);
+        event.register(CauldronModClient::getColor, CauldronModBlocks.BREWING_CAULDRON.get());
 
     }
 
     @SubscribeEvent
     public static void registerColorHandlers(RegisterColorHandlersEvent.Item event) {
-        event.register(CauldronModClient::getColor, CauldronModItems.CAULDRON_CONTENTS);
+        event.register(CauldronModClient::getColor, CauldronModItems.CAULDRON_CONTENTS.get());
     }
 
     @SubscribeEvent

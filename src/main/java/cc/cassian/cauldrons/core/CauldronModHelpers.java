@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class CauldronModHelpers {
@@ -59,8 +60,8 @@ public class CauldronModHelpers {
         return potentialBlock.map(Block::defaultBlockState).orElse(null);
     }
 
-    public static void setBlockAndUpdate(Level level, BlockPos pos, BlockState blockState) {
-//        CauldronMod.LOGGER.debug((level instanceof ServerLevel ? "server" : "client") + " and " + blockState);
+    public static void setBlockAndUpdate(Level level, BlockPos pos, BlockState blockState, String from) {
+//        CauldronMod.LOGGER.info("%s, %s and %s".formatted(level instanceof ServerLevel ? "server" : "client", from, blockState));
         level.setBlockAndUpdate(pos, blockState);
     }
 }

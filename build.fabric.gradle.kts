@@ -142,6 +142,7 @@ dependencies {
         isTransitive = false;
     }
     implementation("org.jspecify:jspecify:1.0.0")
+    implementation("cc.cassian.mru:mru-fabric:${property("deps.mru")}")
 
 }
 

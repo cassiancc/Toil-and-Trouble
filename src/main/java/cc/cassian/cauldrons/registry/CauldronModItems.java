@@ -20,12 +20,16 @@ public class CauldronModItems {
             "honey", Item::new, new Item.Properties()
     );
 
+    public static final Item SLIME_CONTENTS = register(
+            "slime", Item::new, new Item.Properties()
+    );
+
     public static final Item MILK_CONTENTS = register(
             "milk", Item::new, new Item.Properties()
     );
 
     private static Item register(ResourceKey<Item> resourceKey, Function<Item.Properties, Item> function, Item.Properties properties) {
-        return CommonRegistry.registerItem(resourceKey.location().getPath(), function.apply(properties));
+        return CauldronMod.REGISTRAR.registerItem(resourceKey.identifier().getPath(), function.apply(properties.setId(resourceKey)));
     }
 
     private static ResourceKey<Item> registryKey(String string) {

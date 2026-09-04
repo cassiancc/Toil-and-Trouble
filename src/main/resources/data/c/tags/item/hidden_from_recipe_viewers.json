@@ -1,6 +1,8 @@
 {
   "values": [
     "toil_and_trouble:cauldron_contents",
-    "toil_and_trouble:honey"
+    "toil_and_trouble:honey",
+    "toil_and_trouble:slime",
+    "toil_and_trouble:milk"
   ]
 }

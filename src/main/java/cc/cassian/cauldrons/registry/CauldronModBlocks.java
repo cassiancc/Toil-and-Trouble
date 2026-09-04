@@ -2,42 +2,15 @@ package cc.cassian.cauldrons.registry;
 
 import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.blocks.BrewingCauldronBlock;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
+import cc.cassian.mru.util.ItemLikeEntry;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 public class CauldronModBlocks {
 
-    public static final Block BREWING_CAULDRON = register(
-            "cauldron", BrewingCauldronBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON).lightLevel(properties->{
-                if (properties.getValue(BrewingCauldronBlock.CONTENTS) == BrewingCauldronBlock.Contents.LAVA) {
-                    return 15;
-                }
-                return 0;
-            })
+    public static final ItemLikeEntry<Block> BREWING_CAULDRON = CauldronMod.REGISTRAR.registerBlockEntry(
+            "cauldron", BrewingCauldronBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON).lightLevel(properties-> properties.getValue(BrewingCauldronBlock.CONTENTS) == BrewingCauldronBlock.ContentsProperty.LAVA ? 15 : 0)
     );
-
-    private static Block register(ResourceKey<Block> resourceKey, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties) {
-        // register block
-        // return
-        return CommonRegistry.registerBlock(resourceKey.location().getPath(), function.apply(properties));
-    }
-
-    private static ResourceKey<Block> registryKey(String string) {
-        return ResourceKey.create(Registries.BLOCK, CauldronMod.of(string));
-    }
-
-    private static Block register(String string, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties) {
-        return register(registryKey(string), function, properties);
-    }
-
-    private static Block register(String string, BlockBehaviour.Properties properties) {
-        return register(string, Block::new, properties);
-    }
 
     public static void touch() {
 

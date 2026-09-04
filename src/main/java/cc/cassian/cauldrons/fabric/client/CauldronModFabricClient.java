@@ -20,8 +20,8 @@ public final class CauldronModFabricClient implements ClientModInitializer {
         // This entrypoint is suitable for setting up client-specific logic, such as rendering.
         BlockEntityRenderers.register(CauldronModBlockEntityTypes.CAULDRON_BLOCK_ENTITY, CauldronRenderer::new);
 
-		ColorProviderRegistry.BLOCK.register(CauldronModClient::getColor, CauldronModBlocks.BREWING_CAULDRON);
-		ColorProviderRegistry.ITEM.register(CauldronModClient::getColor, CauldronModItems.CAULDRON_CONTENTS);
+		ColorProviderRegistry.BLOCK.register(CauldronModClient::getColor, CauldronModBlocks.BREWING_CAULDRON.get());
+		ColorProviderRegistry.ITEM.register(CauldronModClient::getColor, CauldronModItems.CAULDRON_CONTENTS.get());
 
     }
 }

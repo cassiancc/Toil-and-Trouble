@@ -17,6 +17,7 @@ public class Constants {
 			CauldronMod.of("lava"), new ItemStack(Blocks.LAVA),
 			CauldronMod.of("empty"), new ItemStack(Items.AIR),
 			CauldronMod.of("honey"), new ItemStack(CauldronModItems.HONEY_CONTENTS),
+			CauldronMod.of("slime"), new ItemStack(CauldronModItems.SLIME_CONTENTS),
 			CauldronMod.of("milk"), new ItemStack(CauldronModItems.MILK_CONTENTS)
 	);
 }
