@@ -9,12 +9,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 public class CauldronModBlocks {
 
     public static final ItemLikeEntry<Block> BREWING_CAULDRON = CauldronMod.REGISTRAR.registerBlockEntry(
-            "cauldron", BrewingCauldronBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON).lightLevel(properties->{
-                if (properties.getValue(BrewingCauldronBlock.CONTENTS) == BrewingCauldronBlock.ContentsProperty.LAVA) {
-                    return 15;
-                }
-                return 0;
-            })
+            "cauldron", BrewingCauldronBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON).lightLevel(properties-> properties.getValue(BrewingCauldronBlock.CONTENTS) == BrewingCauldronBlock.ContentsProperty.LAVA ? 15 : 0)
     );
 
     public static void touch() {

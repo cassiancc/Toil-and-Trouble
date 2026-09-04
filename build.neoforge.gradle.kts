@@ -163,6 +163,8 @@ dependencies {
     compileOnly("mezz.jei:jei-26.1.1-neoforge:${property("deps.jei")}")
     compileOnly("cc.cassian.rrv:reliable-recipe-viewer-neoforge:${property("deps.rrv")}")
     runtimeOnly("cc.cassian.rrv:reliable-recipe-viewer-neoforge:${property("deps.rrv")}")
+    implementation("cc.cassian.mru:mru-neoforge:${property("deps.mru")}")
+
 }
 
 stonecutter {

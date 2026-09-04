@@ -28,6 +28,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+//? if >26.2 {
+/*import net.minecraft.world.item.crafting.BrewingInput;
+import net.minecraft.world.item.crafting.RecipeType;
+*///?}
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -183,13 +187,20 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 				return updateAfterBrewing(ItemStack.EMPTY, this.contents, PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1));
 			}
 			else if (CauldronMod.CONFIG.useBrewingStandRecipes.value()) {
-				var potionBrewing = this.level.potionBrewing();
-				var potionItem = CauldronContents.createItemStack(Items.POTION, contents);
-				if (potionBrewing.hasMix(potionItem, items.getFirst())) {
-					ItemStack mix = potionBrewing.mix(items.getFirst(), potionItem);
-					this.contents = new CauldronContents(Objects.requireNonNullElse(mix.getComponents().get(DataComponents.POTION_CONTENTS), PotionContents.EMPTY));
-					return updateAfterBrewing(ItemStack.EMPTY, this.contents, ParticleTypes.BUBBLE);
-				}
+                var potionItem = CauldronContents.createItemStack(Items.POTION, contents);
+                //? if >26.2 {
+                /*Optional<RecipeHolder<net.minecraft.world.item.crafting.BrewingRecipe>> vanillaBrewingRecipeHolder = Platform.getFirstRecipe(RecipeType.BREWING, new BrewingInput(potionItem, items.getFirst()), level);
+                if (vanillaBrewingRecipeHolder.isPresent()) {
+                    var vanillaBrewingRecipe = vanillaBrewingRecipeHolder.get().value();
+                    var mix = vanillaBrewingRecipe.getOutput().create();
+                *///?} else {
+                    var potionBrewing = this.level.potionBrewing();
+                    if (potionBrewing.hasMix(potionItem, items.getFirst())) {
+                        ItemStack mix = potionBrewing.mix(items.getFirst(), potionItem);
+                //?}
+                    this.contents = new CauldronContents(Objects.requireNonNullElse(mix.getComponents().get(DataComponents.POTION_CONTENTS), PotionContents.EMPTY));
+                    return updateAfterBrewing(ItemStack.EMPTY, this.contents, ParticleTypes.BUBBLE);
+                }
 			}
 		}
 

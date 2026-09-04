@@ -75,28 +75,36 @@ public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity
 			if (i==0) {
 				poseStack.translate(0.5F, yPos.get(), 0.5F);
 				yPos.updateAndGet(v -> (float) (v + .2));
-				poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+				rotate(poseStack, Axis.XP, 90.0F);
 				poseStack.translate(0.0, 0, 0.0F);
 			}
 			else if (i<5) {
 				poseStack.translate(0.5F, 0.44921875F, 0.5F);
                 Direction direction = Direction.from2DDataValue((i + Direction.UP.get2DDataValue()) % 4);
                 float angle = -direction.toYRot();
-                poseStack.mulPose(Axis.YP.rotationDegrees(angle));
-                poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+				rotate(poseStack, Axis.YP, angle);
+				rotate(poseStack, Axis.XP, 90.0F);
                 poseStack.translate(-0.2125F, -0.2125F, 0.0F);
 			} else {
 				poseStack.translate(0.5F, 0.64921875F, 0.5F);
 				Direction direction = Direction.from2DDataValue((i + Direction.UP.get2DDataValue()) % 4);
 				float angle = -direction.toYRot();
-				poseStack.mulPose(Axis.YP.rotationDegrees(angle));
-				poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+				rotate(poseStack, Axis.YP, angle);
+				rotate(poseStack, Axis.XP, 90.0F);
 				poseStack.translate(-0.1125F, -0.1125F, 0.0F);
 			}
 			poseStack.scale(SIZE, SIZE, SIZE);
 			itemStack.submit(poseStack, submitNodeCollector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
 			poseStack.popPose();
 		}
+	}
+
+	private static void rotate(PoseStack poseStack, Axis axis, float angle) {
+		//? if <26.3 {
+		poseStack.mulPose(axis.rotationDegrees(angle));
+		//?} else {
+		/*poseStack.rotateDegrees(axis, angle);
+		*///?}
 	}
 
 

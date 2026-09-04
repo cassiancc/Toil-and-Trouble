@@ -24,19 +24,6 @@ public class CommonRegistry {
         return () -> object;
     }
 
-    public static <R, T extends R> T register(String name, T object, Registry<R> reg) {
-		Registry.register(reg, CauldronMod.of(name), object);
-        return object;
-    }
-
-    public static SoundEvent registerSoundEvent(String name, SoundEvent supplier) {
-        return register(name, supplier, BuiltInRegistries.SOUND_EVENT);
-    }
-
-    public static SoundEvent registerSoundEvent(String name) {
-        return registerSoundEvent(name, SoundEvent.createVariableRangeEvent(CauldronMod.of(name)));
-    }
-
     public static <B extends RecipeSerializer<?>> B registerRecipeSerializer(String name, Supplier<B> supplier) {
         return register(name, supplier, BuiltInRegistries.RECIPE_SERIALIZER).get();
     }

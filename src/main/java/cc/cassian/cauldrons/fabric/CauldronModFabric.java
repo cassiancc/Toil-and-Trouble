@@ -29,6 +29,8 @@ public final class CauldronModFabric implements ModInitializer {
 		RecipeSynchronization.synchronizeRecipeSerializer(CauldronModRecipes.BREWING_SERIALIZER);
 		RecipeSynchronization.synchronizeRecipeSerializer(CauldronModRecipes.INSERTION_SERIALIZER);
 		RecipeSynchronization.synchronizeRecipeSerializer(CauldronModRecipes.ALCHEMY_SERIALIZER);
+		//? if >26.2
+		//RecipeSynchronization.synchronizeRecipeSerializer(net.minecraft.world.item.crafting.BrewingRecipe.SERIALIZER);
     }
 }
 

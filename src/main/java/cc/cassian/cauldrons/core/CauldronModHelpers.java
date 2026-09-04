@@ -59,12 +59,8 @@ public class CauldronModHelpers {
         return potentialBlock.map(Block::defaultBlockState).orElse(null);
     }
 
-    public static void setBlockAndUpdate(Level level, BlockPos pos, BlockState blockState) {
-        setBlockAndUpdate(level, pos, blockState, "unknown");
-    }
-
     public static void setBlockAndUpdate(Level level, BlockPos pos, BlockState blockState, String from) {
-        CauldronMod.LOGGER.info("%s, %s and %s".formatted(level instanceof ServerLevel ? "server" : "client", from, blockState));
+//        CauldronMod.LOGGER.info("%s, %s and %s".formatted(level instanceof ServerLevel ? "server" : "client", from, blockState));
         level.setBlockAndUpdate(pos, blockState);
     }
 }
