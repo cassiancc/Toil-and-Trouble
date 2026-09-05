@@ -33,10 +33,13 @@ public class CauldronModEvents {
     public static InteractionResult PASS_TO_EMPTY_HAND = InteractionResult.TRY_WITH_EMPTY_HAND;
 
     public static InteractionResult useBlock(Player player, Level level, InteractionHand interactionHand, BlockPos pos, Direction direction) {
+		return useBlock(player.getItemInHand(interactionHand), player, level, interactionHand, pos, direction);
+	}
+
+    public static InteractionResult useBlock(ItemStack stack, @Nullable Player player, Level level, @Nullable InteractionHand interactionHand, BlockPos pos, @Nullable Direction direction) {
         BlockState blockState = level.getBlockState(pos);
-        ItemStack stack = player.getItemInHand(interactionHand);
         if (stack.isEmpty()) {
-            if (CauldronMod.CONFIG.client.showContentsWhenInteracting.value()) {
+            if (CauldronMod.CONFIG.client.showContentsWhenInteracting.value() && player != null) {
                 player.sendOverlayMessage(level.getBlockState(pos).getBlock().getName());
             }
             return PASS_TO_EMPTY_HAND;
@@ -44,20 +47,20 @@ public class CauldronModEvents {
         else if (blockState.is(Blocks.CAULDRON) && !stack.is(Items.WATER_BUCKET)) {
             var state = CauldronModBlocks.BREWING_CAULDRON.defaultBlockState();
             CauldronModHelpers.setBlockAndUpdate(level, pos, state, "insert water bucket");
-            return insert(player.getItemInHand(interactionHand), state, level, pos, player, interactionHand, direction);
+            return insert(stack, state, level, pos, player, interactionHand, direction);
         }
         else if (blockState.is(Blocks.WATER_CAULDRON) && !stack.is(Items.BUCKET)) {
-            var state =  CauldronModBlocks.BREWING_CAULDRON.defaultBlockState().setValue(BrewingCauldronBlock.CONTENTS, BrewingCauldronBlock.ContentsProperty.WATER).setValue(POTION_QUANTITY, blockState.getValue(LayeredCauldronBlock.LEVEL));
+            var state = CauldronModBlocks.BREWING_CAULDRON.defaultBlockState().setValue(BrewingCauldronBlock.CONTENTS, BrewingCauldronBlock.ContentsProperty.WATER).setValue(POTION_QUANTITY, blockState.getValue(LayeredCauldronBlock.LEVEL));
             CauldronModHelpers.setBlockAndUpdate(level, pos, state, "water cauldron");
             level.setBlockEntity(new CauldronBlockEntity(pos, state, new CauldronContents(Potions.WATER)));
-            return insert(player.getItemInHand(interactionHand), state, level, pos, player, interactionHand, direction);
+            return insert(stack, state, level, pos, player, interactionHand, direction);
 
         }
         else if (blockState.is(Blocks.LAVA_CAULDRON) && !stack.is(Items.BUCKET)) {
-            var state =  CauldronModBlocks.BREWING_CAULDRON.defaultBlockState().setValue(BrewingCauldronBlock.CONTENTS, BrewingCauldronBlock.ContentsProperty.LAVA).setValue(POTION_QUANTITY, 3);
+            var state = CauldronModBlocks.BREWING_CAULDRON.defaultBlockState().setValue(BrewingCauldronBlock.CONTENTS, BrewingCauldronBlock.ContentsProperty.LAVA).setValue(POTION_QUANTITY, 3);
             CauldronModHelpers.setBlockAndUpdate(level, pos, state, "lava cauldron");
             level.setBlockEntity(new CauldronBlockEntity(pos, state, new CauldronContents("lava")));
-            return insert(player.getItemInHand(interactionHand), state, level, pos, player, interactionHand, direction);
+            return insert(stack, state, level, pos, player, interactionHand, direction);
         }
         return PASS_TO_EMPTY_HAND;
     }

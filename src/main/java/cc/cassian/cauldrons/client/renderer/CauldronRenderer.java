@@ -21,10 +21,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+@NullMarked
 public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity, CauldronBlockEntityRenderState> {
     private static final float SIZE = 0.375F;
     private final ItemModelResolver itemRenderer;
@@ -43,11 +46,11 @@ public class CauldronRenderer implements BlockEntityRenderer<CauldronBlockEntity
     public void extractRenderState(
             CauldronBlockEntity cauldronBlockEntity,
             CauldronBlockEntityRenderState cauldronBlockEntityRenderState,
-            float f,
-            Vec3 vec3,
-            ModelFeatureRenderer.CrumblingOverlay crumblingOverlay
+            float partialTicks,
+            Vec3 cameraPosition,
+            ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay
     ) {
-        BlockEntityRenderer.super.extractRenderState(cauldronBlockEntity, cauldronBlockEntityRenderState, f, vec3, crumblingOverlay);
+        BlockEntityRenderer.super.extractRenderState(cauldronBlockEntity, cauldronBlockEntityRenderState, partialTicks, cameraPosition, crumblingOverlay);
 
 
         int k = (int)cauldronBlockEntity.getBlockPos().asLong();
