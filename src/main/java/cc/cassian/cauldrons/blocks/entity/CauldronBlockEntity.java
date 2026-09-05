@@ -75,6 +75,16 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
     }
 
     @Override
+    public void setChanged() {
+        super.setChanged();
+
+        if (level == null) return;
+
+        BlockState state = getBlockState();
+        level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
+    }
+
+    @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         return saveWithoutMetadata(registries);
     }
@@ -420,7 +430,7 @@ public class CauldronBlockEntity extends BlockEntity implements WorldlyContainer
 
     @Override
     public void setItem(int slot, ItemStack stack) {
-        items.set(slot, stack);
+        items.add(stack);
     }
 
     @Override
