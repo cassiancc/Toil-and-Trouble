@@ -28,7 +28,7 @@ public class CauldronAlchemyClientRecipe implements ReliableClientRecipe {
     }
 
     @Override
-    public ReliableClientRecipeType getViewType() {
+    public ReliableClientRecipeType getType() {
         return CauldronAlchemyClientRecipeType.INSTANCE;
     }
 
