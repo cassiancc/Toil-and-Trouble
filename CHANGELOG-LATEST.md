@@ -1,2 +1,2 @@
-### Fixed
-- Cauldrons no longer crash the game when used with Hoppers.
+### Changed
+- Toil and Trouble now depends on Asphodel API rather than MRU.

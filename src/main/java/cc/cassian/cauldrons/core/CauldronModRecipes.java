@@ -4,21 +4,19 @@ import cc.cassian.cauldrons.CauldronMod;
 import cc.cassian.cauldrons.recipe.AlchemyRecipe;
 import cc.cassian.cauldrons.recipe.BrewingRecipe;
 import cc.cassian.cauldrons.recipe.InsertingRecipe;
-import cc.cassian.cauldrons.registry.CommonRegistry;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class CauldronModRecipes {
-    public static final RecipeType<BrewingRecipe> BREWING = CommonRegistry.registerRecipe("brewing", () -> registerRecipeType("brewing"));
-    public static final RecipeType<AlchemyRecipe> ALCHEMY = CommonRegistry.registerRecipe("alchemy", () -> registerRecipeType("alchemy"));
-    public static final RecipeType<InsertingRecipe> INSERTING = CommonRegistry.registerRecipe("inserting", () -> registerRecipeType("inserting"));
+    public static final RecipeType<BrewingRecipe> BREWING = CauldronMod.REGISTRAR.registerRecipeType("brewing");
+    public static final RecipeType<AlchemyRecipe> ALCHEMY = CauldronMod.REGISTRAR.registerRecipeType("alchemy");
+    public static final RecipeType<InsertingRecipe> INSERTING = CauldronMod.REGISTRAR.registerRecipeType("inserting");
 
-    public static final RecipeSerializer<BrewingRecipe> BREWING_SERIALIZER = CommonRegistry.registerRecipeSerializer("brewing", ()-> new RecipeSerializer<>() {
+    public static final RecipeSerializer<BrewingRecipe> BREWING_SERIALIZER = registerRecipeSerializer("brewing", new RecipeSerializer<>() {
         @Override
         public MapCodec<BrewingRecipe> codec() {
             return BrewingRecipe.CODEC;
@@ -29,7 +27,7 @@ public class CauldronModRecipes {
             return BrewingRecipe.STREAM_CODEC;
         }
     });
-    public static final RecipeSerializer<AlchemyRecipe> ALCHEMY_SERIALIZER = CommonRegistry.registerRecipeSerializer("alchemy", ()-> new RecipeSerializer<>() {
+    public static final RecipeSerializer<AlchemyRecipe> ALCHEMY_SERIALIZER = registerRecipeSerializer("alchemy", new RecipeSerializer<>() {
         @Override
         public MapCodec<AlchemyRecipe> codec() {
             return AlchemyRecipe.CODEC;
@@ -40,7 +38,7 @@ public class CauldronModRecipes {
             return AlchemyRecipe.STREAM_CODEC;
         }
     });
-    public static final RecipeSerializer<InsertingRecipe> INSERTION_SERIALIZER = CommonRegistry.registerRecipeSerializer("inserting", ()-> new RecipeSerializer<>() {
+    public static final RecipeSerializer<InsertingRecipe> INSERTION_SERIALIZER = registerRecipeSerializer("inserting", new RecipeSerializer<>() {
         @Override
         public MapCodec<InsertingRecipe> codec() {
             return InsertingRecipe.CODEC;
@@ -52,13 +50,8 @@ public class CauldronModRecipes {
         }
     });
 
-
-    private static <T extends Recipe<?>> RecipeType<T> registerRecipeType(final String identifier) {
-        return new RecipeType<>() {
-            public String toString() {
-                return CauldronMod.MOD_ID + ":" + identifier;
-            }
-        };
+    public static <B extends RecipeSerializer<?>> B registerRecipeSerializer(String name, B supplier) {
+        return CauldronMod.REGISTRAR.register(name, supplier, BuiltInRegistries.RECIPE_SERIALIZER);
     }
 
     public static void touch() {

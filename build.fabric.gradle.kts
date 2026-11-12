@@ -142,7 +142,7 @@ dependencies {
         isTransitive = false;
     }
     implementation("org.jspecify:jspecify:1.0.0")
-    modImplementation("cc.cassian.mru:mru-fabric:${property("deps.mru")}")
+    modImplementation("cc.cassian.asphodel:asphodel-api-fabric:${property("deps.asphodel")}")
 
 }
 
@@ -208,7 +208,7 @@ publishMods {
         minecraftVersions.add(property("deps.minecraft").toString())
         minecraftVersions.addAll(additionalVersions)
         requires("fabric-api")
-        requires("mru")
+        requires("asphodel-api")
         optional("mcqoy")
         optional("rrv")
         environment = CLIENT_AND_SERVER
@@ -220,7 +220,7 @@ publishMods {
         minecraftVersions.add(property("publish.curseforge_minecraft_version").toString())
         minecraftVersions.addAll(additionalVersions)
         requires("fabric-api")
-        requires("mru")
+        requires("asphodel-api")
         client = true
         server = true
 

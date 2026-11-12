@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.2]
+
+### Fixed
+- Removed deprecated RRV code.
+
+## [1.6.1]
+
+### Fixed
+- Cauldrons no longer crash the game when used with Hoppers.
+
 ## [1.6.0]
 
 ### Added
