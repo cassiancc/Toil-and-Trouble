@@ -1,9 +1,9 @@
 package cc.cassian.cauldrons;
 
 import cc.cassian.cauldrons.config.ModConfig;
-import cc.cassian.mru.Platform;
-import cc.cassian.mru.util.CommonRegistry;
-import cc.cassian.mru.util.RegistryUtils;
+import cc.cassian.asphodel.Platform;
+import cc.cassian.asphodel.util.CommonRegistry;
+import cc.cassian.asphodel.util.RegistryUtils;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

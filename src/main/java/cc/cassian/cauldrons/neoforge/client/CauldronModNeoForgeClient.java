@@ -35,7 +35,7 @@ public final class CauldronModNeoForgeClient {
 
     @SubscribeEvent
     public static void registerColorHandlers(RegisterColorHandlersEvent.BlockTintSources event) {
-        event.register(List.of(CauldronModClient.getColor()), CauldronModBlocks.BREWING_CAULDRON.get());
+        event.register(List.of(CauldronModClient.getColor()), CauldronModBlocks.BREWING_CAULDRON);
 
     }
 

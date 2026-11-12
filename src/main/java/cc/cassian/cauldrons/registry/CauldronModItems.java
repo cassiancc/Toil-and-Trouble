@@ -28,20 +28,8 @@ public class CauldronModItems {
             "milk", Item::new, new Item.Properties()
     );
 
-    private static Item register(ResourceKey<Item> resourceKey, Function<Item.Properties, Item> function, Item.Properties properties) {
-        return CauldronMod.REGISTRAR.registerItem(resourceKey.identifier().getPath(), function.apply(properties.setId(resourceKey)));
-    }
-
-    private static ResourceKey<Item> registryKey(String string) {
-        return ResourceKey.create(Registries.ITEM, CauldronMod.of(string));
-    }
-
-    private static Item register(String string, Function<Item.Properties, Item> function, Item.Properties properties) {
-        return register(registryKey(string), function, properties);
-    }
-
-    private static Item register(String string, Item.Properties properties) {
-        return register(string, Item::new, properties);
+    private static Item register(String name, Function<Item.Properties, Item> function, Item.Properties properties) {
+        return CauldronMod.REGISTRAR.registerItem(name, function, properties);
     }
 
     public static void touch() {

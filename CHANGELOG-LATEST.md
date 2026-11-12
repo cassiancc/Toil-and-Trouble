@@ -1,2 +1,2 @@
-### Fixed
-- Removed deprecated RRV code.
+### Changed
+- Toil and Trouble now depends on Asphodel API rather than MRU.

@@ -133,7 +133,7 @@ dependencies {
     localRuntime("cc.cassian.rrv:reliable-recipe-viewer-fabric:${property("deps.rrv")}") {
         isTransitive = false
     }
-    implementation("cc.cassian.mru:mru-fabric:${property("deps.mru")}")
+    implementation("cc.cassian.asphodel:asphodel-api-fabric:${property("deps.asphodel")}")
 
 }
 
@@ -199,7 +199,7 @@ publishMods {
         minecraftVersions.add(property("deps.minecraft").toString())
         minecraftVersions.addAll(additionalVersions)
         requires("fabric-api")
-        requires("mru")
+        requires("asphodel-api")
         optional("mcqoy")
         optional("rrv")
         environment = CLIENT_AND_SERVER
@@ -211,7 +211,7 @@ publishMods {
         minecraftVersions.add(property("publish.curseforge_minecraft_version").toString())
         minecraftVersions.addAll(additionalVersions)
         requires("fabric-api")
-        requires("mru")
+        requires("asphodel-api")
         client = true
         server = true
 

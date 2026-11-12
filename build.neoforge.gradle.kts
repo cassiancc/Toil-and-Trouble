@@ -163,7 +163,7 @@ dependencies {
     compileOnly("mezz.jei:jei-26.1.1-neoforge:${property("deps.jei")}")
     compileOnly("cc.cassian.rrv:reliable-recipe-viewer-neoforge:${property("deps.rrv")}")
     runtimeOnly("cc.cassian.rrv:reliable-recipe-viewer-neoforge:${property("deps.rrv")}")
-    implementation("cc.cassian.mru:mru-neoforge:${property("deps.mru")}")
+    implementation("cc.cassian.asphodel:asphodel-api-neoforge:${property("deps.asphodel")}")
 
 }
 
@@ -226,7 +226,7 @@ publishMods {
         accessToken = env.MODRINTH_API_KEY.orNull()
         minecraftVersions.add(stonecutter.current.version)
         minecraftVersions.addAll(additionalVersions)
-        requires("mru")
+        requires("asphodel-api")
         optional("mcqoy")
         environment = CLIENT_AND_SERVER
     }
@@ -236,7 +236,7 @@ publishMods {
         accessToken = env.CURSEFORGE_API_KEY.orNull()
         minecraftVersions.add(stonecutter.current.version)
         minecraftVersions.addAll(additionalVersions)
-        requires("mru")
+        requires("asphodel-api")
         client = true
         server = true
     }

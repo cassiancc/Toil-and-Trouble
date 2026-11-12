@@ -40,7 +40,7 @@
     "minecraft": "${minecraft}",
     "java": ">=21",
     "fabric-api": "*",
-    "mru": ">1.0.30"
+    "asphodel_api": ">=1.1.2"
   },
   "breaks": {
     "rrv": "<8.0.0"
